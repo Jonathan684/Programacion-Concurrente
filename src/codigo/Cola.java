@@ -6,8 +6,10 @@ import java.util.concurrent.Semaphore;
 public class Cola {
 	//Campos
 	private Set<Integer> transicionesEsperando;
+	private int [] hilos_esperando;
 	private int cantTransiciones;
 	private Semaphore [] semaforos;
+	private int prioridad = -1;
 	
 	/**
 	 * Constructor de la clase Cola que inicia un semaforo para cada elemento
@@ -18,12 +20,26 @@ public class Cola {
 		this.cantTransiciones = cantTransiciones;
 		//transicionesEsperando = new ArrayList<>();
 		transicionesEsperando = new TreeSet<>();
+		
+		hilos_esperando = new int[10];
 		semaforos = new Semaphore[cantTransiciones]; 
 		for (int i = 0; i < cantTransiciones; i++) {
-			semaforos[i] = new Semaphore(0);
+			semaforos[i] = new Semaphore(0,true);
         }
 		
      }
+	public void prioridad(int transicion) {
+		   synchronized(this) {
+		      // codigo del metodo aca
+			  prioridad = transicion;
+		   }
+		}
+	public int leer_prioridad(){
+		   synchronized(this) {
+		      // codigo del metodo aca
+			  return prioridad;
+		   }
+		}
 	/**
 	 * Metodo que debe devolver el vector con los hilos que estan en cola 
 	 * @return Vc matriz con los hilos que esperan 
@@ -42,19 +58,24 @@ public class Cola {
 	 * @param transicion transicion que intento realizar el disparo
 	 */
 	 
-	public boolean ponerEnCola(Integer transicion) {
-		boolean agregado;
+	public boolean agregar(Integer transicion) {
+		boolean agregado = false;
+		/*if(semaforos[transicion]!=null) {
+			
+			System.out.println("Hay alguien esperando "+ transicion);	
+		}
+		*/
+		
 		agregado = transicionesEsperando.add(transicion);
-		//agregado = transicionesEsperando.add(3);
-		//System.out.println(agregado);
 		return agregado;
 	}
 	public String imprimirCola(){
-		String esperando = "Esperando: ";
+		String esperando = "Esperando en la cola: [";
 		
 		for(Integer transicion : transicionesEsperando){
 			esperando += " T"+(transicion+1);
 		}
+		esperando = "* "+esperando+" ]        (hilo que hizo la consulta: "+Thread.currentThread().getName()+")";
 		return esperando;
 	}
     
@@ -83,8 +104,9 @@ public class Cola {
 		}	
 	}
 	public void sacar_de_Cola(int nTransicion) {
+		//hilos_esperando[nTransicion]  = 0;
 		transicionesEsperando.remove(nTransicion);
-		if(semaforos[nTransicion]!=null){
+		if(semaforos[nTransicion] != null){
 		 semaforos[nTransicion].release();
 		}
     }

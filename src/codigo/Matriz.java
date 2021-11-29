@@ -103,10 +103,14 @@ public class Matriz {
 		 	input = new Scanner(new File(archivo));
 			while (input.hasNextLine()) {
 				String linea = input.nextLine();
-				String[] datos = linea.split("	");
-			    for (int columna = 0; columna < columnas; columna++) {
-			    	
+				String[] datos = linea.split(" "); //Modificacion Tab x Esp
+				for (int columna = 0; columna < columnas; columna++) {
+			    	//System.out.println(columna+"<->"+fila);
+			    	//System.out.println("datos[columna]->"+datos[columna]);
+			    	//System.out.println("======");
 			    	matriz[fila][columna] = Integer.parseInt(datos[columna]);
+			    	//System.out.println("IZ :"+matriz[fila][columna]);
+			    	
 			    }
 			    	fila ++;
 			}

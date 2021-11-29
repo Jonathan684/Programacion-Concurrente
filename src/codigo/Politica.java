@@ -21,12 +21,16 @@ public class Politica {
 		}
 	}
 	/**
-	 * Metodo que devuleve una transicion
+	 * Metodo que devuelve una transicion
 	 * @param m matriz que contiene el resultado de Vc and Vs
-	 * @return
+	 * @return Transicion
 	 */
 
 	public int cual(Matriz m) {
+		
+		//System.out.println("============= metodo cual ===================");
+		//m.getTranspuesta().imprimirMatriz();
+		//System.out.println("=============   ===================");
 	    List<Integer> aux_1 =  new ArrayList<>();
 	    List<Integer> aux_2 =  new ArrayList<>();
 	    int tmp;
@@ -89,18 +93,17 @@ public class Politica {
 		//Hardcodeado - ver de hacer alguna forma mas general, tipo lo de arriba pero que funcione bien
 		//VecesPorInvariante contiene la cantidad de veces que se dispararon los invariantes
 		if(nTransicion == 3) {
-			System.out.println("Se disparo primer invariante");
+			//System.out.println("Se disparo primer invariante");
 			vecesPorInvariante.set(0, (vecesPorInvariante.get(0)+1));
 		}
 		if(nTransicion == 4) {
-			System.out.println("Se disparo segundo invariante");
+			//System.out.println("Se disparo segundo invariante");
 			vecesPorInvariante.set(1, (vecesPorInvariante.get(1)+1));
 		}
 		if(nTransicion == 9) {
-			System.out.println("Se disparo tercer invariante");
+			//System.out.println("Se disparo tercer invariante");
 			vecesPorInvariante.set(2, (vecesPorInvariante.get(2)+1));
 		}
-		
 		disparos.set(nTransicion , (disparos.get(nTransicion)+1));
 	}
 
@@ -115,18 +118,32 @@ public class Politica {
 		return -1; //Si la transicion no pertenece a ningun invariante
 	}
    
-	public void imprimirVecesPorInvariante(){
-		int i = 1;
+	public void imprimir(Log log){
+		//System.out.println("=================================");
+		int j = 1;
+		log.registrarDisparo("=====================================", 1);
 		for(int veces: vecesPorInvariante){
-			System.out.println("Invariante " + i + ": " + veces + " veces" );
-			i++;
+			if(j==1) {
+				//System.out.println("Invariante " + j + ": " + veces + " veces  [T1 T2 T4 T6] " );
+				log.registrarDisparo("Invariante " + j + ": " + veces + " veces  [T1 T2 T4 T6] " , 1);
+			}
+			if(j==2) {
+				//System.out.println("Invariante " + j + ": " + veces + " veces   [T1 T3 T5 T7]" );
+				log.registrarDisparo("Invariante " + j + ": " + veces + " veces  [T1 T3 T5 T7]" , 1);
+			}
+			if(j==3) {
+				//System.out.println("Invariante " + j + ": " + veces + " veces  [T7 T8 T9 T10]" );
+				log.registrarDisparo("Invariante " + j + ": " + veces + " veces  [T7 T8 T9 T10]" , 1);
+			}
+			
+			j++;
 		}
-
-	}
-	public void imprimirDisparos(){
-		System.out.println("=================================");
-	   for(int i=0;i< disparos.size();i++)
-		System.out.println("Transicion: "+(i+1)+ " disparos: "+disparos.get(i));
+		log.registrarDisparo("=====================================", 1);
+	   for(int i=0;i< disparos.size();i++) {
+		//System.out.println("Transicion: "+(i+1)+ " disparos: "+disparos.get(i));
+	   log.registrarDisparo("Transicion: "+(i+1)+ " disparos: "+disparos.get(i), 1);
+	   }
 	   // System.out.println("Mayor " + Collections.max(disparos)) ;
 	}
+	
 }
