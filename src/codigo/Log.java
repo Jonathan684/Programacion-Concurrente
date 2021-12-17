@@ -35,9 +35,6 @@ public class Log {
 			e.printStackTrace();
 		}
     }
-    
-    //PUBLIC METHODS
-    //------------------------------------------------------------------------------------------------------------------
     public void registrarDisparo(String cadena,int tipo) {
        if(tipo == 0)
     	   

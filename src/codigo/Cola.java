@@ -18,11 +18,10 @@ public class Cola {
 	 */
 	public Cola(int cantTransiciones) {
 		this.cantTransiciones = cantTransiciones;
-		//transicionesEsperando = new ArrayList<>();
 		transicionesEsperando = new TreeSet<>();
-		
 		hilos_esperando = new int[10];
 		semaforos = new Semaphore[cantTransiciones]; 
+		
 		for (int i = 0; i < cantTransiciones; i++) {
 			semaforos[i] = new Semaphore(0,true);
         }
@@ -60,12 +59,6 @@ public class Cola {
 	 
 	public boolean agregar(Integer transicion) {
 		boolean agregado = false;
-		/*if(semaforos[transicion]!=null) {
-			
-			System.out.println("Hay alguien esperando "+ transicion);	
-		}
-		*/
-		
 		agregado = transicionesEsperando.add(transicion);
 		return agregado;
 	}
@@ -88,23 +81,17 @@ public class Cola {
 	
 	public void poner_EnCola(int Transicion) {
 		   
-		//System.out.println("Se pone en la cola "+ (Transicion+1));
-		//transicionesEsperando.add(Transicion);
 		if(semaforos[Transicion]!=null) {
 			
 			try {
 					semaforos[Transicion].acquire(); //se queda esperando
 			}
 			catch(InterruptedException e){
-				//System.out.println("Error al intentar poner en cola");
 				Thread.currentThread().interrupt(); 
-				//e.printStackTrace();
-				
 			}
 		}	
 	}
 	public void sacar_de_Cola(int nTransicion) {
-		//hilos_esperando[nTransicion]  = 0;
 		transicionesEsperando.remove(nTransicion);
 		if(semaforos[nTransicion] != null){
 		 semaforos[nTransicion].release();
