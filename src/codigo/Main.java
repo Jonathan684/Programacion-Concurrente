@@ -11,7 +11,7 @@ public class Main {
 	private static int[][] secInvariante = {{2,4},{3,5},{7,8,9,10}};
 	private static Hilo[] hilos;
 	private static Thread[] threads;
-	private static final int tiempoCorrida = 400; // milisegundos
+	private static final int tiempoCorrida = 200; // milisegundos
 	private static RDP redDePetri;
 	private static Mutex mutex;
 	private final static String REPORT_FILE_NAME_3 = "Consola/Reporte.txt";
