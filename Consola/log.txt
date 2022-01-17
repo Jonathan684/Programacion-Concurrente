@@ -1,4 +1,4 @@
-2022/01/12 23:51:32
+2022/01/14 22:10:52
 **************************************************
 *        COMIENZO DEL MONITOR                    *
 **************************************************
@@ -7,18 +7,634 @@
 * Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
 
-* Dentro del monitor T1
+* Dentro del monitor T6
 * Esperando en la cola: [ ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T6 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 4)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
 * Se disparo: T1
 * P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
 * T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
+* m: no es nula
+* Se saca de la cola: T2
 * Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
 * Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T2
-* Esperando en la cola: [ ]        (hilo que hizo la consulta: 2)
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T2
+* P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T4
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T4
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T3
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T3
+* P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T5
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T5
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 4)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T2
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T2
+* P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T4
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T4
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T3
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T3
+* P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T5
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T5
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T3 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 4)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T3
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T3
+* P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T5
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T5
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T2
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
 * Se disparo: T2
 * P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
@@ -28,120 +644,114 @@
 * Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T7
-* Esperando en la cola: [ ]        (hilo que hizo la consulta: 5)
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 5)
 * Encolar: T7
 * Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
 
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 4)
-* No Encolar: T7
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T7 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
 * Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 6)
-* No Encolar: T7
-* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T6
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 1)
-* Encolar: T6
-* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T3
-* Esperando en la cola: [ T6 T7 ]        (hilo que hizo la consulta: 3)
-* Encolar: T3
-* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T1
-* Esperando en la cola: [ T3 T6 T7 ]        (hilo que hizo la consulta: 0)
-* Se disparo: T1
-* P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-* T1:0 T2:0 T3:1 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: no es nula
-* Se saca de la cola: T3
-* Inicio P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-* Inicio T1:0 T2:0 T3:1 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T3
-* Esperando en la cola: [ T6 T7 ]        (hilo que hizo la consulta: 3)
-* Se disparo: T3
-* P1:0 P2:1 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:0 P12:1 P13:3 
-* T1:1 T2:0 T3:0 T4:1 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:0 P2:1 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:0 P12:1 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:1 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T4
-* Esperando en la cola: [ T6 T7 ]        (hilo que hizo la consulta: 2)
+* Esperando en la cola: [ T3 T6 T7 T8 ]        (hilo que hizo la consulta: 1)
 * Se disparo: T4
-* P1:0 P2:0 P3:1 P4:1 P5:0 P6:0 P7:0 P8:1 P9:0 P10:0 P11:1 P12:1 P13:3 
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
 * m: no es nula
 * Se saca de la cola: T6
-* Inicio P1:0 P2:0 P3:1 P4:1 P5:0 P6:0 P7:0 P8:1 P9:0 P10:0 P11:1 P12:1 P13:3 
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T6
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 1)
+* Esperando en la cola: [ T3 T7 T8 ]        (hilo que hizo la consulta: 0)
 * Se disparo: T6
-* P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
-* T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T7
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 4)
-* No Encolar: T7
-* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
 
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 6)
-* No Encolar: T7
-* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T1
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 0)
-* Se disparo: T1
-* P1:1 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:0 P9:0 P10:1 P11:1 P12:1 P13:3 
-* T1:0 T2:1 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
 * m: nula
 * k: false
-* Inicio P1:1 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:0 P9:0 P10:1 P11:1 P12:1 P13:3 
-* Inicio T1:0 T2:1 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
 
-* Dentro del monitor T5
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 3)
-* Se disparo: T5
-* P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
 
 * Dentro del monitor T2
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 2)
-* Se disparo: T2
-* P1:0 P2:1 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:0 P12:1 P13:3 
-* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:0 P2:1 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:0 P12:1 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
 
 * Dentro del monitor T6
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 1)
-* Se disparo: T6
+* Esperando en la cola: [ T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T2
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T2
 * P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
 * m: nula
@@ -149,51 +759,115 @@
 * Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
 
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 4)
-* No Encolar: T7
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
 * Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 6)
-* No Encolar: T7
-* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T1
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 0)
-* Se disparo: T1
-* P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-* T1:0 T2:0 T3:1 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-* Inicio T1:0 T2:0 T3:1 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T3
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 3)
-* Se disparo: T3
-* P1:0 P2:1 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:0 P12:1 P13:3 
-* T1:1 T2:0 T3:0 T4:1 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:0 P2:1 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:0 P12:1 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:1 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T4
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 2)
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
 * Se disparo: T4
-* P1:0 P2:0 P3:1 P4:1 P5:0 P6:0 P7:0 P8:1 P9:0 P10:0 P11:1 P12:1 P13:3 
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:0 P2:0 P3:1 P4:1 P5:0 P6:0 P7:0 P8:1 P9:0 P10:0 P11:1 P12:1 P13:3 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T6
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 1)
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 0)
 * Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T3 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 4)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T3
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T3
 * P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 * m: nula
@@ -201,51 +875,115 @@
 * Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 4)
-* No Encolar: T7
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
 * Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 6)
-* No Encolar: T7
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 5)
+* Encolar: T7
 * Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T1
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 0)
-* Se disparo: T1
-* P1:1 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:0 P9:0 P10:1 P11:1 P12:1 P13:3 
-* T1:0 T2:1 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:1 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:0 P9:0 P10:1 P11:1 P12:1 P13:3 
-* Inicio T1:0 T2:1 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T5
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 3)
+* Esperando en la cola: [ T2 T6 T7 T8 ]        (hilo que hizo la consulta: 2)
 * Se disparo: T5
-* P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T2
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 2)
-* Se disparo: T2
-* P1:0 P2:1 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:0 P12:1 P13:3 
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:0 P2:1 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:0 P12:1 P13:3 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T6
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 1)
+* Esperando en la cola: [ T2 T7 T8 ]        (hilo que hizo la consulta: 0)
 * Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T7
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T1 T2 T8 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T2
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T2
 * P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
 * m: nula
@@ -253,51 +991,463 @@
 * Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
 
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 4)
-* No Encolar: T7
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
 * Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 6)
-* No Encolar: T7
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 5)
+* Encolar: T7
 * Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T1
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 0)
-* Se disparo: T1
-* P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-* T1:0 T2:0 T3:1 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-* Inicio T1:0 T2:0 T3:1 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T3
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 3)
-* Se disparo: T3
-* P1:0 P2:1 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:0 P12:1 P13:3 
-* T1:1 T2:0 T3:0 T4:1 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:0 P2:1 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:0 P12:1 P13:3 
-* Inicio T1:1 T2:0 T3:0 T4:1 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T4
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 2)
+* Esperando en la cola: [ T3 T6 T7 T8 ]        (hilo que hizo la consulta: 1)
 * Se disparo: T4
-* P1:0 P2:0 P3:1 P4:1 P5:0 P6:0 P7:0 P8:1 P9:0 P10:0 P11:1 P12:1 P13:3 
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:0 P2:0 P3:1 P4:1 P5:0 P6:0 P7:0 P8:1 P9:0 P10:0 P11:1 P12:1 P13:3 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T6
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 1)
+* Esperando en la cola: [ T3 T7 T8 ]        (hilo que hizo la consulta: 0)
 * Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T7
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 4)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T8 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T3
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T3
+* P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T5
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T5
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T1 T2 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T2
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T2
+* P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 5)
+* Encolar: T7
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T4
+* Esperando en la cola: [ T3 T6 T7 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T4
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T3 T7 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T7
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T3 ]        (hilo que hizo la consulta: 4)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T1 T3 T8 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T3
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T3
+* P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 5)
+* Encolar: T7
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T5
+* Esperando en la cola: [ T2 T6 T7 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T5
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T7 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T7
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T8 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T3
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T3
 * P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
 * T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 * m: nula
@@ -306,83 +1456,557 @@
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 4)
-* No Encolar: T7
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 5)
+* Encolar: T7
 * Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 6)
-* No Encolar: T7
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T7 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
 * Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
 * Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T1
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 0)
-* Se disparo: T1
-* P1:1 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:0 P9:0 P10:1 P11:1 P12:1 P13:3 
-* T1:0 T2:1 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
-* m: nula
-* k: false
-* Inicio P1:1 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:0 P9:0 P10:1 P11:1 P12:1 P13:3 
-* Inicio T1:0 T2:1 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
 
 * Dentro del monitor T5
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 3)
+* Esperando en la cola: [ T2 T6 T7 T8 ]        (hilo que hizo la consulta: 2)
 * Se disparo: T5
-* P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-2022/01/12 23:51:32
-* T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* Inicio P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T7 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T7
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 4)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T8 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T2
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T2
+* P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 5)
+* Encolar: T7
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T4
+* Esperando en la cola: [ T3 T6 T7 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T4
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T3 T7 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T7
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T1 T3 T8 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T2
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T2
+* P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T4
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T4
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T3 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T3 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T3 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 4)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 3)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T3
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T3
+* P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:1 P4:0 P5:0 P6:0 P7:0 P8:1 P9:0 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:1 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T5
+* Esperando en la cola: [ T2 T6 T8 ]        (hilo que hizo la consulta: 2)
+* Se disparo: T5
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 3)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T8
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 ]        (hilo que hizo la consulta: 6)
+* Encolar: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T3
+* Esperando en la cola: [ T1 T2 ]        (hilo que hizo la consulta: 2)
+* Encolar: T3
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T1 T2 T3 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 3)
+* Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+
+* Dentro del monitor T9
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T9
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:1 P8:0 P9:1 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:1 
+
+* Dentro del monitor T10
+* Esperando en la cola: [ T1 T2 T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* Se disparo: T10
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T1
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T1
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 6)
+* Se disparo: T1
+* P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T2
+* Inicio P1:1 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:1 P12:2 P13:3 
+* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T2
+* P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:0 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T4
+* Esperando en la cola: [ T3 T6 T8 ]        (hilo que hizo la consulta: 1)
+* Se disparo: T4
+* P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T6
+* Inicio P1:0 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:2 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 0)
+* Se disparo: T6
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+* m: nula
+* k: false
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 4)
+* No Encolar: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T2
+* Esperando en la cola: [ T3 T8 ]        (hilo que hizo la consulta: 1)
+* Encolar: T2
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T6
+* Esperando en la cola: [ T2 T3 T8 ]        (hilo que hizo la consulta: 0)
+* Encolar: T6
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:0 P7:0 P8:1 P9:1 P10:1 P11:1 P12:3 P13:3 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:0 T10:0 
+
+* Dentro del monitor T7
+* Esperando en la cola: [ T2 T3 T6 T8 ]        (hilo que hizo la consulta: 5)
+* Se disparo: T7
+* P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* m: no es nula
+* Se saca de la cola: T8
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:1 P6:0 P7:0 P8:1 P9:1 P10:0 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+
+* Dentro del monitor T8
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 3)
+2022/01/14 22:10:53
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* Inicio P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+
+* Dentro del monitor T2
 
 ************************ Fin ****************************
-* m: nula
-* Inicio P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* Inicio P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* k: true
-* Inicio P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* Inicio P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* Inicio P1:1 P2:0 P3:0 P4:1 P5:0 P6:0 P7:0 P8:0 P9:1 P10:0 P11:1 P12:1 P13:3 
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 2)
 
-* Dentro del monitor T7
-* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* Inicio T1:0 T2:1 T3:1 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-
-* Dentro del monitor T7
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 6)
-* Se disparo: T2
-
-* Dentro del monitor T5
+* Dentro del monitor T3
+* Inicio T1:1 T2:0 T3:0 T4:0 T5:0 T6:0 T7:0 T8:1 T9:0 T10:0 
 
 * Dentro del monitor T6
+* Se disparo: T8
+* Inicio T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
 
 * Dentro del monitor T1
-* P1:0 P2:1 P3:0 P4:1 P5:0 P6:0 P7:0 P8:1 P9:1 P10:0 P11:0 P12:1 P13:3 
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 4)
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 3)
-* T1:1 T2:0 T3:0 T4:0 T5:0 T6:1 T7:0 T8:0 T9:0 T10:0 
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 0)
-* Esperando en la cola: [ T7 ]        (hilo que hizo la consulta: 1)
-* No Encolar: T7
-* Encolar: T5
-* m: nula
-* Se disparo: T6
-* Inicio P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-* k: true
-* Inicio P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-
-* Dentro del monitor T5
-* Inicio T1:0 T2:0 T3:1 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
-* Esperando en la cola: [ T5 T7 ]        (hilo que hizo la consulta: 3)
-* Esperando en la cola: [ T5 T7 ]        (hilo que hizo la consulta: 2)
-* No Encolar: T5
-* Encolar: T2
-* P1:1 P2:1 P3:0 P4:0 P5:0 P6:0 P7:0 P8:0 P9:1 P10:1 P11:0 P12:1 P13:3 
-* T1:0 T2:0 T3:1 T4:1 T5:0 T6:0 T7:0 T8:0 T9:0 T10:0 
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 2)
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 0)
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 1)
+* Esperando en la cola: [ T2 T3 T6 ]        (hilo que hizo la consulta: 6)
+* No Encolar: T3
+* P1:0 P2:0 P3:0 P4:0 P5:0 P6:1 P7:0 P8:1 P9:0 P10:1 P11:1 P12:3 P13:2 
+* No Encolar: T2
+* Encolar: T1
+* Esperando en la cola: [ T1 T2 T3 T6 ]        (hilo que hizo la consulta: 4)
+* T1:0 T2:0 T3:0 T4:0 T5:0 T6:0 T7:1 T8:0 T9:1 T10:0 
+* No Encolar: T6
+* Encolar: T8
 * m: nula
 * k: false

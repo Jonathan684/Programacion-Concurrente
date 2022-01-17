@@ -1,8 +1,9 @@
 package codigo;
 
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class Politica {
@@ -11,11 +12,13 @@ public class Politica {
 	private int[][] invariantes;
 	private List<Integer> vecesPorInvariante;
 	private List<Integer> disparos;
-
-	public Politica(int[][] invariantes){
+	private RDP red;
+	
+	public Politica(int[][] invariantes,RDP red){
 		this.invariantes = invariantes;
 		vecesPorInvariante = new ArrayList<>();
 		disparos = new ArrayList<Integer>(Collections.nCopies(10, 0));
+		this.red = red;
 		for(int i = 0; i < invariantes.length; i++){
 			vecesPorInvariante.add(0);
 		}
@@ -45,8 +48,8 @@ public class Politica {
 		List<Integer> aux_2 =  new ArrayList<>();
 		    int tmp;
 			int k=0;
-		    
-			for(int i = 0 ; i<10 ; i++)
+		    System.out.println("Cantidad de transiciones :"+red.get_numero_Transiciones());
+			for(int i = 0 ; i<red.get_numero_Transiciones() ; i++)
 		    {
 		    	if(m.getDato(i, 0)==1)
 		    	{
@@ -149,7 +152,7 @@ public class Politica {
 			}
 			if(j==2) {
 				//System.out.println("Invariante " + j + ": " + veces + " veces   [T1 T3 T5 T7]" );
-				log.registrarDisparo("Invariante " + j + ": " + veces + " veces  [T1 T3 T5 T7]" , 1);
+				log.registrarDisparo("Invariante " + j + ": " + veces + " veces  [T1 T3 T5 T6]" , 1);
 			}
 			if(j==3) {
 				//System.out.println("Invariante " + j + ": " + veces + " veces  [T7 T8 T9 T10]" );
