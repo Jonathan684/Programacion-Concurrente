@@ -329,7 +329,7 @@ public class RDP {
 				resetEsperando(transicion);
 
 			calculoDeVectorEstado(transicion);
-			System.out.println("Verificacion de los invariante de plaza");
+			//System.out.println("Verificacion de los invariante de plaza");
 			if (Test_Invariante() == false) {
 				consola.registrarDisparo("* NO SE CUMPLE EL INVARIANTE DE PLAZA \n", 0);
 				throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
@@ -401,7 +401,7 @@ public class RDP {
 	 * @param vector vector a imprimir.
 	 */
 	public boolean Test_Invariante() {
-		 VectorMarcadoActual.getTranspuesta().imprimirMatriz();
+		//VectorMarcadoActual.getTranspuesta().imprimirMatriz();
 		CharSequence cort;
 		int Inv = 0;
 		int Suma = 0;// suma los valores que hay en las plaza
@@ -419,10 +419,10 @@ public class RDP {
 							if (h == ')') {
 								cort = line.subSequence(k + 2, z);
 								Inv = Integer.parseInt(cort.toString());
-								System.out.println("Lugares donde extraer los valores "+ (Inv-1));
-								VectorMarcadoActual.getTranspuesta().imprimirMatriz();
+								//System.out.println("Lugares donde extraer los valores "+ (Inv-1));
+								//VectorMarcadoActual.getTranspuesta().imprimirMatriz();
 								Suma = Suma + VectorMarcadoActual.getDato(Inv - 1, 0);
-								System.out.println("Suma :"+Suma);
+								//System.out.println("Suma :"+Suma);
 								k = z;
 								break;
 							}
@@ -431,7 +431,7 @@ public class RDP {
 						
 						cort = line.subSequence(k + 2, line.length());
 						Inv = Integer.parseInt(cort.toString());
-						System.out.println("Resultado :"+Suma);
+						//System.out.println("Resultado :"+Suma);
 						if (Inv != Suma) {
 							return false;
 						}

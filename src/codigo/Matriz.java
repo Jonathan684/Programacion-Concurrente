@@ -83,14 +83,14 @@ public class Matriz {
 	 * Metodo para imprimir los datos contenidos en la matriz
 	 */
 	public void imprimirMatriz() {
-		System.out.println("############################################");
+		System.out.println("--------------------------------------------------");
 		for(int i=0; i<filas; i++){
 			for(int j=0; j<columnas; j++) {
 				System.out.print(this.getDato(i, j) + "  ");
 			}
 			System.out.println();	
 		}
-		System.out.println("############################################");
+		System.out.println("--------------------------------------------------");
 	}
 
 	/**

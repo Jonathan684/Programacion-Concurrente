@@ -34,8 +34,8 @@ public class Politica {
 		//T1 T2 T4 T6
 		//T7 T8 T9 T10
 		
-		m.getTranspuesta().imprimirMatriz();;
-		int disp_transicion = 0;
+		//m.getTranspuesta().imprimirMatriz();;
+		
 //		System.out.println("Total del invariante :"+vecesPorInvariante.toString());
 //		System.out.println("Valor del primer invariante :"+vecesPorInvariante.get(0));
 //		System.out.println(); 
@@ -48,8 +48,7 @@ public class Politica {
 		List<Integer> aux_2 =  new ArrayList<>();
 		    int tmp;
 			int k=0;
-		    System.out.println("Cantidad de transiciones :"+red.get_numero_Transiciones());
-			for(int i = 0 ; i<red.get_numero_Transiciones() ; i++)
+		    for(int i = 0 ; i<red.get_numero_Transiciones() ; i++)
 		    {
 		    	if(m.getDato(i, 0)==1)
 		    	{
