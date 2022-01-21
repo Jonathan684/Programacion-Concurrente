@@ -1,6 +1,4 @@
-package codigo;
-
-
+package log;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -13,7 +11,7 @@ public class Log {
   //PRIVATES VARIABLES
     //------------------------------------------------------------------------------------------------------------------
     private final String REPORT_FILE_NAME;
-    Log(String REPORT_FILE_NAME){
+    public Log(String REPORT_FILE_NAME){
         this.REPORT_FILE_NAME = REPORT_FILE_NAME;
         BufferedWriter bw = null;
 		try {

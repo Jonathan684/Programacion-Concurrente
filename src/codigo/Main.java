@@ -3,12 +3,24 @@ package codigo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import hilos.kuka_0;
+import hilos.kuka_1;
+import hilos.kuka_2;
+import hilos.kuka_3;
+import hilos.kuka_4_5_6;
+import log.Log;
+
 public class Main {
 
 	private static final int numeroHilos = 7;
-	private static int[][] secComunes = { { 1 }, { 6 } };
-	private static int[][] secInvariante = { { 2, 4 }, { 3, 5 }, { 7 }, { 8, 9, 10 } };
-	// private static Hilo[] hilos;
+	
+	private static int[] T1 = { 1 };
+	private static int[] T2_T4 = { 2, 4 };
+	private static int[] T3_T5 = { 3, 5 };
+	private static int[] T6 = { 6 };
+	private static int[] T7_T8_T9_T10 = { 7, 8, 9, 10 };
+	private static int[][] secInvariante = {{2,4},{3,5},{7,8,9,10}};
+	
 	private static kuka_1 Invariante_1;
 	private static kuka_2 Invariante_2;
 	private static kuka_3 Salida;
@@ -17,12 +29,8 @@ public class Main {
 	private static kuka_4_5_6 Invariante_3_0;
 	private static kuka_4_5_6 Invariante_3_1;
 	private static kuka_4_5_6 Invariante_3_2;
-
-	// private static Hilo_Ingreso_II hilo_Ingreso_2;
-//	private static Hilo_Ingreso_2 hilo_Ingreso_3;
-//	private static Hilo_Ingreso_2 hilo_Ingreso_4;
 	private static Thread[] threads;
-	private static final int tiempoCorrida = 650000; // milisegundos
+	private static final int tiempoCorrida = 300; // milisegundos
 	private static RDP redDePetri;
 	private static Mutex mutex;
 	private final static String REPORT_FILE_NAME_3 = "Consola/Reporte.txt";
@@ -44,16 +52,7 @@ public class Main {
 		Monitor monitor = new Monitor(mutex, redDePetri, politica, log2);
 
 		threads = new Thread[numeroHilos];
-
-//		hilo_Ingreso = new Hilo_Ingreso_1(monitor, secComunes[0]); // T1
-//		hilo_Ingreso_2 = new Hilo_Ingreso_2(monitor, secInvariante[2]); // T7
-		// hilos = new Hilo[3];
-		int[] T1 = { 1 };
-		int[] T2_T4 = { 2, 4 };
-		int[] T3_T5 = { 3, 5 };
-		int[] T6 = { 6 };
-		int[] T7_T8_T9_T10 = { 7, 8, 9, 10 };
-
+		
 		hilo_Ingreso_1 = new kuka_0(monitor, T1); // T1 Tiempo en entrar una nueva pieza 10 ms
 		Invariante_1 = new kuka_1(monitor, T2_T4); // T2,T4
 		Invariante_2 = new kuka_2(monitor, T3_T5); // T3,T5
@@ -71,7 +70,6 @@ public class Main {
 		threads[6] = new Thread(Invariante_3_2, "" + 6); // T7 T8 T9 T10
 
 		for (int k = 0; k < numeroHilos; k++) {
-			// hilos[k].set_Fin();
 			threads[k].start();
 		}
 
@@ -81,8 +79,7 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		log2.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
+		
 
 		hilo_Ingreso_1.set_Fin();
 		Invariante_1.set_Fin();
@@ -91,22 +88,16 @@ public class Main {
 		Invariante_3_0.set_Fin();
 		Invariante_3_1.set_Fin();
 		Invariante_3_2.set_Fin();
-
-		threads[0].interrupt();
-		threads[1].interrupt();
-		threads[2].interrupt();
-		threads[3].interrupt();
-		threads[4].interrupt();
-		threads[5].interrupt();
-		threads[6].interrupt();
-
-//		for (int k = 0; k < numeroHilos; k++) {
-//			//hilos[k].set_Fin();
-//			threads[k].interrupt();
-//		}
-//		
+		for (int k = 0; k < numeroHilos; k++) {
+			threads[k].interrupt();
+		}
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		log2.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
 		log2.registrarDisparo("\n************************ Fin ****************************", 1);
+		
 		log.registrarDisparo("Tiempo de ejecucion : " + (tiempoCorrida / 1000) + "seg.", 1);
+		
 		politica.imprimir(log);
 	}
 

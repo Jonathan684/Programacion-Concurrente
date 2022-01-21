@@ -3,6 +3,8 @@ package codigo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import log.Log;
+
 public class Monitor {
 
 	private RDP red;

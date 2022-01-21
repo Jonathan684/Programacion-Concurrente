@@ -1,4 +1,7 @@
 package codigo;
+
+import log.Log;
+
 public class SensibilizadaConTiempo {
 	
 	
