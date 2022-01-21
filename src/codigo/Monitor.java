@@ -87,8 +87,7 @@ public class Monitor {
 				consola.registrarDisparo("* Encolar: T" + (T_Disparar + 1), 1);
 				mutex._release();
 				cola.poner_EnCola(T_Disparar); //
-				// consola.registrarDisparo("* Hilo que sale de la cola :
-				// ->"+Thread.currentThread().getName()+"<-",1);
+			    //consola.registrarDisparo("* Hilo que sale de la cola :->"+Thread.currentThread().getName()+"<-",1);
 			}
 		}
 		mutex._release();
