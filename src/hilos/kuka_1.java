@@ -11,14 +11,14 @@ public class kuka_1 implements Runnable {
 		this.monitor = monitor;
 		this.secuencia = secuencia;
 	}
-
+    // T2 T4
 	public void run() {
 		while (continuar == true) {
 			for (Integer Transicion : secuencia) {
 				monitor.dispararTransicion(Transicion - 1);
 			}
 			try {
-				Thread.sleep(30);
+				Thread.sleep(45);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

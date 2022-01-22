@@ -21,16 +21,16 @@ public class Main {
 	private static int[] T7_T8_T9_T10 = { 7, 8, 9, 10 };
 	private static int[][] secInvariante = {{2,4},{3,5},{7,8,9,10}};
 	
+	private static kuka_0 hilo_Ingreso_1;
 	private static kuka_1 Invariante_1;
 	private static kuka_2 Invariante_2;
 	private static kuka_3 Salida;
-	private static kuka_0 hilo_Ingreso_1;
-
 	private static kuka_4_5_6 Invariante_3_0;
 	private static kuka_4_5_6 Invariante_3_1;
 	private static kuka_4_5_6 Invariante_3_2;
+	
 	private static Thread[] threads;
-	private static final int tiempoCorrida = 300; // milisegundos
+	private static final int tiempoCorrida = 2000; // milisegundos
 	private static RDP redDePetri;
 	private static Mutex mutex;
 	private final static String REPORT_FILE_NAME_3 = "Consola/Reporte.txt";
@@ -38,7 +38,7 @@ public class Main {
 	private static Log log;
 
 	public static void main(String[] args) {
-		iniciarPrograma();
+		iniciarPrograma(); 
 	}
 
 	public static void iniciarPrograma() {

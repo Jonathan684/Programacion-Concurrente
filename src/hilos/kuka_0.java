@@ -19,7 +19,7 @@ public class kuka_0 implements Runnable {
 				monitor.dispararTransicion(Transicion - 1);
 			}
 			try {
-				Thread.sleep(20);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

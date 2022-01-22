@@ -7,7 +7,7 @@ import java.util.concurrent.Semaphore;
 public class Cola {
 	// Campos
 	private Set<Integer> transicionesEsperando;
-	private int[] hilos_esperando;
+	//private int[] hilos_esperando;
 	private int cantTransiciones;
 	private Semaphore[] semaforos;
 	private int prioridad = -1;
@@ -21,7 +21,7 @@ public class Cola {
 	public Cola(int cantTransiciones) {
 		this.cantTransiciones = cantTransiciones;
 		transicionesEsperando = new TreeSet<>();
-		hilos_esperando = new int[10];
+		//hilos_esperando = new int[10];
 		semaforos = new Semaphore[cantTransiciones];
 
 		for (int i = 0; i < cantTransiciones; i++) {
