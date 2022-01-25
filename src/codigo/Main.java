@@ -30,7 +30,7 @@ public class Main {
 	private static kuka_4_5_6 Invariante_3_2;
 	
 	private static Thread[] threads;
-	private static final int tiempoCorrida = 2000; // milisegundos
+	private static final int tiempoCorrida = 1000000; // 200000 milisegundos
 	private static RDP redDePetri;
 	private static Mutex mutex;
 	private final static String REPORT_FILE_NAME_3 = "Consola/Reporte.txt";

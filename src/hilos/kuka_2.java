@@ -13,17 +13,19 @@ public class kuka_2 implements Runnable {
 		this.secuencia = secuencia;
 	}
    //T3 T5
+	 @Override
 	public void run() {
 		while (continuar == true) {
 			for (Integer Transicion : secuencia) {
 				monitor.dispararTransicion(Transicion - 1);
-				//System.out.println("T "+(Transicion));
-			}
 				try {
-					Thread.sleep(30);// min 15 max 25
+					Thread.sleep(20);// SIN TIMEPO 30 // CON TIEMPO 30
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				//System.out.println("T "+(Transicion));
+			}
+				
 		}
 	}
 
