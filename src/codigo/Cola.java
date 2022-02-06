@@ -109,6 +109,7 @@ public class Cola {
 		transicionesEsperando.remove(nTransicion);
 		if (semaforos[nTransicion] != null) {
 			semaforos[nTransicion].release();
+			
 		}
 
 	}

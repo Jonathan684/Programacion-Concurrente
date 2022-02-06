@@ -2,8 +2,8 @@ package codigo;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
-
 import log.Log;
 
 public class RDP {
@@ -13,7 +13,7 @@ public class RDP {
 	private Matriz VectorMarcadoActual, VectorExtendido, VectorSensibilizado, VectorInhibicion;
 	private Matriz Incidencia, Identidad, Inhibicion;
 	private Matriz Intervalo;
-	// private Matriz VectorZ;
+	private Matriz VectorZ;
 	private final int numeroPlazas;
 	private final int numeroTransiciones;
 	// private final List<Matriz> invariantes;
@@ -23,13 +23,19 @@ public class RDP {
 	private SensibilizadaConTiempo Temporizadas;
 	private Mutex mutex;
 	private Log consola;
-
+	private long timeStamp[];
+	private Integer[] todavia_espera;
+	private int TimeStamp_ahora;
+	private static HashMap<String, String> p_invariantes;
+	private int timeout ;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public RDP(Mutex mutex, Log consola) {
-
+		p_invariantes = new HashMap<String, String>();
+		TimeStamp_ahora = 0;
 		this.consola = consola;
 		this.mutex = mutex;
+		int timeout = 0;
 		numeroTransiciones = cargarTransiciones("matrices/M.I.txt"); // Extraccion de la cantidad de transiciones.
 		numeroPlazas = cargarPlazas("matrices/M.I.txt"); // Extraccion de la cantidad de plazas.
 
@@ -48,7 +54,7 @@ public class RDP {
 		VectorSensibilizado = new Matriz(numeroTransiciones, 1);
 		VectorInhibicion = new Matriz(numeroTransiciones, 1);
 		VectorExtendido = new Matriz(numeroTransiciones, 1);
-		// VectorZ = new Matriz(1,numeroTransiciones);
+		VectorZ = new Matriz(1, numeroTransiciones);
 
 		// Carga de datos
 		Incidencia.cargarMatriz("matrices/M.I.txt");
@@ -57,10 +63,402 @@ public class RDP {
 		VectorMarcadoActual.cargarMatriz("matrices/VMI.txt");
 		Identidad.cargarIdentidad();
 		IEntrada.cargarMatriz("matrices/M.Pre.txt");
+		Cargar_P_Invariante();
 
+		todavia_espera = new Integer[numeroTransiciones];
+		timeStamp = new long[numeroTransiciones];
+
+		for (int i = 0; i < timeStamp.length; i++) {
+			timeStamp[i] = 0;
+			todavia_espera[i] = 0;
+		}
 		SensibilizadaConTiempo = new long[numeroTransiciones];
-		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, consola);
+		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, mutex, consola, Intervalo);
+		//sensibilizarVectorZ();
+
+		/**
+		 * Metodo que sensibiliza las transiciones y carga el vector extendido
+		 */
+	}
+
+
+
+	/**
+	 * Este metodo dispara una transicion de la rdp indicada por parametro, teniendo
+	 * en cuenta el modo indicado por parametro
+	 * 
+	 * @param transicion : numero de transicion.
+	 * @return : -0 retorna 0 si el disparo no es exitoso. -1 retorna 1 si el
+	 *         disparo es exitoso.
+	 */
+	public boolean Disparar(int transicion) {
+
+		if (!estaSensibilizada(transicion)) { // no sensibilizada
+			// Estoy en el vectorZ(transicion) == 0
+			return false;
+		}
+
+		else {
+			if (Temporizadas.esTemporal(transicion)) {// Es temporal y esta sensibilizada.
+				// consola.registrarDisparo("* Salidas posible", 1);
+				// Dos cosas pueden pasar:
+				//
+				if (!test_ventana(transicion)) {
+					if (getEsperando(transicion) == false) {
+						//flag = true;
+						consola.registrarDisparo(
+								"*         Salida 2 antes de alfa  TimeStamp :" + timeStamp[transicion], 1);
+						return false;
+					}
+				}
+			}
+			if (estaSensibilizada(transicion))// Verificamos si sigue sensibilizada por si es temporal
+			{
+				// consola.registrarDisparo("* Disparo asegurado", 1);
+				if (Temporizadas.esTemporal(transicion))
+					// Temporizadas.resetEsperando(transicion);
+					resetEsperando(transicion);
+
+				calculoDeVectorEstado(transicion);
+				// Verificacion de los invariante de plaza
+				if (!Test_Invariante()) {
+					consola.registrarDisparo("* NO SE CUMPLE EL INVARIANTE DE PLAZA \n", 0);
+					throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
+				}
+
+				// consola.registrarDisparo("* Actualizar", 1);
+				sensibilizar();
+				actualiceSensibilizadoT();
+			}
+			return true;
+		}
+
+	}
+//	public boolean get_flag() {
+//		return flag;
+//	}
+//	public void set_flag(boolean flag) {
+//		this.flag=flag;
+//	}
+	public boolean Test_Invariante() {
+		int Suma_Tokens_Plaza = 0;
+		String valor = "";
+		String[] corte = null;
+
+		for (String plazas : p_invariantes.keySet()) {
+			valor = p_invariantes.get(plazas);
+			corte = plazas.split(" ");
+			for (String elemt : corte) {
+				int token = Integer.parseInt(elemt);
+				Suma_Tokens_Plaza += VectorMarcadoActual.getDato((token - 1), 0);
+			}
+			if (Suma_Tokens_Plaza != Integer.parseInt(valor))
+				return false;
+			Suma_Tokens_Plaza = 0;
+		}
+		return true;
+	}
+	
+	/**
+	 * 
+	 */
+	public void sensibilizar() {
+
+		sensibilizarVectorE();
+		sensibilizarVectorB();
 		// sensibilizarVectorZ();
+		VectorExtendido = VectorSensibilizado.getAnd(VectorInhibicion);
+//		VectorExtendido = VectorExtendido.getAnd(VectorZ.getTranspuesta());
+	}
+
+
+	public boolean test_ventana(int transicion) {
+		Marca_actual(transicion);
+		if ((TimeStamp_ahora >= (Intervalo.getDato(0, transicion)))) {
+			return true;
+		} else
+			return false;
+	}
+
+	/*
+	 * Comprueba si se sensibilizaron transiciones temporales colocar el valor
+	 * TimeStamp
+	 */
+	public void actualiceSensibilizadoT() {
+
+		for (int t = 0; t < numeroTransiciones; t++) {
+			if (Temporizadas.esTemporal(t) && (VectorExtendido.getDato(t, 0) == 1)) {
+				setNuevoTimeStamp(t);
+				// VectorZ.setDato(0, t, 0);
+			}
+			if ((Temporizadas.esTemporal(t) == true) && (VectorExtendido.getDato(t, 0) == 0)) {
+				// && (!Temporizadas.getEsperando(t))) {
+				resetEsperando(t);
+				// VectorZ.setDato(0, t, 1);
+			}
+		}
+		// VectorZ.imprimirMatriz();
+		// sensibilizar();
+	}
+	public void Marca_actual(int transicion) {
+		TimeStamp_ahora = (int) (System.currentTimeMillis() - (timeStamp[transicion]));
+	}
+
+	/**
+	 * alfa = Intervalo.getDato(0, transicion) beta = Intervalo.getDato(1,
+	 * transicion)
+	 * 
+	 * @param transicion
+	 * @return
+	 */
+	public boolean Analisis_Temporal(int transicion) {
+
+		// consola.registrarDisparo("* Tiempo 1 :" + System.currentTimeMillis()+"
+		// TimeStamp :"+timeStamp[transicion] , 1);
+		Marca_actual(transicion);
+
+		if (test_ventana(transicion)) {
+			return true; // <<-- Esta en la ventana de tiempo
+		}
+		// No estoy en la venta de tiempo.
+		if (TimeStamp_ahora < (Intervalo.getDato(0, transicion))) {// <-- Esta antes del alfa
+			// consola.registrarDisparo("* Tiempo 2 :" + System.currentTimeMillis(), 1);
+
+			int Tiempo_esperar = (int) ((((timeStamp[transicion]) + (Intervalo.getDato(0, transicion)))
+					- System.currentTimeMillis()) + 2); // +2
+
+			if (Tiempo_esperar < 0) { // Tiempo negativo signidica que estoy dentro de la ventana.
+				// consola.registrarDisparo("* Tiempo_esperar negativo esta dentro de la ventana
+				// ahora :" + Tiempo_esperar, 1);
+				return true;
+			} 
+			timeout = Tiempo_esperar;
+			return false; // esperar alfa
+			
+		} 
+		return true;
+//		else { // <<-- Esta despues de beta
+//					// consola.registrarDisparo("* Saliendo pasando beta :" +
+//					// Thread.currentThread().getName(), 1);
+//			return;
+//		}
+	}
+	public void esperar(int Tiempo_esperar,int transicion) {
+		// consola.registrarDisparo("* Estoy antes del alfa. Esperar :" +
+		// Tiempo_esperar, 1);
+		setEsperando(transicion);
+		//System.out.println("Tiempo_esperar :"+ Tiempo_esperar);
+		// todavia_espera[transicion] = 1;
+		 mutex._release();
+		try {
+			Thread.sleep(Tiempo_esperar);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public int get_timeout() {
+		return timeout;
+	}
+	public boolean get_todavia_espera(int transicion) {
+		if (todavia_espera[transicion] == 1)
+			return true;
+		return false;
+	}
+
+	public void reset_todavia_espera(int transicion) {
+		todavia_espera[transicion] = 0;
+	}
+
+	public void calculoDeVectorEstado(int transicion) {
+
+		Matriz aux = Incidencia.getMultiplicacion(Identidad.getColumna(transicion));
+		VectorMarcadoActual = VectorMarcadoActual.getSuma(aux);
+	}
+
+	public void resetEsperando(int transicion) {
+		timeStamp[transicion] = 0;
+		Temporizadas.resetEsperando(transicion);
+	}
+
+	public void setNuevoTimeStamp(int transicion) {
+
+		if (timeStamp[transicion] == 0) {
+			timeStamp[transicion] = System.currentTimeMillis();
+			consola.registrarDisparo("* Nuevo Timestamp a T" + (transicion + 1) + ": " + timeStamp[transicion], 1);
+		}
+	}
+
+
+	public boolean esInmediata(int transicion) {
+		if (Temporizadas.esTemporal(transicion)) {
+			return false;
+		} else
+			return true;
+	}
+
+	/**
+	 * Devuelve true si la transicion esta habilitada de acuerdo al vector extendido
+	 * 
+	 * @param transicion : transicion la que se desea saber si está habilitada o no.
+	 * @return verdadero estan habilitadas
+	 */
+	public boolean estaSensibilizada(int transicion) {
+		if (VectorExtendido.getDato(transicion, 0) == 1)
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * Metedo encargado de verificar si se cumple el los p-Inavariantes.
+	 * 
+	 * @param vector vector a imprimir.
+	 */
+	public void Cargar_P_Invariante() {
+
+		CharSequence cort;
+		try {
+			input = new Scanner(new File("matrices/P_Invariantes.txt"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		while (input.hasNextLine()) {
+			String line = input.nextLine();
+			String cort2 = "";
+			String valor = "";
+			// System.out.println("linea "+line);
+			for (int k = 0; k < line.length(); k++) {
+				char r = line.charAt(k);
+				if (r == '(') {
+					for (int z = k; z < line.length(); z++) {
+						char h = line.charAt(z);
+						if (h == ')') {
+							cort = line.subSequence(k + 2, z);
+							cort2 += cort + " ";
+							k = z;
+							break;
+						}
+					}
+				} else if (r == '=') {
+
+					cort = line.subSequence(k + 2, k + 3);
+					// System.out.println("CORT :"+cort);
+					valor = (String) cort;
+					p_invariantes.put(cort2, valor);
+					cort2 = "";
+					valor = "";
+				}
+			}
+		}
+
+	}
+
+	// Metodos get
+
+	public Matriz getVectorExtendido() {
+		return VectorExtendido;
+	}
+
+//	public Matriz getVectorZ() { return VectorZ; }
+
+	public int get_numero_Transiciones() {
+		return numeroTransiciones;
+	}
+
+	// Metodos de formato para el LOG.txt
+	/**
+	 * 
+	 * @param vector
+	 * @return Transiciones_sensibilizadas tipo String
+	 */
+	public String sensibilidadas() {
+		String Transiciones_sensibilizadas = "";
+
+		for (int n = 0; n < VectorExtendido.getNumFilas(); n++) {
+			Transiciones_sensibilizadas += Transiciones[n] + ":" + VectorExtendido.getDato(n, 0) + " ";
+		}
+		return Transiciones_sensibilizadas;
+	}
+
+	/*
+	 * Retorna el marcado actual
+	 */
+	public String Marcado() {
+		String Marcado_actual = "";
+		for (int n = 0; n < VectorMarcadoActual.getNumFilas(); n++) {
+			Marcado_actual += Plazas[n] + ":" + VectorMarcadoActual.getDato(n, 0) + " ";
+		}
+		return Marcado_actual;
+	}
+
+	/**
+	 * Este metodo muestra el vector indicado por parametro
+	 * 
+	 * @param vector vector a imprimir. Tipo 0: Transiciones 1: Plazas
+	 */
+	public void mostrar(Matriz vector, int Tipo) {
+		if (Tipo == 0) {
+			for (int n = 0; n < vector.getNumFilas(); n++)
+				System.out.print(Transiciones[n] + ":" + vector.getDato(n, 0) + " ");
+		} else if (Tipo > 0) {
+			for (int n = 0; n < vector.getNumFilas(); n++)
+				System.out.print(Plazas[n] + ":" + vector.getDato(n, 0) + " ");
+		}
+		System.out.println("\n");
+	}
+
+	private void sensibilizarVectorE() {
+
+		for (int i = 0; i < IEntrada.getNumColumnas(); i++) {
+			int e = 1;
+			for (int j = 0; j < Incidencia.getNumFilas(); j++) {
+				if (VectorMarcadoActual.getDato(j, 0) < IEntrada.getDato(j, i)) {
+					e = 0;
+				}
+				VectorSensibilizado.setDato(i, 0, e);
+			}
+		}
+	}
+	/**
+	 * Metodos que calcula el vector Inhibicion
+	 */
+	private void sensibilizarVectorB() {
+		Matriz Q = new Matriz(numeroPlazas, 1);
+		for (int i = 0; i < Q.getNumFilas(); i++) {
+
+			if (VectorMarcadoActual.getDato(i, 0) != 0)
+				Q.setDato(i, 0, 1);
+			else
+				Q.setDato(i, 0, 0);
+
+		}
+		VectorInhibicion = Inhibicion.getTranspuesta().getMultiplicacion(Q);
+		for (int i = 0; i < VectorInhibicion.getNumFilas(); i++) {
+			if (VectorInhibicion.getDato(i, 0) > 1)
+				VectorInhibicion.setDato(i, 0, 1);
+		}
+		VectorInhibicion = VectorInhibicion.getComplemento();
+	}
+
+	private Matriz sensibilizarVectorB2(Matriz VectorMarcadoActual2) {
+		Matriz VectorInhibicion2;
+		Matriz Q2 = new Matriz(numeroPlazas, 1);
+		for (int i = 0; i < Q2.getNumFilas(); i++) {
+
+			if (VectorMarcadoActual2.getDato(i, 0) != 0)
+				Q2.setDato(i, 0, 1);
+			else
+				Q2.setDato(i, 0, 0);
+
+		}
+		VectorInhibicion2 = Inhibicion.getTranspuesta().getMultiplicacion(Q2);
+		for (int i = 0; i < VectorInhibicion.getNumFilas(); i++) {
+			if (VectorInhibicion2.getDato(i, 0) > 1)
+				VectorInhibicion2.setDato(i, 0, 1);
+		}
+		VectorInhibicion2 = VectorInhibicion2.getComplemento();
+		return VectorInhibicion2;
 	}
 
 	/**
@@ -133,65 +531,52 @@ public class RDP {
 		}
 	}
 
-	private void sensibilizarVectorE() {
 
-		for (int i = 0; i < IEntrada.getNumColumnas(); i++) {
-			int e = 1;
-			for (int j = 0; j < Incidencia.getNumFilas(); j++) {
-				if (VectorMarcadoActual.getDato(j, 0) < IEntrada.getDato(j, i)) {
-					e = 0;
-				}
-				VectorSensibilizado.setDato(i, 0, e);
-			}
-		}
-	}
-
-	/**
-	 * Metodo que sensibiliza las transiciones y carga el vector extendido
-	 */
-	public void sensibilizar() {
-
-		sensibilizarVectorE();
-		sensibilizarVectorB();
-		// System.out.println("sensibilizar");
-		// VectorExtendido.getTranspuesta().imprimirMatriz();
-		VectorExtendido = VectorSensibilizado.getAnd(VectorInhibicion);// .getAnd(VectorZ.getTranspuesta());
-		// System.out.println("fin sensibilizar");
-	}
 
 	public void setEsperando(int transicion) {
 
+		 synchronized(this) {
+		      // codigo del metodo aca
+			 Temporizadas.setEsperando(transicion);
+		   }
 		// VectorZ.setDato(0, transicion, 0);
-		Temporizadas.setEsperando(transicion);
+		
 	}
 
-	public void resetEsperando(int transicion) {
+	public boolean getEsperando(int transicion) {
 
-		Temporizadas.resetEsperando(transicion);
-		// VectorZ.setDato(0, transicion, 1);
-//		Si el disparo de una transicion temporal desensibilizo a otra transicion temporal deberia resetea el timeStamp
+		// VectorZ.setDato(0, transicion, 0);
+		if (Temporizadas.getEsperando(transicion)) {
+			return true;
+		}
+		return false;
+
 	}
+	public int[] get_vector_Esperando() {
+		return Temporizadas.getvectorEsperando();
+	}
+
 
 	/*
 	 * Este metodo me devuleve si hay alguien esperando por ese token. Ya que
 	 * realizo un falso disparo deshabilitando la transicion.
 	 */
-	public boolean soy_el_primero(int transicion) {
-		boolean soy_el_primero = true;
-		for (int transicion_prueba = 0; transicion_prueba < VectorExtendido.getNumFilas(); transicion_prueba++) {
-			if ((estaSensibilizada(transicion_prueba) == true) && (esTemporal(transicion_prueba) == true)
-					&& ((Temporizadas.getEsperando(transicion_prueba) == true) && (transicion != transicion_prueba))) {
-				Matriz VectorExtendido_auxiliar = new Matriz(numeroTransiciones, 1);
-				VectorExtendido_auxiliar = Falso_Disparo(transicion_prueba);
-				if (VectorExtendido_auxiliar.getDato(transicion, 0) == 0) {
-					soy_el_primero = false;
-					break;
-				}
-			}
-		}
-		return soy_el_primero;
-
-	}
+//	public boolean soy_el_primero(int transicion) {
+//		boolean soy_el_primero = true;
+//		for (int transicion_prueba = 0; transicion_prueba < VectorExtendido.getNumFilas(); transicion_prueba++) {
+//			if ((estaSensibilizada(transicion_prueba) == true) && (Temporizadas.esTemporal(transicion_prueba) == true)
+//					&& ((Temporizadas.getEsperando(transicion_prueba) == true) && (transicion != transicion_prueba))) {
+//				Matriz VectorExtendido_auxiliar = new Matriz(numeroTransiciones, 1);
+//				VectorExtendido_auxiliar = Falso_Disparo(transicion_prueba);
+//				if (VectorExtendido_auxiliar.getDato(transicion, 0) == 0) {
+//					soy_el_primero = false;
+//					break;
+//				}
+//			}
+//		}
+//		return soy_el_primero;
+//
+//	}
 
 	/*
 	 * Este metodo hace un falso disparo con las transicion que estan en el vector
@@ -232,332 +617,46 @@ public class RDP {
 	}
 	///////////////////////////////////////////////////////////////////////////////
 
-//    public void sensibilizarVectorZ() {
-//    	for(int k = 0 ; k<numeroTransiciones; k++) {VectorZ.setDato(0, k, 1);}
-//    	//VectorZ.imprimirMatriz();
-//    }
+//	public boolean T_en_VectorZ(int Transicion) {
+//		if (VectorZ.getDato(0, Transicion) == 0) {
+//			return true;
+//		}
+//		return false;
+//	}
+
+//	public boolean getVectorZ(int transicion) {
+//
+//		if (VectorZ.getDato(0, transicion) == 1) {
+//			return true;
+//		}
+//
+//		return false;
+//	}
+
+//	public void sensibilizarVectorZ() {
+//		// consola.registrarDisparo("* Sensibilizar el vector Z" , 1);
+//		for (int k = 0; k < numeroTransiciones; k++) {
+//
+//			if (timeStamp[k] != 0) {
+//				VectorZ.setDato(0, k, 0);
+//			} else {
+//				VectorZ.setDato(0, k, 1);
+//			}
+//		}
+//		System.out.println("Sensibilizado del vector Z");
+//		VectorZ.imprimirMatriz();
+//		System.out.println("====================");
+	//}
 
 	/*
 	 * Metodo donde espera el hilo.
 	 * 
 	 */
-	public void esperar(int transicion) {
-		int alfa = Intervalo.getDato(0, transicion);
-		long Tiempo_esperar = (Temporizadas.getTimeStamp()[transicion] + alfa) - System.currentTimeMillis();
-		// System.out.println("OBSERVACION : "+Tiempo_esperar+ " HILO:
-		// "+Thread.currentThread().getName());
-		if (Tiempo_esperar > 0) {
-			try {
-				Thread.sleep(Tiempo_esperar);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 
-	}
-
-	/**
-	 * Este metodo dispara una transicion de la rdp indicada por parametro, teniendo
-	 * en cuenta el modo indicado por parametro
-	 * 
-	 * @param transicion : numero de transicion.
-	 * @return : -0 retorna 0 si el disparo no es exitoso. -1 retorna 1 si el
-	 *         disparo es exitoso.
-	 */
-	public boolean Disparar(int transicion) {
-
-		boolean k = true;
-		if (!estaSensibilizada(transicion))
-			return false;
-
-		if (esTemporal(transicion)) {
-			consola.registrarDisparo("\n* Transicion temporal, control de ventana T[" + (transicion + 1) + "]\n"
-					+ "* Tiempo: " + System.currentTimeMillis(), 1);
-			boolean soy_el_primero = false;
-			boolean ventana = false;
-			ventana = Temporizadas.testVentana(transicion, Intervalo);
-			soy_el_primero = soy_el_primero(transicion); // true si no hay alguien esperando
-
-			consola.registrarDisparo("* Ventana: " + ventana, 1);
-			consola.registrarDisparo("* Soy el primero: " + soy_el_primero + " T" + (transicion + 1), 1);
-
-			if (ventana == true && soy_el_primero == true) { // Soy el primero
-				k = true;
-				consola.registrarDisparo("* Se va a disparar: " + "T" + (transicion + 1), 1);
-			} else {// ventana == false
-					// pregunto si estoy antes de la ventana
-				boolean antes = false;
-				antes = Temporizadas.antesDeLaVentana(transicion, Intervalo);
-
-				if (antes == true && soy_el_primero == true) { // soy el primero y estoy antes de la ventana de tiempo
-					consola.registrarDisparo("* Se va a esperar: T" + (transicion + 1), 1);
-					setEsperando(transicion);
-					mutex._release();
-					esperar(transicion);
-					mutex._acquire();
-					consola.registrarDisparo("\n* Desperte tomé el acquire: T" + (transicion + 1), 1);// +"\n* Fin: "
-					k = true; // puede estar desensibilizada. Despues de haber esperado por una transicion sensibilizada
-					
-				}
-				/*
-				 * Si estoy despues de la ventana y no hay nadie esperando por ella k == true
-				 * 
-				 */
-				else if (antes == false && soy_el_primero == true) {// estoy despues de la ventana de tiempo y soy el
-																	// primero
-					consola.registrarDisparo("* Antes : " + antes, 1);
-					// Estoy despues de la ventana pero soy el primero en llegar
-					consola.registrarDisparo(
-							"* Estoy despues de la ventana pero soy el primero en llegar: T" + (transicion + 1), 1);
-					k = true;
-				} else if (antes == false && soy_el_primero == false) {
-					consola.registrarDisparo(
-							"* Estoy despues de la ventana pero no soy el primero en llegar: T" + (transicion + 1), 1);
-					k = false;
-				} else if (antes == true && soy_el_primero == false) {
-					consola.registrarDisparo(
-							"* Estoy antes de la ventana pero no soy el primero en llegar: T" + (transicion + 1), 1);
-					k = false;
-				}
-			}
-		}
-		////////////////////////////////////////////
-		// System.out.println("Valor de k en disparar :"+k +" esta sensibilizada "+
-		//////////////////////////////////////////// estaSensibilizada(transicion));
-		if (k == true)// && estaSensibilizada(transicion)==true)
-		{
-			if (esTemporal(transicion))
-				resetEsperando(transicion);
-			if (!estaSensibilizada(transicion))
-				return false; // Verificamos si sigue sensibilizada
-			calculoDeVectorEstado(transicion);
-			// System.out.println("Verificacion de los invariante de plaza");
-			if (Test_Invariante() == false) {
-				consola.registrarDisparo("* NO SE CUMPLE EL INVARIANTE DE PLAZA \n", 0);
-				throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
-			}
-			sensibilizar();
-			actualiceSensibilizadoT();// Comprueba si disparo de esta transicion ha habilitado el contador de
-										// trasiciones temporales sucesivas
-
-			return true;
-		}
-		return false;
-
-	}
-
-	public void calculoDeVectorEstado(int transicion) {
-
-		Matriz aux = Incidencia.getMultiplicacion(Identidad.getColumna(transicion));
-		VectorMarcadoActual = VectorMarcadoActual.getSuma(aux);
-	}
-
-	/*
-	 * Comprueba si se sensibilizaron transiciones temporales colocar el valor
-	 * TimeStamp
-	 */
-	public void actualiceSensibilizadoT() {
-		for (int t = 0; t < numeroTransiciones; t++) {
-			if (esTemporal(t) && (VectorExtendido.getDato(t, 0) == 1)) {
-				Temporizadas.setNuevoTimeStamp(t);
-			}
-			if ((esTemporal(t) == true) && VectorExtendido.getDato(t, 0) == 0
-					&& (Temporizadas.getEsperando(t) == true)) {
-				Temporizadas.resetEsperando(t);
-				consola.registrarDisparo("* Borrado del TimeStamp de: T" + t, 1);
-			}
-		}
-	}
-
-	public boolean esTemporal(int transicion) {
-		if (Intervalo().getDato(0, transicion) - Intervalo().getDato(1, transicion) != 0) {
-			return true;
-		}
-		return false;
-	}
-
-	public Matriz Intervalo() {
-		return Intervalo;
-	}
-
-	public long[] SensibilizadaConTiempo() {
-		return SensibilizadaConTiempo;
-	}
-
-	/**
-	 * Devuelve true si la transicion esta habilitada de acuerdo al vector extendido
-	 * 
-	 * @param transicion : transicion la que se desea saber si está habilitada o no.
-	 * @return verdadero estan habilitadas
-	 */
-	public boolean estaSensibilizada(int transicion) {
-		if (VectorExtendido.getDato(transicion, 0) == 1)
-			return true;
-		else
-			return false;
-	}
-
-	/**
-	 * Metedo encargado de verificar si se cumple el los p-Inavariantes.
-	 * 
-	 * @param vector vector a imprimir.
-	 */
-	public boolean Test_Invariante() {
-		// VectorMarcadoActual.getTranspuesta().imprimirMatriz();
-		CharSequence cort;
-		int Inv = 0;
-		int Suma = 0;// suma los valores que hay en las plaza
-		try {
-			input = new Scanner(new File("matrices/P_Invariantes.txt"));
-			// System.out.println("Verificacion de p-invariantes");
-			while (input.hasNextLine()) {
-				String line = input.nextLine();
-				// System.out.println("linea "+line);
-				for (int k = 0; k < line.length(); k++) {
-					char r = line.charAt(k);
-					if (r == '(') {
-						for (int z = k; z < line.length(); z++) {
-							char h = line.charAt(z);
-							if (h == ')') {
-								cort = line.subSequence(k + 2, z);
-								Inv = Integer.parseInt(cort.toString());
-								// System.out.println("Lugares donde extraer los valores "+ (Inv-1));
-								// VectorMarcadoActual.getTranspuesta().imprimirMatriz();
-								Suma = Suma + VectorMarcadoActual.getDato(Inv - 1, 0);
-								// System.out.println("Suma :"+Suma);
-								k = z;
-								break;
-							}
-						}
-					} else if (r == '=') {
-
-						cort = line.subSequence(k + 2, line.length());
-						Inv = Integer.parseInt(cort.toString());
-						// System.out.println("Resultado :"+Suma);
-						if (Inv != Suma) {
-							return false;
-						}
-						Suma = 0;
-					}
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
-
-	// Metodos get
-
-	public Matriz getVectorExtendido() {
-		return VectorExtendido;
-	}
-
-	public Matriz getVectorSensibilizado() {
-		return VectorSensibilizado;
-	}
-
-	public Matriz getMatrizInhibicion() {
-		return VectorInhibicion;
-	}
-
-	public Matriz getVectorMA() {
-		return VectorMarcadoActual;
-	}
-
-//	public Matriz getVectorZ() { return VectorZ; }
-
-	public int get_numero_Transiciones() {
-		return numeroTransiciones;
-	}
-
-	// Metodos de formato para el LOG.txt
-	/**
-	 * 
-	 * @param vector
-	 * @return Transiciones_sensibilizadas tipo String
-	 */
-	public String sensibilidadas(Matriz vector) {
-		String Transiciones_sensibilizadas = "";
-
-		for (int n = 0; n < vector.getNumFilas(); n++) {
-			Transiciones_sensibilizadas += Transiciones[n] + ":" + vector.getDato(n, 0) + " ";
-		}
-		return Transiciones_sensibilizadas;
-	}
-
-	/*
-	 * Retorna el marcado actual
-	 */
-	public String Marcado(Matriz vector) {
-		String Marcado_actual = "";
-		for (int n = 0; n < vector.getNumFilas(); n++) {
-			Marcado_actual += Plazas[n] + ":" + vector.getDato(n, 0) + " ";
-		}
-		return Marcado_actual;
-	}
-
-	/**
-	 * Este metodo muestra el vector indicado por parametro
-	 * 
-	 * @param vector vector a imprimir. Tipo 0: Transiciones 1: Plazas
-	 */
-	public void mostrar(Matriz vector, int Tipo) {
-		if (Tipo == 0) {
-			for (int n = 0; n < vector.getNumFilas(); n++)
-				System.out.print(Transiciones[n] + ":" + vector.getDato(n, 0) + " ");
-		} else if (Tipo > 0) {
-			for (int n = 0; n < vector.getNumFilas(); n++)
-				System.out.print(Plazas[n] + ":" + vector.getDato(n, 0) + " ");
-		}
-		System.out.println("\n");
-
-	}
-
-	/**
-	 * Metodo que calcula el vector Inhibicion
-	 */
-	private Matriz sensibilizarVectorB2(Matriz VectorMarcadoActual2) {
-		Matriz VectorInhibicion2;
-		Matriz Q2 = new Matriz(numeroPlazas, 1);
-		for (int i = 0; i < Q2.getNumFilas(); i++) {
-
-			if (VectorMarcadoActual2.getDato(i, 0) != 0)
-				Q2.setDato(i, 0, 1);
-			else
-				Q2.setDato(i, 0, 0);
-
-		}
-		VectorInhibicion2 = Inhibicion.getTranspuesta().getMultiplicacion(Q2);
-		for (int i = 0; i < VectorInhibicion.getNumFilas(); i++) {
-			if (VectorInhibicion2.getDato(i, 0) > 1)
-				VectorInhibicion2.setDato(i, 0, 1);
-		}
-		VectorInhibicion2 = VectorInhibicion2.getComplemento();
-		return VectorInhibicion2;
-	}
-
-	private void sensibilizarVectorB() {
-		Matriz Q = new Matriz(numeroPlazas, 1);
-		for (int i = 0; i < Q.getNumFilas(); i++) {
-
-			if (VectorMarcadoActual.getDato(i, 0) != 0)
-				Q.setDato(i, 0, 1);
-			else
-				Q.setDato(i, 0, 0);
-
-		}
-		// System.out.println("sensibilizarVectorB ");
-		// Inhibicion.imprimirMatriz();
-		// Q.imprimirMatriz();
-		VectorInhibicion = Inhibicion.getTranspuesta().getMultiplicacion(Q);
-		// VectorInhibicion.getTranspuesta().imprimirMatriz();
-
-		for (int i = 0; i < VectorInhibicion.getNumFilas(); i++) {
-			if (VectorInhibicion.getDato(i, 0) > 1)
-				VectorInhibicion.setDato(i, 0, 1);
-		}
-		VectorInhibicion = VectorInhibicion.getComplemento();
-	}
+//		else {
+//			throw new RuntimeException("TIEMPO PARA DORMIR NEGATIVO");
+//		}
+//	public void actualiceSensibilizadoT_politica(int transicion) {
+//	resetEsperando(transicion);
+//}
 }

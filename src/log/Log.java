@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 public class Log {
     private FileWriter file;
     private PrintWriter pw;
+    private static boolean writer;
   //PRIVATES VARIABLES
     //------------------------------------------------------------------------------------------------------------------
     private final String REPORT_FILE_NAME;
@@ -32,9 +33,13 @@ public class Log {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        writer = true;
     }
     public void registrarDisparo(String cadena,int tipo) {
-       if(tipo == 0)
+       if(writer) {
+    	   
+       
+    	if(tipo == 0)
     	   
        {
     	try {
@@ -71,5 +76,10 @@ public class Log {
                }
            }
        }
+    }
+    }
+    public void end() {
+    	
+    	writer = false;
     }
 }
