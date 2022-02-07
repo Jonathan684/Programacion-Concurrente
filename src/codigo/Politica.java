@@ -103,7 +103,7 @@ public class Politica {
 	 */
 
 	public int cual(Matriz m) {
-		System.out.println("POLITICA");
+	//	System.out.println("POLITICA");
 		int tansicion_a_disparar = -1;
 //		for (int transicion = 0; transicion < rdp.get_numero_Transiciones(); transicion++) {
 //			if ((m.getDato(transicion, 0) == 1) && (rdp.esInmediata(transicion))) {
@@ -114,7 +114,7 @@ public class Politica {
 		//System.out.println("\n//////////////////////inicio cual//////////////////////\n");
 		
 		Ordenar_x_disparos();
-		imprimir_disp();
+		//imprimir_disp();
 		for (Info i : disp) {
 			if (m.getDato(i.get_transicion(), 0) == 1) {
 				tansicion_a_disparar = i.get_transicion();
@@ -133,7 +133,7 @@ public class Politica {
 			}
 		}
 		
-		System.out.println("\n"+System.currentTimeMillis());
+		//System.out.println("\n"+System.currentTimeMillis());
 //		if(despertar != -1) {
 //			/System.out.println("Va despertar : "+ (despertar+1));
 //			Matriz aux = rdp.Falso_Disparo(despertar);
@@ -143,12 +143,12 @@ public class Politica {
 //		
 		//System.out.println("Transicion a sacar de la cola : "+(tansicion_a_disparar+1));
 		//System.out.println("Matriz m :");
-		m.getTranspuesta().imprimirMatriz();
+	//	m.getTranspuesta().imprimirMatriz();
 //		System.out.println("Hilos en la cola:");
 //		System.out.println(cola.imprimirCola());
 		
 //		System.out.println("*******************fin cual*************************");
-		System.out.println("Transicion saliendo de la cola : "+(tansicion_a_disparar+1));
+		//System.out.println("Transicion saliendo de la cola : "+(tansicion_a_disparar+1));
 		return tansicion_a_disparar;
 	}
 

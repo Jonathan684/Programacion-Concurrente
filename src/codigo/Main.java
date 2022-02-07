@@ -10,7 +10,7 @@ public class Main {
 
 	private static final int numeroHilos = 7;
 	//private static final int numeroHilos = 3;
-	private static final int tiempoCorrida = 5000; // 200000 milisegundos
+	private static final int tiempoCorrida =200000; // 200000 milisegundos
 	
 	private static int[] T1 = { 1 };
 	private static int[] T2_T4 = { 2, 4 };

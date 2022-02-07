@@ -60,7 +60,7 @@ public class Monitor {
 			consola.registrarDisparo("* Dentro del monitor T" + (T_Disparar + 1), 1);// +" Hilo:
 			consola.registrarDisparo("*¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯", 1);// +" Hilo:
 			consola.registrarDisparo(cola.imprimirCola(), 1);
-			consola.registrarDisparo("* Tiempo de ingreso :" + System.currentTimeMillis(), 1);
+			consola.registrarDisparo("* Tiempo de ingreso :" + System.currentTimeMillis()+" Hilo :"+Thread.currentThread().getName(), 1);
 			//consola.registrarDisparo("* " + red.sensibilidadas(), 1);
 			k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
 
@@ -123,25 +123,23 @@ public class Monitor {
 						mutex._release();
 						cola.poner_EnCola(T_Disparar);
 					 }
-					else {
+					else { // k=false 
 						
 						if(!red.Analisis_Temporal(T_Disparar)) {
 							
 								red.esperar(red.get_timeout(), T_Disparar);
 								mutex._acquire();
-								
+								consola.registrarDisparo("* -.Saliendo de un sleep. Hilo" + Thread.currentThread().getName(), 1);
+								k=true;
 						} // <-- Si esta sensibilizada y está lista para dormir.
 						else {
-							mutex._release();
+							//mutex._release();
+							consola.registrarDisparo("* -.Estoy en la venta. Hilo" + Thread.currentThread().getName(), 1);
+							k=true;
 						}
 						
 						
 						
-						
-						
-						
-						consola.registrarDisparo("* -.Saliendo de un sleep. Hilo" + Thread.currentThread().getName(), 1);
-						k=true;
 					}
 				  }
 			}
