@@ -243,7 +243,7 @@ public class RDP {
 //			return;
 //		}
 	}
-	public void esperar(int Tiempo_esperar,int transicion) {
+	public void esperar(int transicion) {
 		// consola.registrarDisparo("* Estoy antes del alfa. Esperar :" +
 		// Tiempo_esperar, 1);
 		setEsperando(transicion);
@@ -251,23 +251,11 @@ public class RDP {
 		// todavia_espera[transicion] = 1;
 		 mutex._release();
 		try {
-			Thread.sleep(Tiempo_esperar);
+			Thread.sleep(timeout);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	public int get_timeout() {
-		return timeout;
-	}
-	public boolean get_todavia_espera(int transicion) {
-		if (todavia_espera[transicion] == 1)
-			return true;
-		return false;
-	}
-
-	public void reset_todavia_espera(int transicion) {
-		todavia_espera[transicion] = 0;
 	}
 
 	public void calculoDeVectorEstado(int transicion) {

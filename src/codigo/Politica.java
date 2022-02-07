@@ -112,26 +112,27 @@ public class Politica {
 //			}
 //		}
 		//System.out.println("\n//////////////////////inicio cual//////////////////////\n");
-		
-		Ordenar_x_disparos();
+		List<Info> aux = new ArrayList<Info>(disp);
+		//Collections.copy(aux, disp);
+		Ordenar_x_disparos(aux);
 		//imprimir_disp();
-		for (Info i : disp) {
+		for (Info i : aux) {
 			if (m.getDato(i.get_transicion(), 0) == 1) {
 				tansicion_a_disparar = i.get_transicion();
 				
 				break;
 			}
 		}
-		Ordenar_x_transicion();
+		//Ordenar_x_transicion();
 	//	System.out.println("Duermen");
-		int despertar = -1;
-		for(int k = 0;k<rdp.get_vector_Esperando().length;k++){
-			//System.out.print("T"+k+":"+rdp.get_vector_Esperando()[k]+" ");
-			if(rdp.get_vector_Esperando()[k] == 1) {
-				despertar = k;
-				break;
-			}
-		}
+//		int despertar = -1;
+//		for(int k = 0;k<rdp.get_vector_Esperando().length;k++){
+//			//System.out.print("T"+k+":"+rdp.get_vector_Esperando()[k]+" ");
+//			if(rdp.get_vector_Esperando()[k] == 1) {
+//				despertar = k;
+//				break;
+//			}
+//		}
 		
 		//System.out.println("\n"+System.currentTimeMillis());
 //		if(despertar != -1) {
@@ -158,8 +159,8 @@ public class Politica {
 		}
 	}
 
-	public void Ordenar_x_disparos() {
-		Collections.sort(disp, new Comparator<Info>() {
+	public void Ordenar_x_disparos(List<Info> aux) {
+		Collections.sort(aux, new Comparator<Info>() {
 			public int compare(Info c1, Info c2) {
 				if (c1.getCant_disparos() < c2.getCant_disparos())
 					return -1;

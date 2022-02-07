@@ -127,7 +127,7 @@ public class Monitor {
 						
 						if(!red.Analisis_Temporal(T_Disparar)) {
 							
-								red.esperar(red.get_timeout(), T_Disparar);
+								red.esperar(T_Disparar);
 								mutex._acquire();
 								consola.registrarDisparo("* -.Saliendo de un sleep. Hilo" + Thread.currentThread().getName(), 1);
 								k=true;
@@ -137,9 +137,6 @@ public class Monitor {
 							consola.registrarDisparo("* -.Estoy en la venta. Hilo" + Thread.currentThread().getName(), 1);
 							k=true;
 						}
-						
-						
-						
 					}
 				  }
 			}
