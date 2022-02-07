@@ -11,7 +11,7 @@ import log.Log;
 public class Politica {
 	// Campos
 
-	private int[][] invariantes;
+	//private int[][] invariantes;
 	private List<Integer> vecesPorInvariante;
 	private List<Integer> disparos;
 	private List<Integer> Indices;
@@ -20,10 +20,18 @@ public class Politica {
 	private static HashMap<String, Integer> t_invariantes;
 	private Info[] Transiciones;
 	private List<Info> disp = new ArrayList<Info>();
-
-	public Politica(String[][] T_Invariantes, int[][] invariantes, RDP rdp, Log consola) {
+	private  Cola cola;
+	private static String[][] T_invariantes = { {"T1 T2 T4 T6"}, //  Invariante 1
+			{"T1 T3 T5 T6"}, //  Invariante 2
+			{"T7 T8 T9 T10"}};// Invariane 3 
+	
+	
+	
+	
+	public Politica( RDP rdp, Log consola,Cola cola) {
 		this.consola = consola;
-		this.invariantes = invariantes;
+		this.cola = cola;
+		//this.invariantes = invariantes;
 		vecesPorInvariante = new ArrayList<>();
 		disparos = new ArrayList<Integer>(Collections.nCopies(10, 0));
 		this.rdp = rdp;
@@ -32,14 +40,8 @@ public class Politica {
 			Transiciones[i] = new Info(i, 0);
 			disp.add(Transiciones[i]);
 		}
-//		 System.out.println("-------================------------------");	  
-//			for (Info i : disp) {
-//	            System.out.println(" Transicion " +i.getCant_disparos());
-//	            
-//	        }
-//		System.out.println("---------------=====================-------");
 
-		for (int i = 0; i < T_Invariantes.length; i++) {
+		for (int i = 0; i < T_invariantes.length; i++) {
 			vecesPorInvariante.add(0);
 		}
 		/**
@@ -47,7 +49,7 @@ public class Politica {
 		 * disparos. Inico cantidad de disparos 0.
 		 */
 		t_invariantes = new HashMap<String, Integer>();
-		for (String[] inv : T_Invariantes) {
+		for (String[] inv : T_invariantes) {
 			t_invariantes.put(inv[0], 0);
 		}
 //		for (String Inv : t_invariantes.keySet()) {
@@ -101,27 +103,30 @@ public class Politica {
 	 */
 
 	public int cual(Matriz m) {
+		System.out.println("POLITICA");
 		int tansicion_a_disparar = -1;
-		for (int transicion = 0; transicion < rdp.get_numero_Transiciones(); transicion++) {
-			if ((m.getDato(transicion, 0) == 1) && (rdp.esInmediata(transicion))) {
-				return transicion;
-			}
-		}
-		System.out.println("\n//////////////////////inicio cual//////////////////////\n");
+//		for (int transicion = 0; transicion < rdp.get_numero_Transiciones(); transicion++) {
+//			if ((m.getDato(transicion, 0) == 1) && (rdp.esInmediata(transicion))) {
+//				System.out.println("Transicion a sacar de la cola prueba : "+(tansicion_a_disparar+1));
+//				return transicion;
+//			}
+//		}
+		//System.out.println("\n//////////////////////inicio cual//////////////////////\n");
 		
 		Ordenar_x_disparos();
-		//imprimir();
+		imprimir_disp();
 		for (Info i : disp) {
 			if (m.getDato(i.get_transicion(), 0) == 1) {
 				tansicion_a_disparar = i.get_transicion();
+				
 				break;
 			}
 		}
 		Ordenar_x_transicion();
-		System.out.println("Duermen");
+	//	System.out.println("Duermen");
 		int despertar = -1;
 		for(int k = 0;k<rdp.get_vector_Esperando().length;k++){
-			System.out.print("T"+k+":"+rdp.get_vector_Esperando()[k]+" ");
+			//System.out.print("T"+k+":"+rdp.get_vector_Esperando()[k]+" ");
 			if(rdp.get_vector_Esperando()[k] == 1) {
 				despertar = k;
 				break;
@@ -129,23 +134,29 @@ public class Politica {
 		}
 		
 		System.out.println("\n"+System.currentTimeMillis());
-		if(despertar != -1) {
-			System.out.println("Va despertar : "+ (despertar+1));
-			Matriz aux = rdp.Falso_Disparo(despertar);
-			aux.getTranspuesta().imprimirMatriz();
-		}
-		
-		System.out.println("Transicion_a_disparar : "+(tansicion_a_disparar+1));
+//		if(despertar != -1) {
+//			/System.out.println("Va despertar : "+ (despertar+1));
+//			Matriz aux = rdp.Falso_Disparo(despertar);
+//			//System.out.println("Disparo futuro:");
+//			aux.getTranspuesta().imprimirMatriz();
+//		}
+//		
+		//System.out.println("Transicion a sacar de la cola : "+(tansicion_a_disparar+1));
+		//System.out.println("Matriz m :");
 		m.getTranspuesta().imprimirMatriz();
-		System.out.println("*******************fin cual*************************");
+//		System.out.println("Hilos en la cola:");
+//		System.out.println(cola.imprimirCola());
+		
+//		System.out.println("*******************fin cual*************************");
+		System.out.println("Transicion saliendo de la cola : "+(tansicion_a_disparar+1));
 		return tansicion_a_disparar;
 	}
 
-//	public void imprimir_disp() {
-//		for (Info i : disp) {
-//			System.out.println("Trans " + i.get_transicion() + " " + i.getCant_disparos());
-//		}
-//	}
+	public void imprimir_disp() {
+		for (Info i : disp) {
+			System.out.println("Trans " + i.get_transicion() + " " + i.getCant_disparos());
+		}
+	}
 
 	public void Ordenar_x_disparos() {
 		Collections.sort(disp, new Comparator<Info>() {

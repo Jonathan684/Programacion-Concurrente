@@ -9,7 +9,7 @@ public class Monitor {
 
 	private RDP red;
 	private Cola cola;
-	private Politica politica;
+	private Politica pol;
 	private Log log;
 	private Log consola;
 	private int nTransicion;
@@ -18,12 +18,14 @@ public class Monitor {
 	private Matriz m;
 	private boolean k;
 	private boolean salir;
+	//private Politica politica; 
 	/**
 	 * Constructor de la clase Monitor
 	 * 
 	 * @param mutex
 	 */
-	public Monitor(Mutex mutex, RDP red, Politica politica, Log consola) {
+	public Monitor(Mutex mutex, RDP red, Log log2) {
+		this.consola = log2;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		consola.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
 		consola.registrarDisparo("**************************************************", 1);
@@ -32,9 +34,9 @@ public class Monitor {
 		consola.registrarDisparo("** Informe de los disparos **", 1);
 		this.mutex = mutex;
 		this.red = red;
-		this.politica = politica;
+		//this.politica = politica;
 		this.log = new Log(REPORT_FILE_NAME_1);
-		this.consola = consola;
+		
 		cola = new Cola(red.get_numero_Transiciones());
 		nTransicion = 0;
 		red.sensibilizar();
@@ -42,6 +44,7 @@ public class Monitor {
 		salir=false;
 		consola.registrarDisparo("* Marcado inicial     : " + red.Marcado(), 1);
 		consola.registrarDisparo("* Transciones Inicial : " + red.sensibilidadas(), 1);// +"Disparo
+		pol = new Politica(red,log2,cola);
 	}
 
 	/**
@@ -66,7 +69,7 @@ public class Monitor {
 				consola.registrarDisparo("* Se disparo: T" + (T_Disparar + 1), 1);
 				consola.registrarDisparo("* " + red.Marcado(), 1);
 				consola.registrarDisparo("* " + red.sensibilidadas(), 1);
-				politica.registrarDisparo(T_Disparar);
+				pol.registrarDisparo(T_Disparar);
 				//consola.registrarDisparo("* k 0:" + k +" "+Thread.currentThread().getName(), 1);
 				
 				if ((T_Disparar + 1) == 10)
@@ -89,7 +92,7 @@ public class Monitor {
 //					consola.registrarDisparo("* m: no es nula",1);
 
 					//consola.registrarDisparo("* k 3 :" + k +" "+Thread.currentThread().getName(), 1);
-					nTransicion = politica.cual(m);
+					nTransicion = pol.cual(m);
 					//consola.registrarDisparo("* k 4:" + k +" "+Thread.currentThread().getName(), 1);
 					// esta en el cola ?
 					// si esta
@@ -173,6 +176,10 @@ public class Monitor {
 			cola.sacar_de_Cola(i);
 		}
 		// TODO Auto-generated method stub
+	}
+	public void imprimir(Log loga)
+	{
+		pol.imprimir(loga);
 	}
 }
 

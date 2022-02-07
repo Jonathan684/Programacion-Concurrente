@@ -10,16 +10,13 @@ public class Main {
 
 	private static final int numeroHilos = 7;
 	//private static final int numeroHilos = 3;
-	private static final int tiempoCorrida = 10000; // 200000 milisegundos
-	private static String[][] T_invariantes = { {"T1 T2 T4 T6"}, //  Invariante 1
-												{"T1 T3 T5 T6"}, //  Invariante 2
-												{"T7 T8 T9 T10"}};// Invariane 3 
+	private static final int tiempoCorrida = 5000; // 200000 milisegundos
+	
 	private static int[] T1 = { 1 };
 	private static int[] T2_T4 = { 2, 4 };
 	private static int[] T3_T5 = { 3, 5 };
 	private static int[] T6 = { 6 };
 	private static int[] T7_T8_T9_T10 = { 7, 8, 9, 10 };
-	private static int[][] secInvariante ={{2,4},{3,5},{7,8,9,10}};
 	private static Hilo[] hilos;
 	private static Thread[] threads;
 	private static RDP redDePetri;
@@ -39,8 +36,8 @@ public class Main {
 		mutex = new Mutex();
 		Log log2 = new Log(REPORT_FILE_NAME_2);
 		redDePetri = new RDP(mutex, log2);
-		Politica politica = new Politica(T_invariantes,secInvariante, redDePetri,log2);
-		Monitor monitor = new Monitor(mutex, redDePetri, politica, log2);
+		
+		Monitor monitor = new Monitor(mutex, redDePetri,log2);
 		hilos = new Hilo[numeroHilos];
 		
 		hilos[0] = new Hilo(monitor, T1);	//T1
@@ -89,8 +86,8 @@ public class Main {
 		//log2.end();
 		log2.registrarDisparo("\n************************ Fin **************************** Tiempo :" + System.currentTimeMillis(), 1);
 		log.registrarDisparo("Tiempo de ejecucion : " + (tiempoCorrida / 1000) + "seg.", 1);
-		
-		politica.imprimir(log);
+		monitor.imprimir(log);
+		//politica.imprimir(log);
 	}
 
 }
