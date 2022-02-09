@@ -9,8 +9,7 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 7;
-	//private static final int numeroHilos = 3;
-	private static final int tiempoCorrida =120000; // 200000 milisegundos
+	private static final int tiempoCorrida = 220000;//milisegundos
 	
 	private static int[] T1 = { 1 };
 	private static int[] T2_T4 = { 2, 4 };
@@ -33,9 +32,9 @@ public class Main {
 
 		log = new Log(REPORT_FILE_NAME_3);
 		
-		mutex = new Mutex();
+		//mutex = new Mutex();
 		Log log2 = new Log(REPORT_FILE_NAME_2);
-		redDePetri = new RDP(mutex, log2);
+		redDePetri = new RDP(log2);
 		
 		Monitor monitor = new Monitor(mutex, redDePetri,log2);
 		hilos = new Hilo[numeroHilos];
@@ -49,45 +48,34 @@ public class Main {
 		hilos[6] = new Hilo(monitor, T7_T8_T9_T10 ); //T7,T8,T9,T10
 		
 		threads = new Thread[numeroHilos];
-		for(int i=0; i<numeroHilos;i++) {
-			threads[i] = new Thread(hilos[i], "" +i);
-		}
-		for (int k = 0; k < numeroHilos; k++) {
-			threads[k].start();
-		}
-
+		for(int i=0; i<numeroHilos;i++)threads[i] = new Thread(hilos[i], "" +i);
+		
+		for(Thread T : threads)T.start();
+		
 		try {
 			Thread.sleep(tiempoCorrida);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
-		for (int J = 0; J < numeroHilos; J++) {
-			hilos[J].set_Fin();
-		}
+		for(Hilo h:hilos)h.set_Fin();
 		monitor.vaciarcolas();
+		for(Thread t : threads)t.interrupt();
 		
-
-		for (int k = 0; k < numeroHilos; k++) {
-			threads[k].interrupt();
-		}
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		log2.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
 		
-		//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		//log2.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
-		for (int k = 0; k < numeroHilos; k++) {
-			try {
-				threads[k].join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		for (Thread k : threads) {
+//			try {
+//				k.join();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
-		//log2.end();
 		log2.registrarDisparo("\n************************ Fin **************************** Tiempo :" + System.currentTimeMillis(), 1);
 		log.registrarDisparo("Tiempo de ejecucion : " + (tiempoCorrida / 1000) + "seg.", 1);
 		monitor.imprimir(log);
-		//politica.imprimir(log);
 	}
-
 }

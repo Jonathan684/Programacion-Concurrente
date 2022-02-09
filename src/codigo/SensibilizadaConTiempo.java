@@ -10,7 +10,7 @@ public class SensibilizadaConTiempo {
 	private Matriz Intervalo;
 	//private Mutex mutex;
 	
-	public SensibilizadaConTiempo(int cantidad_transiciones,Mutex mutex ,Log consola2, Matriz Intervalo) {
+	public SensibilizadaConTiempo(int cantidad_transiciones ,Log consola2, Matriz Intervalo) {
 		this.consola = consola2;
 		timeStamp = new long[cantidad_transiciones];
 		SetEsperando = new int[cantidad_transiciones];
@@ -24,7 +24,7 @@ public class SensibilizadaConTiempo {
 		}
 	}
 	 public boolean esTemporal(int transicion) {
-			if (Intervalo.getDato(0, transicion) - Intervalo.getDato(1, transicion) != 0) {
+		 if (Intervalo.getDato(0, transicion) - Intervalo.getDato(1, transicion) != 0) {
 				return true;
 			}
 			return false;
