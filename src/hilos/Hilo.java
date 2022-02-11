@@ -17,11 +17,10 @@ public class Hilo implements Runnable {
 	@Override
 	public void run() {
 		while(continuar){
-				for(int i=0 ; i<secuencia.length;) {
+				for(int i=0 ; i<secuencia.length && continuar;) {
 					if(monitor.dispararTransicion(secuencia[i] - 1)){
 						//System.out.println("i :"+i +" secuencia.length :"+secuencia.length+" T"+secuencia[i]+" hilo:"+ Thread.currentThread().getName()+" tiempo:"+System.currentTimeMillis());
 						i++;
-						
 						if(i ==(secuencia.length)) {
 							i=0;
 						}

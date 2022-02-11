@@ -2,6 +2,7 @@ package codigo;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 
 import log.Log;
@@ -15,12 +16,13 @@ public class Monitor {
 	private Log consola;
 	private int nTransicion;
 	private final String REPORT_FILE_NAME_1 = "Python/log.txt";
-	//private Mutex mutex;
+	// private Mutex mutex;
 	private Semaphore mutex;
 	private Matriz m;
 //	private boolean k;
-	 private static volatile boolean fin; 
-
+	private static volatile boolean fin;
+	private boolean k;
+	private Tempo[] dormir; 
 	// private Politica politica;
 	/**
 	 * Constructor de la clase Monitor
@@ -35,19 +37,26 @@ public class Monitor {
 		consola.registrarDisparo("*        COMIENZO DEL MONITOR                    *", 1);
 		consola.registrarDisparo("**************************************************\n", 1);
 		consola.registrarDisparo("** Informe de los disparos **", 1);
-		//this.mutex = mutex;
 		this.red = red;
-		// this.politica = politica;
 		this.log = new Log(REPORT_FILE_NAME_1);
-		this.mutex = new Semaphore(1,true);
+		this.mutex = new Semaphore(1, true);
 		cola = new Cola(red.get_numero_Transiciones());
 		nTransicion = 0;
 		red.sensibilizar();
-//		k = true;
-		fin = true;
+		
+		k = true;
+		fin = false;
+		pol = new Politica(red, log2, cola);
+		
+		
+		dormir = new Tempo[red.get_numero_Transiciones()];
+		//Arrays.fill(dormir, 0);
+		for(int i = 0;i<red.get_numero_Transiciones() ; i++) {
+			dormir[i]=new Tempo();
+		}
 		consola.registrarDisparo("* Marcado inicial     : " + red.Marcado(), 1);
 		consola.registrarDisparo("* Transciones Inicial : " + red.sensibilidadas(), 1);// +"Disparo
-		pol = new Politica(red, log2, cola);
+		
 	}
 
 	/**
@@ -56,50 +65,68 @@ public class Monitor {
 	 * @return True : cuando el disparo fue exitoso
 	 */
 	public boolean dispararTransicion(int T_Disparar) {
+
 		try {
 			mutex.acquire();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		consola.registrarDisparo("* 1======================= T"+(T_Disparar+1) , 1);
-		consola.registrarDisparo(cola.imprimirCola(), 1);
-		while (!red.Disparar(T_Disparar)) {
-			consola.registrarDisparo("* cola o sleep:"+(red.esInmediata(T_Disparar) || red.noduerme(T_Disparar)) , 1);
-				mutex.release();
-				if( red.esInmediata(T_Disparar) || red.noduerme(T_Disparar) ) {
-					cola.poner_EnCola(T_Disparar);
+		k = true;
+		while (k) {
+
+			consola.registrarDisparo("* \n======================", 1);// +" Hilo:
+			consola.registrarDisparo("* Dentro del monitor T" + (T_Disparar + 1), 1);// +" Hilo:
+			consola.registrarDisparo(cola.imprimirCola(), 1);
+			consola.registrarDisparo("* Tiempo de ingreso : " + System.currentTimeMillis() + " Hilo :"
+					+ Thread.currentThread().getName(), 1);
+			k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
+			if (k) { // k =true
+				consola.registrarDisparo("* " + red.sensibilidadas(), 1);
+				consola.registrarDisparo("* Se disparo: T" + (T_Disparar + 1), 1);
+				pol.registrarDisparo(T_Disparar);
+				m = calcularVsAndVc();
+				if (m.esNula()) {
+
+					k = false;// No hay hilos con transiciones esperando para disparar y que esten
+					consola.registrarDisparo("* Saliendo true", 1);// +" Hilo:
+//					mutex.release();
+//					return true;
+				} else {
+					nTransicion = pol.cual(m);
+					consola.registrarDisparo("* Se saca de la cola: T" + (nTransicion + 1) + " tiempo:"
+							+ System.currentTimeMillis() + " valor de k :" + k, 1);
+					cola.sacar_de_Cola(nTransicion);
+					return true;
 				}
+			} else { // k =false
+				consola.registrarDisparo("* Tiempo para cola o sleep : " + System.currentTimeMillis() + " Hilo :"
+						+ Thread.currentThread().getName(), 1);
+				mutex.release();
+				if (!red.estaSensibilizada(T_Disparar) && (red.gettimeout(T_Disparar) == 0)) {
+					cola.poner_EnCola(T_Disparar);
+					consola.registrarDisparo("* Sale de la cola " + k+ " T"+(T_Disparar+1)+" Hilo :" + Thread.currentThread().getName(), 1);
+				}
+				// Transiciones Temporales
 				else {
 					try {
-						Thread.sleep(red.gettimeout(T_Disparar));
+						//Thread.sleep(red.gettimeout(T_Disparar));
+						dormir[T_Disparar].delay(red.gettimeout(T_Disparar));
+						mutex.acquire();
+						consola.registrarDisparo("* Saliendo "+ Thread.currentThread().getName()+" hilo:"+Thread.currentThread().getName() +" ->"+System.currentTimeMillis() , 1);
+						k = true;
+						//mutex.release();
+						//return false;
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
 				}
-				try {
-					mutex.acquire();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				consola.registrarDisparo("* 2======================= T"+(T_Disparar+1)+ " tiempo :"+System.currentTimeMillis()  , 1);
-				consola.registrarDisparo(cola.imprimirCola(), 1);
+				if (fin)
+					return false;
+			}
 		}
-		
-		consola.registrarDisparo("* Se disparo: T" + (T_Disparar + 1), 1);
-		consola.registrarDisparo("* " + red.Marcado(), 1);
-		consola.registrarDisparo("* " + red.sensibilidadas(), 1);
-		pol.registrarDisparo(T_Disparar);
-		m = calcularVsAndVc();
-		if (!(m.esNula()))	
-		{
-				nTransicion = pol.cual(m);
-				consola.registrarDisparo("* Se saca de la cola: T" + (nTransicion + 1) + " tiempo:" + System.currentTimeMillis(), 1);
-				cola.sacar_de_Cola(nTransicion);
-		}
-		consola.registrarDisparo("* Saliendo true Hilo :"+ Thread.currentThread().getName(), 1);// +" Hilo:
 		mutex.release();
 		return true;
 	}
@@ -118,18 +145,18 @@ public class Monitor {
 	}
 
 	public void vaciarcolas() {
-		for (int i = 0; i < red.get_numero_Transiciones(); i++) {
+		
 			try {
 				mutex.acquire();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			fin = false;
-			cola.sacar_de_Cola(i);
+			fin = true;
+			for (int i = 0; i < red.get_numero_Transiciones(); i++)cola.sacar_de_Cola(i);
 			mutex.release();
 			
-		}
+		
 		// TODO Auto-generated method stub
 	}
 

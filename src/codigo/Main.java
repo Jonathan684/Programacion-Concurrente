@@ -9,8 +9,7 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 7;
-	private static final int tiempoCorrida = 220000;//milisegundos
-	
+	private static final int tiempoCorrida =30000;//milisegundos
 	private static int[] T1 = { 1 };
 	private static int[] T2_T4 = { 2, 4 };
 	private static int[] T3_T5 = { 3, 5 };
@@ -58,23 +57,32 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		for(Hilo h:hilos)h.set_Fin();
+		for(Hilo H:hilos)H.set_Fin();
 		monitor.vaciarcolas();
+//		for (Thread k : threads) {
+//		try {
+//			k.join();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 		for(Thread t : threads)t.interrupt();
 		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		log2.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
 		
-//		for (Thread k : threads) {
-//			try {
-//				k.join();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		
+		// Tiempo para que salgan los hilos de la cola
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		
 		log2.registrarDisparo("\n************************ Fin **************************** Tiempo :" + System.currentTimeMillis(), 1);
+		log2.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
 		log.registrarDisparo("Tiempo de ejecucion : " + (tiempoCorrida / 1000) + "seg.", 1);
 		monitor.imprimir(log);
 	}

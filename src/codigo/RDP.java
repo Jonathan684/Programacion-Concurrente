@@ -152,8 +152,8 @@ public class RDP {
 
 	public boolean test_ventana(int transicion) {
 		//Marca_actual(transicion);
-		consola.registrarDisparo("* Test ventana :"+System.currentTimeMillis()+" T:"+(transicion+1),1);
-		int TimeStamp_ahora = (int) (System.currentTimeMillis() - (timeStamp[transicion]));
+		consola.registrarDisparo("* Test ventana :"+System.currentTimeMillis()+" T"+(transicion+1),1);
+		long TimeStamp_ahora = (System.currentTimeMillis() - (timeStamp[transicion]));
 		if ((TimeStamp_ahora >= (Intervalo.getDato(0, transicion)))&&(TimeStamp_ahora <= (Intervalo.getDato(1, transicion)))) {
 			return true;
 		} else {
@@ -163,7 +163,9 @@ public class RDP {
 				consola.registrarDisparo("* Tiempo a dormir "+timeout[transicion],1);
 				return false;
 			}
-			else throw new RuntimeException("Beta demasiado chico, elegir un beta mas grande : T"+ (transicion+1)+" tiempo:"+System.currentTimeMillis());
+			else {
+				throw new RuntimeException("Beta demasiado chico, elegir un beta mas grande : T"+ (transicion+1)+" tiempo:"+System.currentTimeMillis()+ " timeStamp :"+timeStamp[transicion]);
+			}
 			
 		}
 			
@@ -176,7 +178,8 @@ public class RDP {
 
 		for (int t = 0; t < numeroTransiciones; t++) {
 			if (Temporizadas.esTemporal(t) && (VectorExtendido.getDato(t, 0) == 1))setNuevoTimeStamp(t);
-			if ((Temporizadas.esTemporal(t) == true) && (VectorExtendido.getDato(t, 0) == 0))resetEsperando(t);
+			if ((Temporizadas.esTemporal(t) == true) && (VectorExtendido.getDato(t, 0) == 0))
+				resetEsperando(t);
 		}
 	}
 	
@@ -210,7 +213,9 @@ public class RDP {
 			return false; // esperar alfa
 			
 		} 
+		
 		throw new RuntimeException("Beta demasiado chico, elegir un beta mas grande : T"+ (transicion+1)+" tiempo:"+System.currentTimeMillis());
+		
 		//return true;
 		
 //		else { // <<-- Esta despues de beta
@@ -242,6 +247,7 @@ public class RDP {
 
 	public void resetEsperando(int transicion) {
 		timeStamp[transicion] = 0;
+		timeout[transicion]=0;
 		Temporizadas.resetEsperando(transicion);
 	}
 
