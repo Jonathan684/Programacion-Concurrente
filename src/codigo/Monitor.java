@@ -44,7 +44,7 @@ public class Monitor {
 		nTransicion = 0;
 		red.sensibilizar();
 		
-		k = true;
+		//boolean k = true;
 		fin = false;
 		pol = new Politica(red, log2, cola);
 		
@@ -72,57 +72,79 @@ public class Monitor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		k = true;
+		k=true;
 		while (k) {
-
-			consola.registrarDisparo("* \n======================", 1);// +" Hilo:
+			
+			consola.registrarDisparo("* ======================", 1);// +" Hilo:
 			consola.registrarDisparo("* Dentro del monitor T" + (T_Disparar + 1), 1);// +" Hilo:
+			consola.registrarDisparo("* ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯", 1);// +" Hilo:
 			consola.registrarDisparo(cola.imprimirCola(), 1);
-			consola.registrarDisparo("* Tiempo de ingreso : " + System.currentTimeMillis() + " Hilo :"
-					+ Thread.currentThread().getName(), 1);
+			consola.registrarDisparo("* Tiempo de ingreso :" + System.currentTimeMillis(), 1);
+			consola.registrarDisparo("* "+red.Marcado(), 1);
+			consola.registrarDisparo("* " + red.sensibilidadas(), 1);
+			
 			k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
 			if (k) { // k =true
-				consola.registrarDisparo("* " + red.sensibilidadas(), 1);
+				consola.registrarDisparo("* Valor de k : " + k, 1);
 				consola.registrarDisparo("* Se disparo: T" + (T_Disparar + 1), 1);
+				consola.registrarDisparo("* " + red.Marcado(), 1);
+				consola.registrarDisparo("* " + red.sensibilidadas(), 1);
+				consola.registrarDisparo("* k 0:" + k +" "+Thread.currentThread().getName(), 1);
+				if ((T_Disparar + 1) == 10)
+					log.registrarDisparo("T" + 0, 0);
+				else
+					log.registrarDisparo("T" + (T_Disparar + 1), 0);
+				
 				pol.registrarDisparo(T_Disparar);
 				m = calcularVsAndVc();
 				if (m.esNula()) {
-
+					
+					
 					k = false;// No hay hilos con transiciones esperando para disparar y que esten
-					consola.registrarDisparo("* Saliendo true", 1);// +" Hilo:
-//					mutex.release();
-//					return true;
+					mutex.release();
+					return true;
+				
 				} else {
+					
 					nTransicion = pol.cual(m);
-					consola.registrarDisparo("* Se saca de la cola: T" + (nTransicion + 1) + " tiempo:"
-							+ System.currentTimeMillis() + " valor de k :" + k, 1);
+					consola.registrarDisparo(
+							"* Se saca de la cola: T" + (nTransicion + 1)+" k:"+k + " tiempo:" + System.currentTimeMillis(), 1);
+					
 					cola.sacar_de_Cola(nTransicion);
+					//mutex.release();
 					return true;
 				}
 			} else { // k =false
-				consola.registrarDisparo("* Tiempo para cola o sleep : " + System.currentTimeMillis() + " Hilo :"
-						+ Thread.currentThread().getName(), 1);
+			
 				mutex.release();
-				if (!red.estaSensibilizada(T_Disparar) && (red.gettimeout(T_Disparar) == 0)) {
+				
+				////Si es inmediata me voy a dormir
+				if(red.getTemporales().getInmediata()[T_Disparar] == 1 || (red.getTemporales().getTimeStamp()[T_Disparar] == -1)) {
+					//System.out.println(" Encolando T"+(T_Disparar+1));
+					//consola.registrarDisparo("* Encolar T"+(T_Disparar+1), 1);
+					//mutex.release();
 					cola.poner_EnCola(T_Disparar);
-					consola.registrarDisparo("* Sale de la cola " + k+ " T"+(T_Disparar+1)+" Hilo :" + Thread.currentThread().getName(), 1);
+					consola.registrarDisparo("* Desperte T"+(T_Disparar+1)+" hilo:"+Thread.currentThread().getName()+" k:"+k, 1);
 				}
-				// Transiciones Temporales
 				else {
+					//consola.registrarDisparo("* TimeStamp -->"+red.getTemporales().getTimeStamp()[T_Disparar],1);
+					long timeout=red.getTemporales().getTiempoFaltanteParaAlfa(T_Disparar);
+					//consola.registrarDisparo("* Tiempo para dormir-->"+timeout,1);
 					try {
-						//Thread.sleep(red.gettimeout(T_Disparar));
-						dormir[T_Disparar].delay(red.gettimeout(T_Disparar));
-						mutex.acquire();
-						consola.registrarDisparo("* Saliendo "+ Thread.currentThread().getName()+" hilo:"+Thread.currentThread().getName() +" ->"+System.currentTimeMillis() , 1);
-						k = true;
 						//mutex.release();
-						//return false;
+						//dormir[T_Disparar].delay((timeout)+2);
+						Thread.sleep(timeout);
+						mutex.acquire();
+						//consola.registrarDisparo("\n* DESPERTE --> hilo :"+Thread.currentThread().getName()+" instante :"+System.currentTimeMillis()+
+							//	" T"+(T_Disparar +1 ),1);
+						k=true;
+						
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					
+					} //+2 Por problemas de redondeo.
 				}
+				
 				if (fin)
 					return false;
 			}

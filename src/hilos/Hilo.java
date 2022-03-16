@@ -19,7 +19,6 @@ public class Hilo implements Runnable {
 		while(continuar){
 				for(int i=0 ; i<secuencia.length && continuar;) {
 					if(monitor.dispararTransicion(secuencia[i] - 1)){
-						//System.out.println("i :"+i +" secuencia.length :"+secuencia.length+" T"+secuencia[i]+" hilo:"+ Thread.currentThread().getName()+" tiempo:"+System.currentTimeMillis());
 						i++;
 						if(i ==(secuencia.length)) {
 							i=0;
@@ -27,10 +26,6 @@ public class Hilo implements Runnable {
 					}
 				}
 			}
-			
-//			while(continuar){
-//			for (int element:secuencia)monitor.dispararTransicion(element - 1);
-//		}
 	}
 	// Fin del hilo 
 	public void set_Fin() {

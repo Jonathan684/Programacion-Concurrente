@@ -104,10 +104,16 @@ public class Politica {
 
 	public int cual(Matriz m) {
 	//	System.out.println("POLITICA");
+		consola.registrarDisparo("* Vector m", 1);
+		String _m = "";
+		for(int i=0;i<rdp.get_numero_Transiciones();i++) {
+			_m += " "+m.getDato(i, 0);
+		}
+		consola.registrarDisparo(_m, 1);
 		int tansicion_a_disparar = -1;
 //		for (int transicion = 0; transicion < rdp.get_numero_Transiciones(); transicion++) {
 //			if ((m.getDato(transicion, 0) == 1) && (rdp.esInmediata(transicion))) {
-//				System.out.println("Transicion a sacar de la cola prueba : "+(tansicion_a_disparar+1));
+//				//System.out.println("Transicion a sacar de la cola prueba : "+(tansicion_a_disparar+1));
 //				return transicion;
 //			}
 //		}
