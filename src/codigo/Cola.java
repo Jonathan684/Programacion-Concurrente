@@ -73,9 +73,10 @@ public class Cola {
 
 	public String imprimirCola() {
 		String esperando = "Esperando en la cola: [";
-
+		System.out.println(" Tamanio -->"+transicionesEsperando.size());
 		for (Integer transicion : transicionesEsperando) {
 			esperando += " T" + (transicion + 1);
+			System.out.println("--> T"+transicion);
 		}
 		esperando = "* " + esperando + " ]        (hilo que hizo la consulta: " + Thread.currentThread().getName()
 				+ ")";

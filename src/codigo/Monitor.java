@@ -2,7 +2,6 @@ package codigo;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 
 import log.Log;
@@ -31,12 +30,12 @@ public class Monitor {
 	 */
 	public Monitor(Mutex mutex, RDP red, Log log2) {
 		this.consola = log2;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		consola.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+//		consola.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
 		consola.registrarDisparo("**************************************************", 1);
 		consola.registrarDisparo("*        COMIENZO DEL MONITOR                    *", 1);
 		consola.registrarDisparo("**************************************************\n", 1);
-		consola.registrarDisparo("** Informe de los disparos **", 1);
+//		consola.registrarDisparo("** Informe de los disparos **", 1);
 		this.red = red;
 		this.log = new Log(REPORT_FILE_NAME_1);
 		this.mutex = new Semaphore(1, true);
@@ -74,22 +73,23 @@ public class Monitor {
 		}
 		k=true;
 		while (k) {
-			
-			consola.registrarDisparo("* ======================", 1);// +" Hilo:
-			consola.registrarDisparo("* Dentro del monitor T" + (T_Disparar + 1), 1);// +" Hilo:
-			consola.registrarDisparo("* ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯", 1);// +" Hilo:
-			consola.registrarDisparo(cola.imprimirCola(), 1);
-			consola.registrarDisparo("* Tiempo de ingreso :" + System.currentTimeMillis(), 1);
-			consola.registrarDisparo("* "+red.Marcado(), 1);
-			consola.registrarDisparo("* " + red.sensibilidadas(), 1);
+//			consola.registrarDisparo("* ======================", 1);// +" Hilo:
+//			consola.registrarDisparo("* Dentro del monitor T" + (T_Disparar + 1), 1);// +" Hilo:
+//			consola.registrarDisparo("* ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯", 1);// +" Hilo:
+//			consola.registrarDisparo(cola.imprimirCola(), 1);
+//			consola.registrarDisparo("* Tiempo de ingreso :" + System.currentTimeMillis(), 1);
+//			consola.registrarDisparo("* "+red.Marcado(), 1);
+//			consola.registrarDisparo("* " + red.sensibilidadas(), 1);
+
+//			consola.registrarDisparo(cola.imprimirCola(), 1);
+//			consola.registrarDisparo("* Tiempo de ingreso :" + System.currentTimeMillis(), 1);
 			
 			k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
 			if (k) { // k =true
-				consola.registrarDisparo("* Valor de k : " + k, 1);
+				
 				consola.registrarDisparo("* Se disparo: T" + (T_Disparar + 1), 1);
 				consola.registrarDisparo("* " + red.Marcado(), 1);
 				consola.registrarDisparo("* " + red.sensibilidadas(), 1);
-				consola.registrarDisparo("* k 0:" + k +" "+Thread.currentThread().getName(), 1);
 				if ((T_Disparar + 1) == 10)
 					log.registrarDisparo("T" + 0, 0);
 				else
@@ -99,7 +99,6 @@ public class Monitor {
 				m = calcularVsAndVc();
 				if (m.esNula()) {
 					
-					
 					k = false;// No hay hilos con transiciones esperando para disparar y que esten
 					mutex.release();
 					return true;
@@ -107,11 +106,7 @@ public class Monitor {
 				} else {
 					
 					nTransicion = pol.cual(m);
-					consola.registrarDisparo(
-							"* Se saca de la cola: T" + (nTransicion + 1)+" k:"+k + " tiempo:" + System.currentTimeMillis(), 1);
-					
 					cola.sacar_de_Cola(nTransicion);
-					//mutex.release();
 					return true;
 				}
 			} else { // k =false
@@ -120,23 +115,16 @@ public class Monitor {
 				
 				////Si es inmediata me voy a dormir
 				if(red.getTemporales().getInmediata()[T_Disparar] == 1 || (red.getTemporales().getTimeStamp()[T_Disparar] == -1)) {
-					//System.out.println(" Encolando T"+(T_Disparar+1));
-					//consola.registrarDisparo("* Encolar T"+(T_Disparar+1), 1);
-					//mutex.release();
 					cola.poner_EnCola(T_Disparar);
-					consola.registrarDisparo("* Desperte T"+(T_Disparar+1)+" hilo:"+Thread.currentThread().getName()+" k:"+k, 1);
+					mutex.release();
+					return false;
 				}
 				else {
-					//consola.registrarDisparo("* TimeStamp -->"+red.getTemporales().getTimeStamp()[T_Disparar],1);
+					
 					long timeout=red.getTemporales().getTiempoFaltanteParaAlfa(T_Disparar);
-					//consola.registrarDisparo("* Tiempo para dormir-->"+timeout,1);
 					try {
-						//mutex.release();
-						//dormir[T_Disparar].delay((timeout)+2);
 						Thread.sleep(timeout);
 						mutex.acquire();
-						//consola.registrarDisparo("\n* DESPERTE --> hilo :"+Thread.currentThread().getName()+" instante :"+System.currentTimeMillis()+
-							//	" T"+(T_Disparar +1 ),1);
 						k=true;
 						
 					} catch (InterruptedException e) {
@@ -187,17 +175,3 @@ public class Monitor {
 	}
 }
 
-////consola.registrarDisparo("* Hilo que sale de la cola :->"+Thread.currentThread().getName()+"<-",1);
-//consola.registrarDisparo("* Valor en monitor de VectorZ :"+red.T_en_VectorZ(T_Disparar),1);
-//if(red.T_en_VectorZ(T_Disparar)) {
-//	//System.out.println("Salida espectacular del hilo que se fue a dormir :"+(T_Disparar+1));
-//	consola.registrarDisparo("* Saliendo del monitor habiendo tomado el acquire",1);
-//	mutex._release();
-//	return false;
-//}
-//if(red.test_ventana(T_Disparar))
-//	{
-//		consola.registrarDisparo("* -->> Me disparo por que estoy en la ventana Hilo :"+Thread.currentThread().getName()+"<<--",1);
-//		k=true;
-//		//NO LARGO EL MUTEX
-//	}

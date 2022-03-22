@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><pnml>
     <net id="Net-One" type="P/T net">
         <token id="Default" enabled="true" red="0" green="0" blue="0"/>
-        <labels x="208" y="37" width="107" height="38" border="true">
+        <labels x="209" y="38" width="108" height="39" border="true">
             <text>ANALISIS DEL INVARIANTE 3</text>
         </labels>
         <place id="P1">
@@ -187,7 +187,7 @@
                 <value>1.0</value>
             </rate>
             <timed>
-                <value>true</value>
+                <value>false</value>
             </timed>
             <infiniteServer>
                 <value>false</value>
@@ -213,7 +213,7 @@
                 <value>1.0</value>
             </rate>
             <timed>
-                <value>true</value>
+                <value>false</value>
             </timed>
             <infiniteServer>
                 <value>false</value>
@@ -239,7 +239,7 @@
                 <value>1.0</value>
             </rate>
             <timed>
-                <value>true</value>
+                <value>false</value>
             </timed>
             <infiniteServer>
                 <value>false</value>
@@ -271,7 +271,7 @@
                 <value>false</value>
             </tagged>
             <arcpath id="000" x="507" y="311" curvePoint="false"/>
-            <arcpath id="001" x="513" y="574" curvePoint="false"/>
+            <arcpath id="001" x="514" y="575" curvePoint="false"/>
             <arcpath id="002" x="386" y="567" curvePoint="false"/>
             <type value="normal"/>
         </arc>
@@ -350,7 +350,7 @@
                 <value>false</value>
             </tagged>
             <arcpath id="000" x="386" y="57" curvePoint="false"/>
-            <arcpath id="001" x="513" y="64" curvePoint="false"/>
+            <arcpath id="001" x="514" y="65" curvePoint="false"/>
             <arcpath id="002" x="507" y="282" curvePoint="false"/>
             <type value="normal"/>
         </arc>

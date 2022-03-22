@@ -128,7 +128,7 @@ public class SensibilizadaConTiempo {
 			}
 		
 		}
-		consola.registrarDisparo("* updateVectorZ", 1);
+		//consola.registrarDisparo("* updateVectorZ", 1);
 		updateVectorZ(transDespuesdelDisparo); // (E AND B AND L AND C)
 		
 	}

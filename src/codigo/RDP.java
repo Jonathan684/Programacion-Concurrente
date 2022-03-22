@@ -113,7 +113,7 @@ public class RDP {
 			 
 			 
 			 if (!Test_Invariante()) {
-					consola.registrarDisparo("* NO SE CUMPLE EL INVARIANTE DE PLAZA \n", 0);
+					//consola.registrarDisparo("* NO SE CUMPLE EL INVARIANTE DE PLAZA \n", 0);
 					throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
 				}
 
@@ -287,7 +287,7 @@ public class RDP {
 
 		if (timeStamp[transicion] == 0) {
 			timeStamp[transicion] = System.currentTimeMillis();
-			consola.registrarDisparo("* Nuevo Timestamp a T" + (transicion + 1) + ": " + timeStamp[transicion], 1);
+			//consola.registrarDisparo("* Nuevo Timestamp a T" + (transicion + 1) + ": " + timeStamp[transicion], 1);
 		}
 	}
 
@@ -485,7 +485,7 @@ public class RDP {
 		// Falso disparo de las trasiciones dormidas
 		Matriz VectorExtendido_auxiliar = new Matriz(numeroTransiciones, 1);
 		Matriz VectorMarcadoActual2;
-		consola.registrarDisparo("* 0 m: " + VectorMarcadoActual.getDato(0, 0), 1);
+		//consola.registrarDisparo("* 0 m: " + VectorMarcadoActual.getDato(0, 0), 1);
 		Matriz aux = Incidencia.getMultiplicacion(Identidad.getColumna(transicion));
 		VectorMarcadoActual2 = VectorMarcadoActual.getSuma(aux);
 		VectorExtendido_auxiliar = sensibilizarVectorE2(VectorMarcadoActual2)
