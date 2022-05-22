@@ -15,7 +15,7 @@ public class Politica {
 	private List<Integer> vecesPorInvariante;
 	private List<Integer> disparos;
 	private RDP rdp;
-	private Log consola;
+
 	private static HashMap<String, Integer> t_invariantes;
 	private Info[] Transiciones;
 	private List<Info> disp = new ArrayList<Info>();
@@ -24,8 +24,7 @@ public class Politica {
 			{ "T1 T3 T5 T6" }, // Invariante 2
 			{ "T7 T8 T9 T10" } };// Invariane 3
 
-	public Politica(RDP rdp, Log consola, Cola cola) {
-		this.consola = consola;
+	public Politica(RDP rdp, Cola cola) {
 		// this.invariantes = invariantes;
 		vecesPorInvariante = new ArrayList<>();
 		disparos = new ArrayList<Integer>(Collections.nCopies(10, 0));

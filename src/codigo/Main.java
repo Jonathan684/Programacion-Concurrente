@@ -1,5 +1,8 @@
 package codigo;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -8,55 +11,64 @@ import log.Log;
 
 public class Main {
 
-	private static final int numeroHilos = 10;
+	private static final int numeroHilos = 7;
 	//private static final int numeroHilos = 3;
-	private static final int tiempoCorrida =4000;//milisegundos
+	private static final int tiempoCorrida = 3000;//milisegundos
 	private static int[] T1 = { 1 };
-	private static int[] T2 = { 2 };
-	private static int[] T3 = { 3 };
-	private static int[] T4 = { 4 };
-	private static int[] T5 = { 5 };
+	private static int[] T2 = { 2 ,4 };
+	private static int[] T3 = { 3 ,5 };
 	private static int[] T6 = { 6 };
-	private static int[] T7 = { 7 };
-	private static int[] T8 = { 8 };
-	private static int[] T9 = { 9 };
-	private static int[] T10 = { 10 };
+	private static int[] T7_8_9_10 = { 7,8,9,10 };
+//	private static int[] T4 = { 4 };
+//	private static int[] T5 = { 5 };
+	
+//	private static int[] T7 = { 7 };
+//	private static int[] T8 = { 8 };
+//	private static int[] T9 = { 9 };
+//	private static int[] T10 = { 10 };
 	
 	private static Hilo[] hilos;
 	private static Thread[] threads;
 	private static RDP redDePetri;
-	private static Mutex mutex;
 	private final static String REPORT_FILE_NAME_3 = "Consola/Reporte.txt";
 	private final static String REPORT_FILE_NAME_2 = "Consola/log.txt";
 	private static Log log;
+	private static FileWriter fichero = null;
+    private static PrintWriter pw = null;
 
 	public static void main(String[] args) {
 		iniciarPrograma(); 
 	}
 
 	public static void iniciarPrograma() {
-		System.out.println("	=======================    ");
-		System.out.println("	 Prueba piloto TP final	");
-		System.out.println("	=======================   ");
-		log = new Log(REPORT_FILE_NAME_3);
 		
-		//mutex = new Mutex();
+		System.out.println("	=======================    ");
+		System.out.println("	        TP final		   ");
+		System.out.println("	=======================    ");
+		
+		log = new Log(REPORT_FILE_NAME_3);
 		Log log2 = new Log(REPORT_FILE_NAME_2);
 		redDePetri = new RDP(log2);
-		
-		Monitor monitor = new Monitor(mutex, redDePetri,log2);
+		try {
+			fichero = new FileWriter("Consola/log2.txt");
+		    } catch (IOException e1) {
+			// TODO Auto-generated catch block
+					e1.printStackTrace();
+		  }
+	            pw = new PrintWriter(fichero);
+
+        Monitor monitor = new Monitor(pw,redDePetri);
 		hilos = new Hilo[numeroHilos];
 
 		hilos[0] = new Hilo(monitor, T1);	//T1
 		hilos[1] = new Hilo(monitor, T2);	//T2
-		hilos[2] = new Hilo(monitor, T3);	//T3
-		hilos[3] = new Hilo(monitor, T4);	//T4
-		hilos[4] = new Hilo(monitor, T5);	//T5
-		hilos[5] = new Hilo(monitor, T6);	//T6
-		hilos[6] = new Hilo(monitor, T7);	//T7
-		hilos[7] = new Hilo(monitor, T8);	//T8
-		hilos[8] = new Hilo(monitor, T9);	//T9
-		hilos[9] = new Hilo(monitor, T10);	//T10
+		hilos[2] = new Hilo(monitor, T3);
+		hilos[3] = new Hilo(monitor, T6);
+		hilos[4] = new Hilo(monitor, T7_8_9_10);
+		hilos[5] = new Hilo(monitor, T7_8_9_10);
+		hilos[6] = new Hilo(monitor, T7_8_9_10);
+		
+
 		
 		threads = new Thread[numeroHilos];
 		for(int i=0; i<numeroHilos;i++)threads[i] = new Thread(hilos[i], "" +i);
@@ -71,9 +83,19 @@ public class Main {
 
 		for(Hilo H:hilos)H.set_Fin();
 		monitor.vaciarcolas();
-		for(Thread t : threads)t.interrupt();
+		//for(Thread t : threads)t.interrupt();
+		
+		
+		pw.println("* Fin *\n");
+		try {
+			fichero.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		System.out.println("Fin");
+		System.out.println("	======== Fin ==========");
 		log2.registrarDisparo("\n************************ Fin **************************** Tiempo :" + System.currentTimeMillis(), 1);
 		log2.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
 		log.registrarDisparo("Tiempo de ejecucion : " + (tiempoCorrida / 1000) + "seg.", 1);

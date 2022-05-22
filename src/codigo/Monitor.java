@@ -1,7 +1,6 @@
 package codigo;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.PrintWriter;
 import java.util.concurrent.Semaphore;
 
 import log.Log;
@@ -11,58 +10,23 @@ public class Monitor {
 	private RDP red;
 	private Cola cola;
 	private Politica pol;
-	private Log log;
-	private Log consola;
 	private int nTransicion;
-	private final String REPORT_FILE_NAME_1 = "Python/log.txt";
-	// private Mutex mutex;
 	private Semaphore mutex;
 	private Matriz m;
-//	private boolean k;
-	private static volatile boolean fin;
 	private boolean k;
-	private Tempo[] dormir; 
-	// private Politica politica;
-	/**
-	 * Constructor de la clase Monitor
-	 * 
-	 * @param mutex
-	 */
-	public Monitor(Mutex mutex, RDP red, Log log2) {
-		this.consola = log2;
-//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-//		consola.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
-		consola.registrarDisparo("**************************************************", 1);
-		consola.registrarDisparo("*        COMIENZO DEL MONITOR                    *", 1);
-		consola.registrarDisparo("**************************************************\n", 1);
-//		consola.registrarDisparo("** Informe de los disparos **", 1);
+	private	PrintWriter pw;
+	
+	public Monitor(PrintWriter pw,RDP red) {
+
+		this.pw=pw;
 		this.red = red;
-		this.log = new Log(REPORT_FILE_NAME_1);
-		this.mutex = new Semaphore(1, true);
+        this.mutex = new Semaphore(1, false);
 		cola = new Cola(red.get_numero_Transiciones());
 		nTransicion = 0;
 		red.sensibilizar();
-		
-		//boolean k = true;
-		fin = false;
-		pol = new Politica(red, log2, cola);
-		
-		
-		dormir = new Tempo[red.get_numero_Transiciones()];
-		//Arrays.fill(dormir, 0);
-		for(int i = 0;i<red.get_numero_Transiciones() ; i++) {
-			dormir[i]=new Tempo();
-		}
-		consola.registrarDisparo("* Marcado inicial     : " + red.Marcado(), 1);
-		consola.registrarDisparo("* Transciones Inicial : " + red.sensibilidadas(), 1);// +"Disparo
-		
+        pol = new Politica(red, cola);
 	}
-
-	/**
-	 * 
-	 * @param T_Disparar
-	 * @return True : cuando el disparo fue exitoso
-	 */
+	
 	public boolean dispararTransicion(int T_Disparar) {
 
 		try {
@@ -72,33 +36,15 @@ public class Monitor {
 			e.printStackTrace();
 		}
 		k=true;
-		while (k) {
-//			consola.registrarDisparo("* ======================", 1);// +" Hilo:
-//			consola.registrarDisparo("* Dentro del monitor T" + (T_Disparar + 1), 1);// +" Hilo:
-//			consola.registrarDisparo("* ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯", 1);// +" Hilo:
-//			consola.registrarDisparo(cola.imprimirCola(), 1);
-//			consola.registrarDisparo("* Tiempo de ingreso :" + System.currentTimeMillis(), 1);
-//			consola.registrarDisparo("* "+red.Marcado(), 1);
-//			consola.registrarDisparo("* " + red.sensibilidadas(), 1);
-
-//			consola.registrarDisparo(cola.imprimirCola(), 1);
-//			consola.registrarDisparo("* Tiempo de ingreso :" + System.currentTimeMillis(), 1);
-			
+    	while (k) {
 			k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
+			
 			if (k) { // k =true
-				
-				consola.registrarDisparo("* Se disparo: T" + (T_Disparar + 1), 1);
-				consola.registrarDisparo("* " + red.Marcado(), 1);
-				consola.registrarDisparo("* " + red.sensibilidadas(), 1);
-				if ((T_Disparar + 1) == 10)
-					log.registrarDisparo("T" + 0, 0);
-				else
-					log.registrarDisparo("T" + (T_Disparar + 1), 0);
-				
+				pw.println("* Se disparo:["+(T_Disparar+1)+"]\n");
 				pol.registrarDisparo(T_Disparar);
 				m = calcularVsAndVc();
 				if (m.esNula()) {
-					
+					m.getTranspuesta().getTranspuesta();
 					k = false;// No hay hilos con transiciones esperando para disparar y que esten
 					mutex.release();
 					return true;
@@ -110,33 +56,13 @@ public class Monitor {
 					return true;
 				}
 			} else { // k =false
-			
 				mutex.release();
-				
-				////Si es inmediata me voy a dormir
-				if(red.getTemporales().getInmediata()[T_Disparar] == 1 || (red.getTemporales().getTimeStamp()[T_Disparar] == -1)) {
-					cola.poner_EnCola(T_Disparar);
-					mutex.release();
-					return false;
-				}
-				else {
-					
-					long timeout=red.getTemporales().getTiempoFaltanteParaAlfa(T_Disparar);
-					try {
-						Thread.sleep(timeout);
-						mutex.acquire();
-						k=true;
-						
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} //+2 Por problemas de redondeo.
-				}
-				
-				if (fin)
-					return false;
+				cola.poner_EnCola(T_Disparar);
+				mutex.release();
+				return false;
 			}
 		}
+
 		mutex.release();
 		return true;
 	}
@@ -159,19 +85,12 @@ public class Monitor {
 			try {
 				mutex.acquire();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			fin = true;
-			for (int i = 0; i < red.get_numero_Transiciones(); i++)cola.sacar_de_Cola(i);
+		    for (int i = 0; i < red.get_numero_Transiciones(); i++)cola.sacar_de_Cola(i);
 			mutex.release();
-			
-		
-		// TODO Auto-generated method stub
 	}
-
-	public void imprimir(Log loga) {
+    public void imprimir(Log loga) {
 		pol.imprimir(loga);
 	}
 }
-
