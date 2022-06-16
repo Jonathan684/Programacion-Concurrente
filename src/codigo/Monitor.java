@@ -20,11 +20,11 @@ public class Monitor {
 
 		this.pw=pw;
 		this.red = red;
-        this.mutex = new Semaphore(1, false);
+        this.mutex = new Semaphore(1);
 		cola = new Cola(red.get_numero_Transiciones());
 		nTransicion = 0;
 		red.sensibilizar();
-        pol = new Politica(red, cola);
+        pol = new Politica(pw,red, cola);
 	}
 	
 	public boolean dispararTransicion(int T_Disparar) {
@@ -32,7 +32,6 @@ public class Monitor {
 		try {
 			mutex.acquire();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		k=true;
@@ -40,12 +39,17 @@ public class Monitor {
 			k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
 			
 			if (k) { // k =true
-				pw.println("* Se disparo:["+(T_Disparar+1)+"]\n");
+				pw.println("*************************");
+				pw.println("* Se disparo:[T"+(T_Disparar+1)+"]");
 				pol.registrarDisparo(T_Disparar);
 				m = calcularVsAndVc();
+				pw.println("* m: "+m.imprimir());
+				pw.println("* "+cola.imprimir2());
+				
 				if (m.esNula()) {
-					m.getTranspuesta().getTranspuesta();
 					k = false;// No hay hilos con transiciones esperando para disparar y que esten
+					pw.println("*************************");
+					pw.println("\n");
 					mutex.release();
 					return true;
 				
@@ -53,12 +57,17 @@ public class Monitor {
 					
 					nTransicion = pol.cual(m);
 					cola.sacar_de_Cola(nTransicion);
+					pw.println("* Se saca T"+(nTransicion+1));
+					
+					pw.println("*************************");
+					pw.println("\n");
+					mutex.release();
 					return true;
 				}
 			} else { // k =false
+				pw.println("* Se va a dormir T"+(T_Disparar+1));
 				mutex.release();
 				cola.poner_EnCola(T_Disparar);
-				mutex.release();
 				return false;
 			}
 		}

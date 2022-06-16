@@ -92,6 +92,18 @@ public class Matriz {
 		}
 		//System.out.println("--------------------------------------------------");
 	}
+	public String imprimir() {
+		//System.out.println("--------------------------------------------------");
+		String cadena="";
+		for(int i=0; i<filas; i++){
+			for(int j=0; j<columnas; j++) {
+				cadena = cadena + (this.getDato(i, j) + "  ");
+			}
+			//System.out.println();	
+		}
+		return cadena;
+		//System.out.println("--------------------------------------------------");
+	}
 
 	/**
 	 * 

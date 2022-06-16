@@ -8,9 +8,8 @@ public class Cola {
 
 	private int cantTransiciones;
 	private Semaphore[] semaforos;
-
-	//private static boolean Transiciones_en_espera[];
-	private static boolean Transiciones_en_espera[];
+    private static boolean Transiciones_en_espera[];
+    
 	/**
 	 * Constructor de la clase Cola que inicia un semaforo para cada elemento que se
 	 * encuentre en la misma, de esta manera el hilo se queda esperando en la cola.
@@ -18,9 +17,9 @@ public class Cola {
 	 * @param cantTransiciones Cantidad de transiciones para armar vector Vc
 	 */
 	public Cola(int cantTransiciones) {
+		
 		this.cantTransiciones = cantTransiciones;
-
-		semaforos = new Semaphore[cantTransiciones];
+        semaforos = new Semaphore[cantTransiciones];
 		Transiciones_en_espera = new boolean[cantTransiciones];
 
 		for (int i = 0; i < cantTransiciones; i++) {
@@ -64,13 +63,29 @@ public class Cola {
 	public void sacar_de_Cola(int nTransicion) {
 
 		Transiciones_en_espera[nTransicion] = false;
+		if(nTransicion == 6) {
+			while(semaforos[nTransicion] != null) {
+				semaforos[nTransicion].release();
+				if(semaforos[nTransicion] != null)break;
+			}
+		}
 		if (semaforos[nTransicion] != null)semaforos[nTransicion].release();
 	}
+	
 	public void imprimir(){
 		System.out.print("Cola [");
 		for(int i=0;i<cantTransiciones;i++){
 			if(Transiciones_en_espera[i])System.out.print("T"+(i+1)+" ");
 		}
 		System.out.println("]");
+	}
+	public String imprimir2(){
+		String cadena="";
+		cadena = cadena+"Cola [";
+		for(int i=0;i<cantTransiciones;i++){
+			if(Transiciones_en_espera[i])cadena = cadena + ("T"+(i+1)+" ");
+		}
+		cadena = cadena + "]";
+		return cadena;
 	}
 }
