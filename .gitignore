@@ -1,4 +1,2 @@
 # ignorar los archivos terminados en .txt dentro de la carpeta doc (pero no sus subdirectorios)
-*.log.txt
-*.log2.txt
-*.Reporte.txt
+Consola/
