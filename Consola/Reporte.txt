@@ -1,16 +1,16 @@
-Tiempo de ejecucion : 3seg.
+Tiempo de ejecucion : 6seg.
 =====================================
-Invariante 1: 10865 veces  [T1 T2 T4 T6] 
-Invariante 2: 10864 veces  [T1 T3 T5 T6]
-Invariante 3: 1432 veces  [T7 T8 T9 T10]
+Invariante 1: 9796 veces  [T1 T2 T4 T6] 
+Invariante 2: 9797 veces  [T1 T3 T5 T6]
+Invariante 3: 9772 veces  [T7 T8 T9 T10]
 =====================================
-Transicion: 1 disparos: 21731
-Transicion: 2 disparos: 10866
-Transicion: 3 disparos: 10865
-Transicion: 4 disparos: 10865
-Transicion: 5 disparos: 10864
-Transicion: 6 disparos: 21729
-Transicion: 7 disparos: 1432
-Transicion: 8 disparos: 1432
-Transicion: 9 disparos: 1432
-Transicion: 10 disparos: 1432
+Transicion: 1 disparos: 19595
+Transicion: 2 disparos: 9798
+Transicion: 3 disparos: 9797
+Transicion: 4 disparos: 9797
+Transicion: 5 disparos: 9797
+Transicion: 6 disparos: 19593
+Transicion: 7 disparos: 9772
+Transicion: 8 disparos: 9772
+Transicion: 9 disparos: 9772
+Transicion: 10 disparos: 9772

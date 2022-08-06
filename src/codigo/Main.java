@@ -11,16 +11,15 @@ import log.Log;
 
 public class Main {
 
-	private static final int numeroHilos = 7;
-	private static final int tiempoCorrida = 3000;//milisegundos
+	private static final int numeroHilos = 9;
+	private static final int tiempoCorrida = 6000;//milisegundos
 	private static int[] T1 = { 1 };
-	private static int[] T2 = { 2,4 };
-	private static int[] T3 = { 3,5 };
-//	private static int[] T4 = { 4 };
-//	private static int[] T5 = { 5 };
+	private static int[] T2 = { 2 };
+	private static int[] T3 = { 3 };
+	private static int[] T4 = { 4 };
+	private static int[] T5 = { 5 };
 	private static int[] T6 = { 6 };
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
-
 	private static Hilo[] hilos;
 	private static Thread[] threads;
 	private static RDP redDePetri;
@@ -58,9 +57,11 @@ public class Main {
 		hilos[1] = new Hilo(monitor, T2);	//T2
 		hilos[2] = new Hilo(monitor, T3);
 		hilos[3] = new Hilo(monitor, T6);
-		hilos[4] = new Hilo(monitor, T7_8_9_10);
-		hilos[5] = new Hilo(monitor, T7_8_9_10);
+		hilos[4] = new Hilo(monitor, T4);
+		hilos[5] = new Hilo(monitor, T5);
 		hilos[6] = new Hilo(monitor, T7_8_9_10);
+		hilos[7] = new Hilo(monitor, T7_8_9_10);
+		hilos[8] = new Hilo(monitor, T7_8_9_10);
 //		hilos[7] = new Hilo(monitor, T4);
 //		hilos[8] = new Hilo(monitor, T5);
 		

@@ -2,8 +2,8 @@ package codigo;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +25,7 @@ public class Politica {
 	private Info[] Transiciones;
 	private List<Info> disp = new ArrayList<Info>();
 	private PrintWriter pw;
+	private int var;
 	private static String[][] T_invariantes = { { "T1 T2 T4 T6" }, // Invariante 1
 			{ "T1 T3 T5 T6" }, // Invariante 2
 			{ "T7 T8 T9 T10" } };// Invariane 3
@@ -32,9 +33,10 @@ public class Politica {
 	private static int[][] invariantes = { { 1, 2, 4, 6 }, // Invariante 1
 			{ 1, 3, 5, 6 }, // Invariante 2
 			{ 7, 8, 9, 10 } };// Invariane 3
+	private int[] transicionesiguales;
 
 	public Politica(PrintWriter pw, RDP rdp, Cola cola) {
-
+		var = 0;
 		ultima = 0;
 		inv1 = 0;
 		inv2 = 0;
@@ -63,12 +65,27 @@ public class Politica {
 		}
 	}
 
+	public int pertence(int ingreso) {
+
+		int retorna = -1;
+		for (int i = 0; i < invariantes.length; i++) {
+
+			for (int j = 0; j < (invariantes[i].length); j++) {
+				if (invariantes[i][j] == (ingreso + 1)) {
+					return i;
+				}
+			}
+		}
+		return retorna;
+	}
+
 	public void registrarDisparo(int nTransicion) { // No considera a T1 ni a T6
 
 		// T1
-		if (nTransicion == 0) {// T4
-			if (inv1 > inv2) {
+		if (nTransicion == 0) {// T1
+			if (inv1 > inv2) { // DEBERIA DE TOMAR LA CANTIDAD DE VECES QUE SE DISPARO PARA ESE INVARIANTE
 				Transiciones[0].setInvariante(1);
+				
 			} else
 				Transiciones[0].setInvariante(0);
 		}
@@ -77,36 +94,87 @@ public class Politica {
 			// System.out.println("Se disparo primer invariante");
 			vecesPorInvariante.set(0, (vecesPorInvariante.get(0) + 1));
 			ultima = 3;
+			Transiciones[5].setInvariante(0);
 		}
 		if (nTransicion == 4) { // T5
 			// System.out.println("Se disparo segundo invariante");
 			ultima = 4;
 			vecesPorInvariante.set(1, (vecesPorInvariante.get(1) + 1));
+			Transiciones[5].setInvariante(1);
 		}
 		if (nTransicion == 9) {// T10
+			
+			inv3 = inv3 + 1;
+			T_inv[2] = T_inv[2] + 1;
+			
 			// System.out.println("Se disparo tercer invariante");
+			vecesPorInvariante.set(2, (vecesPorInvariante.get(2) + 1));
+			Transiciones[6].setInvariante(2);
+			Transiciones[6].setcantInvariante(inv3);//T7
+			
+			Transiciones[7].setInvariante(2);
+			Transiciones[7].setcantInvariante(inv3);//T8
+			
+			Transiciones[8].setInvariante(2);
+			Transiciones[8].setcantInvariante(inv3);//T9
+				
+			// System.out.println("Se disparo tercer invariante");
+			//update todo el invariante 3
 			vecesPorInvariante.set(2, (vecesPorInvariante.get(2) + 1));
 		}
 		if (nTransicion == 5) {// T6
 			if (ultima == 3) { // T4 --> T6
 				inv1 = inv1 + 1;
 				T_inv[0] = T_inv[0] + 1;
-				Transiciones[5].setInvariante(0);
+				//Update todo el invariante 0
+				//System.out.println("Actualizar");
+				Transiciones[1].setcantInvariante(inv1);//T2
+				Transiciones[3].setcantInvariante(inv1);//T4
+				//System.out.println("Ultima t4 ");
+				if (inv1 > inv2) { // DEBERIA DE TOMAR LA CANTIDAD DE VECES QUE SE DISPARO PARA ESE INVARIANTE
+					Transiciones[0].setInvariante(1);
+					Transiciones[0].setcantInvariante(inv2);//T1
+				}
+				else if (inv2 == inv1) { // T1
+					Transiciones[0].setInvariante(0);
+					Transiciones[0].setcantInvariante(inv2);//T1
+				}
+				else if (inv2 > inv1) { // DEBERIA DE TOMAR LA CANTIDAD DE VECES QUE SE DISPARO PARA ESE INVARIANTE
+					Transiciones[0].setInvariante(0);
+					Transiciones[0].setcantInvariante(inv1);//T1
+					
+				}
 			}
-			if (ultima == 4) { // T4 --> T6
+			if (ultima == 4) { // T5 --> T6
+				
 				inv2 = inv2 + 1;
 				T_inv[1] = T_inv[1] + 1;
-				Transiciones[5].setInvariante(1);
+				
+				Transiciones[2].setcantInvariante(inv2);//T3
+				Transiciones[4].setcantInvariante(inv2);//T5
+				
+				//System.out.println("Ultima t5 ");
+				
+				if (inv2 > inv1) { // DEBERIA DE TOMAR LA CANTIDAD DE VECES QUE SE DISPARO PARA ESE INVARIANTE
+					Transiciones[0].setInvariante(0);
+					Transiciones[0].setcantInvariante(inv1);//T1
+				}
+				else if (inv2 == inv1) { // T1
+					Transiciones[0].setInvariante(1);
+					Transiciones[0].setcantInvariante(inv1);//T1
+				}
+				else if (inv2 < inv1) { // DEBERIA DE TOMAR LA CANTIDAD DE VECES QUE SE DISPARO PARA ESE INVARIANTE
+					Transiciones[0].setInvariante(1);
+					Transiciones[0].setcantInvariante(inv2);//T1
+				}
+				//update todo el invariante 2
 			}
 			// System.out.println("Se disparo tercer invariante");
 			vecesPorInvariante.set(2, (vecesPorInvariante.get(2) + 1));
 		}
-		if (nTransicion == 9) {// T6
-			inv3 = inv3 + 1;
-			T_inv[2] = T_inv[2] + 1;
-			// System.out.println("Se disparo tercer invariante");
-			vecesPorInvariante.set(2, (vecesPorInvariante.get(2) + 1));
-		}
+		
+		
+		//Update de la cantidad de veces que se dispara el invariante
 		if (Transiciones[nTransicion].getInvariante() == 0) {
 			Transiciones[nTransicion].setcantInvariante(inv1);
 		}
@@ -129,9 +197,9 @@ public class Politica {
 		// System.out.println("Transicion : "+nTransicion+" Disparos
 		// :"+disp.get(0).getCant_disparos());
 		disparos.set(nTransicion, (disparos.get(nTransicion) + 1));
-		pw.println("* inv1: " + inv1);
-		pw.println("* inv2: " + inv2);
-		pw.println("* inv3: " + inv3);
+		//pw.println("* inv1: " + inv1);
+		//pw.println("* inv2: " + inv2);
+		//pw.println("* inv3: " + inv3);
 		pw.println("* T_inv1: " + T_inv[0]);
 		pw.println("* T_inv2: " + T_inv[1]);
 		pw.println("* T_inv3: " + T_inv[2]);
@@ -144,7 +212,11 @@ public class Politica {
 	 * @param m matriz que contiene el resultado de Vc and Vs
 	 * @return Transicion
 	 */
-
+	/*
+	 * CRITERIO DE LA POLITICA SI LAS TRANSICIONES PERTENECEN AL MISMO INVARIANTE SE
+	 * DISPARA LAS MAS GRANDE. PRIORIDAD A COMPLETAR EL INVARIANTE OBSERVO LA
+	 * CANTIDAD DE VECES QUE SE DISPARO EL INVARIANTE, NO LA TRANSICION.
+	 */
 	public int cual(Matriz m) {
 
 		int cantidad = 0;
@@ -152,263 +224,80 @@ public class Politica {
 		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
 			// _m += " " + m.getDato(i, 0);
 			if (m.getDato(i, 0) == 1) {
-				pw.println("* T: " + (i + 1) + " disp:" + disp.get(i).getCant_disparos() + " cant:"
-						+ Transiciones[i].getcantInvariante());
+				pw.println("* [T" + (i + 1) + "] disp:" + disp.get(i).getCant_disparos() + " cant_vcs_inv:"
+						+ Transiciones[i].getcantInvariante() + " Inv-->>" + Transiciones[i].getInvariante());
 				cantidad++;
-				transicion_aux=i;
+				transicion_aux = i;
 			}
 		}
-		//
-//		// pw.println("* Cantidad: "+cantidad);
-//		if (m.getDato(5, 0) == 1) { // Prioridad a la salidad
-//			return 5;
-//		}
-//		if (m.getDato(3, 0) == 1) { // Prioridad a la salidad
-//			return 3;
-//		}
-//		if (m.getDato(4, 0) == 1) { // Prioridad a la salidad
-//			return 4;
-//		}
-//		if (m.getDato(9, 0) == 1) { //T10
-//			return 9;
-//		}
-//		if (m.getDato(8, 0) == 1) {
-//			return 8;
-//		}
-		
+		// SI HAY MAS DE UNA TRANSICION EN  "m".
 		if (cantidad > 1) {
+			//System.out.println("Implementando la politica "+ var);
+			var ++;
 			int transicion_a_disparar = -1;
-			int transicion_temporal = 0;
+			boolean inicio = true;
 			int disparos_de_invariantes = 0;
+			transicionesiguales = new int[rdp.get_numero_Transiciones()];
+			
 			for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
-
-				if (m.getDato(i, 0) == 1)
-				{
-					//PRIMERA VEZ QUE ENCUENTRE UNA TRANSICION
-					if (transicion_temporal == 0) 
-					{
-						transicion_temporal = i;
+				
+				if (m.getDato(i, 0) == 1) { //BUSCO LA TRANSICION EN m.
+					// PRIMERA VEZ QUE ENCUENTRE UNA TRANSICION
+					if (inicio) {
+						inicio = false;
 						disparos_de_invariantes = Transiciones[i].getcantInvariante();
 						transicion_a_disparar = i;
-						transicion_temporal++;
-					} 
-					//CANTIDAD DE VECES QUE SE DISPARO EL INVARIANTE ES MAYOR QUE EL ACTUAL
-					else if (disparos_de_invariantes > Transiciones[i].getcantInvariante()) 
-					{
-//						//SI PERTENECEN AL MISMO INVARIANTE
-//						if (Transiciones[i].getInvariante() == Transiciones[transicion_a_disparar].getInvariante())
-//						{
-//							if (i > transicion_a_disparar) 
-//							{
-//								transicion_a_disparar = i;
-//								disparos_de_invariantes = Transiciones[i].getcantInvariante();
-//							}
-//						} 
-//						//SI NO SON DEL MISMO INVARIANTE
-//						else 
-//						{
-							disparos_de_invariantes = Transiciones[i].getcantInvariante();
-							transicion_a_disparar = i;
-//						}
 					}
-				}
-			}
-			return transicion_a_disparar;
-			}
-			return 	transicion_aux;
-		}
-			
-//					else if (disparos_de_invariantes > Transiciones[i].getcantInvariante()) {
-//						// pw.println("* Invariante menor: "+Transiciones[i].getcantInvariante()+"
-//						// Invariante mayor :"+disparos_de_invariantes);
-//						disparos_de_invariantes = Transiciones[i].getcantInvariante();
-//						transicion_a_disparar = i;
-//					} else if (disparos_de_invariantes == Transiciones[i].getcantInvariante()) {
-//						pw.println("* Invariante  menor: " + Transiciones[i].getcantInvariante() + " Invariante mayor :"
-//								+ disparos_de_invariantes);
-//						disparos_de_invariantes = Transiciones[i].getcantInvariante();
-//
-//						if (i > transicion_a_disparar)
-//							transicion_a_disparar = i;
-////						int numero = (int)(Math.random()*2+1);
-////						if(numero%2==0) {
-////							transicion_a_disparar = i;
-////						}
-//					}
-					
-					
-					
-
-	
-
-	public int decisiones(Matriz m) {
-		// Transiciones
-		// if ((m.getDato(1, 0) == 1) && (m.getDato(2, 0) == 1) && (m.getDato(5, 0) ==
-		// 0) ) {
-		int transicion_a_disparar = -1;
-		int temp = 0;
-		int pertenece = 0;
-		int disparos_de_invariantes = 0;
-		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
-//				System.out.println("Ingreso aca0 " +m.getDato(i, 0) );
-			if (m.getDato(i, 0) == 1) {
-//					System.out.println("Ingreso aca1");
-				if (temp == 0) {
-//						System.out.println("Ingreso aca2");
-					temp = i;
-					pertenece = Transiciones[i].getInvariante();// inv1 - inv2 -inv3 pero en la proxima se puede
-																// actualizar
-					disparos_de_invariantes = Transiciones[i].getcantInvariante();
-
-					transicion_a_disparar = i;
-					temp++;
-				} else if (disparos_de_invariantes > Transiciones[i].getcantInvariante()) {
-					pw.println("* Invariante  menor: " + Transiciones[i].getcantInvariante() + " Invariante mayor :"
-							+ disparos_de_invariantes);
-					disparos_de_invariantes = Transiciones[i].getcantInvariante();
-					transicion_a_disparar = i;
-				} else if (disparos_de_invariantes == Transiciones[i].getcantInvariante()) {
-					pw.println("* Invariante  menor: " + Transiciones[i].getcantInvariante() + " Invariante mayor :"
-							+ disparos_de_invariantes);
-					disparos_de_invariantes = Transiciones[i].getcantInvariante();
-					transicion_a_disparar = i;
-					int numero = (int) (Math.random() * 2 + 1);
-					if (numero % 2 == 0) {
+					// CANTIDAD DE VECES QUE SE DISPARO EL INVARIANTE ES MAYOR QUE EL ACTUAL
+					else if ((Transiciones[i].getcantInvariante() < disparos_de_invariantes)&& (Transiciones[transicion_a_disparar].getInvariante() != Transiciones[i].getInvariante())) {
+						//System.out.println("Entro para 0 "+ disparos_de_invariantes +" i: "+ i+" transicion_a_disparar: "+transicion_a_disparar);
+						disparos_de_invariantes = Transiciones[i].getcantInvariante();
 						transicion_a_disparar = i;
 					}
+					// SI SON IGUALES ALMACENO LA TRANSICION DE MAYOR TAMAÑO POR LA PRIORIDAD A LA SALIDA
+					else if ((disparos_de_invariantes == Transiciones[i].getcantInvariante()) && (Transiciones[transicion_a_disparar].getInvariante() == Transiciones[i].getInvariante())) {
+					//System.out.println("Entro para 1 "+ disparos_de_invariantes +" i: "+ i+" Transicion_a_disparar: "+transicion_a_disparar);
+					//System.out.println("Invariantes al que pertenecen "+ Transiciones[transicion_a_disparar].getInvariante() +" : "+Transiciones[i].getInvariante());
+						//pw.println("* Prioridad a la salida");
+						//pw.println("* Transicion_a_disparar = "+(i+1));
+						disparos_de_invariantes = Transiciones[i].getcantInvariante();
+						transicion_a_disparar = i;
+					}
+					// SI SON IGUALES PERO DE DISTINTOS INVARIANTES LOS ALMACENO Y ELIJO UNO
+					// ALEATORIAMENTE
+					else if ((disparos_de_invariantes == Transiciones[i].getcantInvariante()) && (Transiciones[transicion_a_disparar].getInvariante() != Transiciones[i].getInvariante())) {
+						//System.out.println("Son iguales : "+ (transicion_a_disparar+1) +" i: "+(i+1)+" cant_inv :"+ disparos_de_invariantes);
+						//pw.println("* Iguales y de distinto invariantes T"+(i+1)+" == T"+(transicion_a_disparar+1));
+						int t = (int) (Math.random() * 2);
+						if(t==1) {
+							transicion_a_disparar = i;	
+						}
+						//pw.println("* Se eligió T"+(transicion_a_disparar+1)+" t="+t);
+						
+					}
+
 				}
 			}
+			// pw.println("* Longitud: "+transicionesiguales[0]+" "+transicionesiguales[1]+"
+			// "+transicionesiguales[2]);
+			return transicion_a_disparar;
 		}
-		System.out.println(m.getTranspuesta().imprimir());
-		System.out.println("LLEGO HASTA ACA :" + transicion_a_disparar);
-		System.out.println("--->" + Transiciones[transicion_a_disparar].getcantInvariante());
-		// List<Info> aux = new ArrayList<Info>(disp);
-//			Ordenar_x_disparos(aux);
-//			
-//			for (Info i : aux) {
-//				pw.print("->"+i.get_transicion() +" ");
-//				if (m.getDato(i.get_transicion(), 0) == 1) {
-//					transicion_a_disparar = i.get_transicion();
-//					break;
-//				}
-//			}
-		pw.println("*");
-		pw.print("* " + transicion_a_disparar);
-		return transicion_a_disparar;
-		// }
-		// return -1;
+        //SI HAY UNA SOLA TRANSICION EN "m"
+		return transicion_aux;
 	}
 
-	public int pertence(int ingreso) {
-
-//    for(int i = 0;i<invariantes.length;i++) {
-//			
-//			for(int j = 0;j<((invariantes[i].length));j++) {
-//				System.out.println(" valor :"+ invariantes[i][j]+" -->"+i+" "+j);
-//				
-//			}
-//		}
-//		System.out.println("Tamño :"+ invariantes.length);
-//		System.out.println("Tamño2 :"+ invariantes[0].length);
-		// System.out.println("Ingreso T:"+ (ingreso+1));
-		int retorna = -1;
-		for (int i = 0; i < invariantes.length; i++) {
-
-			for (int j = 0; j < (invariantes[i].length); j++) {
-				// System.out.println(" -->"+i+" "+j);
-				// System.out.println("["+ invariantes[i][j]+" -->"+i+" "+j+" ]");
-				if (invariantes[i][j] == (ingreso + 1)) {
-					// System.out.println("invariante al que pertenece :"+i);
-					return i;
-				}
-			}
-		}
-		// System.out.println("Retorna :"+retorna);
-		return retorna;
-
-	}
-
-	public int decision_entre_T1_T7(Matriz m) {
-		if ((m.getDato(0, 0) == 1) && (m.getDato(6, 0) == 1)) {
-
-			// si T7 es mayor a T2
-			if (disp.get(1).getCant_disparos() < disp.get(6).getCant_disparos()) {
-				return 0; // T1
-			}
-			// Si T7 es mayor a T3
-			else if (disp.get(2).getCant_disparos() < disp.get(6).getCant_disparos()) {
-				return 0; // T1
-			} else if (disp.get(2).getCant_disparos() == disp.get(6).getCant_disparos()) {
-				m.setDato(2, 0, 0);
-				return Aleatorio(2, m);
-
-			} else if (disp.get(1).getCant_disparos() == disp.get(6).getCant_disparos()) {
-				m.setDato(1, 0, 0);
-				return Aleatorio(2, m);
-
-			} else
-				return 6;// T7
-		}
-		return -1;
-	}
-
-	public int Unica_opcion(Matriz m) {
+	private int getAleatorio(int[] transicionesiguales2) {
+		// TODO Auto-generated method stub
+		int h = 0;
 		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
-			if (m.getDato(i, 0) == 1) {
-				return i;
+			if (transicionesiguales2[i] != -1) {
+				h++;
 			}
 		}
-		return -1;
-	}
-
-	public int Aleatorio(int cantidad, Matriz m) {
-		int j = 0;
-		List<Info> auxiliar = new ArrayList<Info>();
-		Info[] T;
-		T = new Info[cantidad];
-		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
-			if (m.getDato(i, 0) == 1) {
-				// ystem.out.println(" Se agrega :"+ i);
-				T[j] = new Info(i, 0, pertence(i));
-				auxiliar.add(T[j]);
-				// System.out.println(" -> "+auxiliar.get(j).get_transicion());
-				j++;
-			}
-		}
-		int number = (int) (Math.random() * auxiliar.size());
-		return auxiliar.get(number).get_transicion();
-		// return 0;
-	}
-
-	// ------------------------------------------------------------------------------------
-//	public void imprimir_disp() {
-//		for (Info i : disp) {
-//			System.out.println("Trans " + i.get_transicion() + " " + i.getCant_disparos());
-//		}
-//	}
-
-	public void Ordenar_x_disparos(List<Info> aux) {
-		Collections.sort(aux, new Comparator<Info>() {
-			public int compare(Info c1, Info c2) {
-				if (c1.getCant_disparos() < c2.getCant_disparos())
-					return -1;
-				if (c1.getCant_disparos() < c2.getCant_disparos())
-					return 1;
-				return 0;
-			}
-		});
-	}
-
-	public void Ordenar_x_transicion() {
-		Collections.sort(disp, new Comparator<Info>() {
-			public int compare(Info c1, Info c2) {
-				if (c1.get_transicion() < c2.get_transicion())
-					return -1;
-				if (c1.get_transicion() < c2.get_transicion())
-					return 1;
-				return 0;
-			}
-		});
+		int t = (int) (Math.random()*h);
+		pw.println("* h:" + h);
+		pw.println("* t:" + t);
+		return t;
 	}
 
 	public void imprimir(Log log) {

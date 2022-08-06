@@ -3,7 +3,7 @@ package codigo;
 public class Info {
 	private int transicion;
 	private int cant_disparos;
-	private	int invariante;
+	private	int invariante; // Tipo de invariante
 	private int cant_invariante;
 	public Info(int transicion,int cant_disparos, int invariante) {
 		this.transicion = transicion; 

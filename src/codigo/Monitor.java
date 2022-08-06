@@ -27,7 +27,7 @@ public class Monitor {
         pol = new Politica(pw,red, cola);
 	}
 	
-	public boolean dispararTransicion(int T_Disparar) {
+	public void dispararTransicion(int T_Disparar) {
 
 		try {
 			mutex.acquire();
@@ -35,7 +35,7 @@ public class Monitor {
 			e.printStackTrace();
 		}
 		k=true;
-    	while (k) {
+    	//while (k) {
 			k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
 			
 			if (k) { // k =true
@@ -51,7 +51,7 @@ public class Monitor {
 					pw.println("*************************");
 					pw.println("\n");
 					mutex.release();
-					return true;
+					//return;
 				
 				} else {
 					
@@ -62,18 +62,19 @@ public class Monitor {
 					pw.println("*************************");
 					pw.println("\n");
 					mutex.release();
-					return true;
+					//return;
 				}
 			} else { // k =false
 				pw.println("* Se va a dormir T"+(T_Disparar+1));
 				mutex.release();
 				cola.poner_EnCola(T_Disparar);
-				return false;
+				dispararTransicion(T_Disparar);
+				//return;
 			}
-		}
+		//}
 
-		mutex.release();
-		return true;
+		//mutex.release();
+		//return;
 	}
 
 	/**

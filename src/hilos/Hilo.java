@@ -17,14 +17,7 @@ public class Hilo implements Runnable {
 	@Override
 	public void run() {
 		while(continuar){
-				for(int i=0 ; i<secuencia.length && continuar;) {
-					if(monitor.dispararTransicion(secuencia[i] - 1)){
-						i++;
-						if(i ==(secuencia.length)) {
-							i=0;
-						}
-					}
-				}
+				for(Integer i:secuencia) {monitor.dispararTransicion(i - 1);}
 			}
 	}
 	// Fin del hilo 
