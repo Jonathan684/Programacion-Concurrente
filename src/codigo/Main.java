@@ -12,7 +12,7 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 9;
-	private static final int tiempoCorrida = 600;//milisegundos
+	private static final int tiempoCorrida = 1600;//milisegundos
 	private static int[] T1 = { 1 };
 	private static int[] T2 = { 2 };
 	private static int[] T3 = { 3 };
