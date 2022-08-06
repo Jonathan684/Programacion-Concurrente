@@ -1,1 +1,5 @@
 /bin/
+# ignorar los archivos terminados en .txt dentro de la carpeta doc (pero no sus subdirectorios)
+Consola/Reporte.txt
+Consola/log.txt
+Consola/log2.txt
