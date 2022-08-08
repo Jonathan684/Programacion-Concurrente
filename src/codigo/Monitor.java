@@ -1,6 +1,7 @@
 package codigo;
 
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.concurrent.Semaphore;
 
 import log.Log;
@@ -9,22 +10,22 @@ public class Monitor {
 
 	private RDP red;
 	private Cola cola;
-	private Politica pol;
+	private Politica politica;
 	private int nTransicion;
 	private Semaphore mutex;
 	private Matriz m;
 	private boolean k;
 	private	PrintWriter pw;
-	
-	public Monitor(PrintWriter pw,RDP red) {
+	//private static RDP red;
+	public Monitor(PrintWriter pw) {
 
 		this.pw=pw;
-		this.red = red;
-        this.mutex = new Semaphore(1);
-		cola = new Cola(red.get_numero_Transiciones());
-		nTransicion = 0;
-		red.sensibilizar();
-        pol = new Politica(pw,red, cola);
+		this.mutex = new Semaphore(1);
+        red = new RDP(mutex);
+        cola = new Cola(red.get_numero_Transiciones());
+		politica = new Politica(pw,red, cola);
+        red.sensibilizar();
+        nTransicion = -1;
 	}
 	
 	public void dispararTransicion(int T_Disparar) {
@@ -41,7 +42,8 @@ public class Monitor {
 			if (k) { // k =true
 				pw.println("*************************");
 				pw.println("* Se disparo:[T"+(T_Disparar+1)+"]");
-				pol.registrarDisparo(T_Disparar);
+				pw.println("* "+red.getVectorExtendido().imprimir());
+				politica.registrarDisparo(T_Disparar);
 				m = calcularVsAndVc();
 				pw.println("* m: "+m.imprimir());
 				pw.println("* "+cola.imprimir2());
@@ -55,7 +57,7 @@ public class Monitor {
 				
 				} else {
 					
-					nTransicion = pol.cual(m);
+					nTransicion = politica.cual(m);
 					cola.sacar_de_Cola(nTransicion);
 					pw.println("* Se saca T"+(nTransicion+1));
 					
@@ -67,7 +69,35 @@ public class Monitor {
 			} else { // k =false
 				pw.println("* Se va a dormir T"+(T_Disparar+1));
 				mutex.release();
-				cola.poner_EnCola(T_Disparar);
+				/// Se va a poner en la cola o a dormir
+				 if(red.getTemporales().esTemporal(T_Disparar)) {
+				 long Tiempo = red.getTemporales().getTiempoFaltanteParaAlfa(T_Disparar);
+				 long l =  new Date().getTime();
+				 //System.out.println("No entra "+Tiempo);
+				 if(Tiempo>0) {
+					 System.out.println("A dormir :"+"T"+(T_Disparar+1)
+							 +" Tiempo:"+Tiempo+"  l"+l);
+					 try {
+						mutex.release();
+						Thread.sleep(Tiempo);
+					
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					 try {
+						mutex.acquire();
+						l =  new Date().getTime();
+						System.out.println("Desperté :"+"T"+(T_Disparar+1)+"  l"+l);
+								} 
+					 catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				 else	cola.poner_EnCola(T_Disparar);
+			 }
+				 else	cola.poner_EnCola(T_Disparar);
 				dispararTransicion(T_Disparar);
 				//return;
 			}
@@ -101,6 +131,6 @@ public class Monitor {
 			mutex.release();
 	}
     public void imprimir(Log loga) {
-		pol.imprimir(loga);
+		politica.imprimir(loga);
 	}
 }

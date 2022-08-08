@@ -3,8 +3,11 @@ package codigo;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.Semaphore;
+
 import log.Log;
 
 public class RDP {
@@ -14,28 +17,23 @@ public class RDP {
 	private Matriz VectorMarcadoActual, VectorExtendido, VectorSensibilizado, VectorInhibicion;
 	private Matriz Incidencia, Identidad, Inhibicion;
 	private Matriz Intervalo;
-	private Matriz VectorZ,M_Inicial;
+	private Matriz VectorZ;
 	private final int numeroPlazas;
 	private final int numeroTransiciones;
 	// private final List<Matriz> invariantes;
 	private Scanner input;
 	private Matriz IEntrada;
 	private SensibilizadaConTiempo Temporizadas;
-	//private Mutex mutex;
-	private Log consola;
+	private Semaphore mutex;
 	private long timeStamp[];
-	private int TimeStamp_ahora;
+
 	private static HashMap<String, String> p_invariantes;
 	private long timeout[] ;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public RDP(Log consola) {
+	public RDP(Semaphore mutex) {
+		this.mutex = mutex;
 		p_invariantes = new HashMap<String, String>();
-		TimeStamp_ahora = 0;
-		this.consola = consola;
-		//this.mutex = mutex;
-		//int timeout = 0;
-		
 		numeroTransiciones = cargarTransiciones("matrices/M.I.txt"); // Extraccion de la cantidad de transiciones.
 		numeroPlazas = cargarPlazas("matrices/M.I.txt"); // Extraccion de la cantidad de plazas.
 		
@@ -47,7 +45,7 @@ public class RDP {
 
 		Identidad = new Matriz(numeroTransiciones, numeroTransiciones);
 		Intervalo = new Matriz(2, numeroTransiciones);
-		M_Inicial = new Matriz(1, numeroPlazas);
+		//M_Inicial = new Matriz(1, numeroPlazas);
 		// ISalida = new Matriz(numeroPlazas,numeroTransiciones);
 		// Vectores
 		VectorMarcadoActual = new Matriz(numeroPlazas, 1);
@@ -66,7 +64,7 @@ public class RDP {
 		
 		
 		Cargar_P_Invariante();
-		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, consola, Intervalo);
+		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, Intervalo);
 		timeStamp = new long[numeroTransiciones];
 		timeout = new long[numeroTransiciones];
 		
@@ -89,6 +87,9 @@ public class RDP {
 		//consola.registrarDisparo("* =====Antes======= ", 1);
 		sensibilizar(); // Se actualiza el Vz 
 		if (!estaSensibilizada(transicion)) { // no sensibilizada
+			// Es temporal?
+			// System.out.println("Pasó :"+"T"+(transicion+1));
+			 
 			return false;
 		}
 		else {
@@ -100,24 +101,21 @@ public class RDP {
 //			 System.out.println("\n VectorExtendido antes del disparo");
 //			 transAntesdelDisparo.getTranspuesta().imprimirMatriz();
 //      	 System.out.println("......................");	
-			// consola.registrarDisparo("* =====despues======= ", 1);
+//			 consola.registrarDisparo("* =====despues======= ", 1);
 			 calculoDeVectorEstado(transicion);
 			 sensibilizar(); // Se vuelve a sensibiizar para sacar el nuevo vectorExtendido
-			 
 			 transDespuesdelDisparo = VectorExtendidoSinVZ();
 //			 System.out.println("\n VectorExtendido despues del disparo");
 //			 transDespuesdelDisparo.getTranspuesta().imprimirMatriz();
 			 Temporizadas.ActualizarTimeStamp(transAntesdelDisparo,transDespuesdelDisparo,transicion);
-			// System.out.println("fin de disparar en rdp");
-			 
-			 
+			 //System.out.println("fin de disparar en rdp");
+
 			 
 			 if (!Test_Invariante()) {
 					//consola.registrarDisparo("* NO SE CUMPLE EL INVARIANTE DE PLAZA \n", 0);
 					throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
 				}
-
-			return true;
+			 return true;
 		}
 
 	}
@@ -157,19 +155,13 @@ public class RDP {
 		sensibilizarVectorB();
 		//sensibilizarVectorZ();
 		//////////////////////////////////////////////////////////////
-		
-//		System.out.println("..Marcado Inicial..");
-//		M_Inicial.imprimirMatriz();
-//		System.out.println("...................");
-		
-		//////////////////////////////////////////////////////////////
 		VectorExtendido = VectorSensibilizado.getAnd(VectorInhibicion);
 		VectorZ = Temporizadas.getVectorZ(VectorExtendidoSinVZ());
 		VectorExtendido = VectorExtendido.getAnd(VectorZ.getTranspuesta());
-	//	consola.registrarDisparo("* con Vz---->> " + sensibilidadas(), 1);
-	//	consola.registrarDisparo("* sin Vz---->> " + sensibilidadas2(), 1);
-//		System.out.println("VectorZ :");
-//		VectorZ.imprimirMatriz();
+	    //consola.registrarDisparo("* con Vz---->> " + sensibilidadas(), 1);
+	    //consola.registrarDisparo("* sin Vz---->> " + sensibilidadas2(), 1);
+        //System.out.println("VectorZ :");
+        //VectorZ.imprimirMatriz();
 	}
 	public void sensibilizarVectorZ() {
 		for (int k = 0; k < numeroTransiciones; k++) {
@@ -181,85 +173,12 @@ public class RDP {
 			}
 		}
     }
-//	public boolean test_ventana(int transicion) {
-//		//Marca_actual(transicion);
-//		consola.registrarDisparo("* Test ventana :"+System.currentTimeMillis()+" T"+(transicion+1) +" timeStamp :"+ timeStamp[transicion],1);
-//		long TimeStamp_ahora = (System.currentTimeMillis() - (timeStamp[transicion]));
-//		if ((TimeStamp_ahora >= (Intervalo.getDato(0, transicion)))&&(TimeStamp_ahora <= (Intervalo.getDato(1, transicion)))) {
-//			return true;
-//		} else {
-//			if(TimeStamp_ahora < Intervalo.getDato(0, transicion)) {
-//				timeout[transicion] =  ((((timeStamp[transicion]) + (Intervalo.getDato(0, transicion)))
-//						- System.currentTimeMillis()) + 2);
-//				consola.registrarDisparo("* Tiempo a dormir "+timeout[transicion],1);
-//				return false;
-//			}
-//			else {
-//				throw new RuntimeException("Beta demasiado chico, elegir un beta mas grande : T"+ (transicion+1)+" tiempo:"+System.currentTimeMillis()+ " timeStamp :"+timeStamp[transicion]);
-//			}
-//			
-//		}
-//			
-//	}
+
 	public long gettimeout(int t) {
 		return timeout[t];
 	}
-	
-//	public void actualiceSensibilizadoT() {
-//
-//		for (int t = 0; t < numeroTransiciones; t++) {
-//			if (Temporizadas.esTemporal(t) && (VectorExtendido.getDato(t, 0) == 1))setNuevoTimeStamp(t);
-//			if ((Temporizadas.esTemporal(t) == true) && (VectorExtendido.getDato(t, 0) == 0))
-//				resetEsperando(t);
-//		}
-//	}
-	
-//	public void Marca_actual(int transicion) {
-//		TimeStamp_ahora = (int) (System.currentTimeMillis() - (timeStamp[transicion]));
-//	}
 
-//	public boolean Analisis_Temporal(int transicion) {
-//
-//		// consola.registrarDisparo("* Tiempo 1 :" + System.currentTimeMillis()+"
-//		// TimeStamp :"+timeStamp[transicion] , 1);
-//		Marca_actual(transicion);
-//
-//		if (test_ventana(transicion)) {
-//			return true; // <<-- Esta en la ventana de tiempo
-//		}
-//		consola.registrarDisparo("* Tiempo en analisis temporal :"+System.currentTimeMillis()+" T"+(transicion+1),1);
-//		// No estoy en la venta de tiempo.
-//		if (TimeStamp_ahora < (Intervalo.getDato(0, transicion))) {// <-- Esta antes del alfa
-//			// consola.registrarDisparo("* Tiempo 2 :" + System.currentTimeMillis(), 1);
-//
-//			int Tiempo_esperar = (int) ((((timeStamp[transicion]) + (Intervalo.getDato(0, transicion)))
-//					- System.currentTimeMillis()) + 2); // +2
-//
-//			if (Tiempo_esperar < 0) { // Tiempo negativo signidica que estoy dentro de la ventana.
-//				// consola.registrarDisparo("* Tiempo_esperar negativo esta dentro de la ventana
-//				// ahora :" + Tiempo_esperar, 1);
-//				return true;
-//			} 
-//			//timeout = Tiempo_esperar;
-//			return false; // esperar alfa
-//			
-//		} 
-//		
-//		throw new RuntimeException("Beta demasiado chico, elegir un beta mas grande : T"+ (transicion+1)+" tiempo:"+System.currentTimeMillis());
-//		
-//		//return true;
-//		
-////		else { // <<-- Esta despues de beta
-////					// consola.registrarDisparo("* Saliendo pasando beta :" +
-////					// Thread.currentThread().getName(), 1);
-////			return;
-////		}
-//	}
-//	
 	public void esperar(int transicion) {
-		//Temporizadas.setEsperando(transicion);
-		//consola.registrarDisparo("* Tiempo a esperar :"+ timeout, 1);
-		//mutex._release();
 		int timeout = (int) ((((timeStamp[transicion]) + (Intervalo.getDato(0, transicion)))
 				- System.currentTimeMillis()) + 2);
 		try {
@@ -275,13 +194,6 @@ public class RDP {
 		Matriz aux = Incidencia.getMultiplicacion(Identidad.getColumna(transicion));
 		VectorMarcadoActual = VectorMarcadoActual.getSuma(aux);
 	}
-
-//	public void resetEsperando(int transicion) {
-//		consola.registrarDisparo("transicion que resetea mal :"+transicion,1);
-//		timeStamp[transicion] = 0;
-//		timeout[transicion]=0;
-//		Temporizadas.resetEsperando(transicion);
-//	}
 
 	public void setNuevoTimeStamp(int transicion) {
 

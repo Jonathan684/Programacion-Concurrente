@@ -3,6 +3,7 @@ package codigo;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,7 +13,7 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 7;
-	private static final int tiempoCorrida = 800;//milisegundos
+	private static final int tiempoCorrida = 4000;//milisegundos
 	private static int[] T1 = { 1 };
 	private static int[] T2 = { 2,4 };
 	private static int[] T3 = { 3,5 };
@@ -20,7 +21,7 @@ public class Main {
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
 	private static Hilo[] hilos;
 	private static Thread[] threads;
-	private static RDP redDePetri;
+	
 	private final static String REPORT_FILE_NAME_3 = "Consola/Reporte.txt";
 	private final static String REPORT_FILE_NAME_2 = "Consola/log.txt";
 	private static Log log;
@@ -32,14 +33,15 @@ public class Main {
 	}
 
 	public static void iniciarPrograma() {
-		
+//		long l =  new Date().getTime();
+//		System.out.println("	=======================    "+l);
 		System.out.println("	=======================    ");
 		System.out.println("	        TP final		   ");
 		System.out.println("	=======================    ");
 		
 		log = new Log(REPORT_FILE_NAME_3);
 		Log log2 = new Log(REPORT_FILE_NAME_2);
-		redDePetri = new RDP(log2);
+	
 		try {
 			fichero = new FileWriter("Consola/log2.txt");
 		    } catch (IOException e1) {
@@ -48,7 +50,7 @@ public class Main {
 		  }
 	            pw = new PrintWriter(fichero);
 
-        Monitor monitor = new Monitor(pw,redDePetri);
+        Monitor monitor = new Monitor(pw);
 		hilos = new Hilo[numeroHilos];
 
 		hilos[0] = new Hilo(monitor, T1);	//T1
