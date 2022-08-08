@@ -1,5 +1,6 @@
 package codigo;
 
+import java.io.PrintWriter;
 import java.util.Date;
 
 import log.Log;
@@ -11,9 +12,9 @@ public class SensibilizadaConTiempo {
 	private int cantidad_transiciones;
 	private Matriz VectorZ;
 	private int [] T_Inmediata;
-	
-	public SensibilizadaConTiempo(int cantidad_transiciones , Matriz Intervalo) {
-		
+	private	PrintWriter pw;
+	public SensibilizadaConTiempo(int cantidad_transiciones , Matriz Intervalo,PrintWriter pw) {
+		this.pw = pw;
 		timeStamp = new long[cantidad_transiciones];
 		T_Inmediata = new int[cantidad_transiciones];
 		VectorZ = new Matriz(1, cantidad_transiciones);
@@ -90,11 +91,12 @@ public class SensibilizadaConTiempo {
 		for (int transicion = 0; transicion < cantidad_transiciones; transicion++) { //Se recorren todas las transiciones
 			
 			if(transAntesdelDisparo.getDato(transicion, 0)==1 && transDespuesdelDisparo.getDato(transicion, 0)==1) { //Si la transicion se encontraba sensibilizada antes del disparo y sigue sensibilizada despues de disparar, no se resetea el contador de la misma 
-				if(!(transicion==transicion_a_disparar)) { //A MENOS QUE justamente sea esa la transicion disparada (tiene que reinizializar su cronometro)
+				if(transicion==transicion_a_disparar) { //A MENOS QUE justamente sea esa la transicion disparada (tiene que reinizializar su cronometro)
 					//System.out.println("Continua la cuenta");
 					//consola.registrarDisparo("* Continua la cuenta para T"+(transicion+1),1);
 					timeStamp[transicion] = System.currentTimeMillis(); //continua la cuenta
 					//System.out.println("transicion :"+transicion+" :"+timeStamp[transicion]);
+					//pw.println("* POSIBLE ERROR ACA T"+(transicion+1)+" transicion_a_disparar:"+transicion_a_disparar);
 				}
 			}
 			
@@ -103,20 +105,24 @@ public class SensibilizadaConTiempo {
 			else if(transAntesdelDisparo.getDato(transicion, 0)==1 && transDespuesdelDisparo.getDato(transicion, 0)==0) {
 				//consola.registrarDisparo("* Reset a T"+(transicion+1),1);
 				timeStamp[transicion] = -1;
-				//System.out.println("Contador en cero para T"+(transicion+1));
+				//pw.println("*  Contador en cero para T"+(transicion+1));
 			}
 			
 			//Si no estaba sensibilizada y despues de disparar si lo esta, se inicia la cuenta del cronometro alfa con setNuevoTimeStamp.
 			else if((transAntesdelDisparo.getDato(transicion, 0)==0) && (transDespuesdelDisparo.getDato(transicion, 0)==1)  && (T_Inmediata[transicion] == 0 )) {
 				//consola.registrarDisparo("* Inicia la cuenta a T"+(transicion+1),1);
-				timeStamp[transicion] = System.currentTimeMillis();
+				
+				timeStamp[transicion] = System.currentTimeMillis()+2;
+				//pw.println("*	Inicio del contador para T"+(transicion+1)+"  ->"+timeStamp[transicion]);	
 				//System.out.println("Inicio del contador para T"+(transicion+1)+"  ->"+timeStamp[transicion]);
 			}
 			
 			//Si no estaba sensibilizada y sigue sin estarlo despues del disparo, no se empieza la cuenta del cronometro alfa.
 			else if(transAntesdelDisparo.getDato(transicion, 0)==0 && transDespuesdelDisparo.getDato(transicion, 0)==0){
 				//consola.registrarDisparo("* Reset "+(transicion+1),1);
+				
 				timeStamp[transicion] = -1;
+				//pw.println("*   Salida 3. T"+(transicion+1));	
 				//System.out.println("Contador en -1 T"+(transicion+1));
 			}
 		
@@ -135,11 +141,18 @@ public class SensibilizadaConTiempo {
 	public void updateVectorZ(Matriz q) {
 		//long TimeStamp_ahora = new Date().getTime();
 		//System.out.println("Tiempo :"+TimeStamp_ahora);
+		//pw.println("* updateVectorZ");
 		for (int T= 0; T < cantidad_transiciones; T++) { 
 			if(test_ventana(T) & q.getDato(T, 0)==1) { 
 				VectorZ.setDato(0, T, 1);
+//				if(T == 5) {
+//					pw.println("* pone 1");	
+//				}
 			}
 			else {
+//				if(T == 5) {
+//					pw.println("* pone 0");	
+//				}
 				VectorZ.setDato(0, T, 0);
 			}
 		}
@@ -158,6 +171,9 @@ public class SensibilizadaConTiempo {
 		return VectorZ;
 	}
 	public boolean test_ventana(int transicion) {
+//		if(timeStamp[transicion] == -1) {
+//			return false;
+//		}
 		//Marca_actual(transicion);
 		long l =  new Date().getTime();
 		//long TimeStamp_ahora = (System.currentTimeMillis() - (timeStamp[transicion]));
@@ -167,18 +183,29 @@ public class SensibilizadaConTiempo {
 		// Es inmediata
 		// O no timeStamp = -1
 		
-		
 		// EN LA VENTANA DE TIEMPO
+//		if(transicion == 4) {
+//			pw.println("* ANALISIS PARA T"+(transicion+1));
+//			pw.println("* Intervalo.getDato(0, transicion) :" + Intervalo.getDato(0, transicion));
+//			pw.println("* TimeStamp_ahora :" + TimeStamp_ahora);
+//			pw.println("* timeStamp[transicion] : T"+(transicion+1)+" = " + timeStamp[transicion] +" l="+l);
+//		}
 		if (((TimeStamp_ahora >= (Intervalo.getDato(0, transicion)))
 			&& (TimeStamp_ahora <= (Intervalo.getDato(1, transicion))))//ESTA EN LA VENTA DE TIEMPO
 				|| (T_Inmediata[transicion] == 1) 						//ES INMEDIATA
 				|| (timeStamp[transicion] == -1)) 						//TODAVIA NO INICIO EL TIEMPO
 		{
+			//pw.println("* timeStamp[transicion]" + timeStamp[transicion]);
+			//pw.println("* Retorna true");
 			return true;//en la ventana de tiempo
 		} 
 		// ANTES DEL ALFA o Despues del beta
-		else return false;
-		//else(TimeStamp_ahora < Intervalo.getDato(0, transicion)) {
+		else {
+			
+			//pw.println("* Retorna false");
+			return false;
+		}
+			//else(TimeStamp_ahora < Intervalo.getDato(0, transicion)) {
 		//	return false;	//antes del alfa
 		//}
 		//System.out.println("TimeStamp_ahora :"+TimeStamp_ahora);

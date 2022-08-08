@@ -2,6 +2,7 @@ package codigo;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,12 +27,15 @@ public class RDP {
 	private SensibilizadaConTiempo Temporizadas;
 	private Semaphore mutex;
 	private long timeStamp[];
-
+	private PrintWriter pw;
 	private static HashMap<String, String> p_invariantes;
 	private long timeout[] ;
+	
+	Matriz VectorExtendidoAux; 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public RDP(Semaphore mutex) {
+	public RDP(Semaphore mutex , PrintWriter pw) {
+		this.pw = pw;
 		this.mutex = mutex;
 		p_invariantes = new HashMap<String, String>();
 		numeroTransiciones = cargarTransiciones("matrices/M.I.txt"); // Extraccion de la cantidad de transiciones.
@@ -42,7 +46,7 @@ public class RDP {
 		Incidencia = new Matriz(numeroPlazas, numeroTransiciones);
 		Inhibicion = new Matriz(numeroPlazas, numeroTransiciones);
 		IEntrada = new Matriz(numeroPlazas, numeroTransiciones);
-
+		 VectorExtendidoAux = new Matriz(numeroTransiciones, 1);
 		Identidad = new Matriz(numeroTransiciones, numeroTransiciones);
 		Intervalo = new Matriz(2, numeroTransiciones);
 		//M_Inicial = new Matriz(1, numeroPlazas);
@@ -64,7 +68,7 @@ public class RDP {
 		
 		
 		Cargar_P_Invariante();
-		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, Intervalo);
+		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, Intervalo,pw);
 		timeStamp = new long[numeroTransiciones];
 		timeout = new long[numeroTransiciones];
 		
@@ -83,13 +87,44 @@ public class RDP {
 	 *         disparo es exitoso.
 	 */
 	public boolean Disparar(int transicion) {
+		pw.println("* ----------------------");
+		pw.println("* Disparar red T"+(transicion+1));
 		//System.out.println("Sensillibizar apenas entra :");
 		//consola.registrarDisparo("* =====Antes======= ", 1);
 		sensibilizar(); // Se actualiza el Vz 
+		pw.println("* red : "+getVectorExtendido().imprimir()+" sensi="+estaSensibilizada(transicion));
 		if (!estaSensibilizada(transicion)) { // no sensibilizada
 			// Es temporal?
 			// System.out.println("Pasó :"+"T"+(transicion+1));
-			 
+			if(Temporizadas.esTemporal(transicion)) {
+				pw.println("* Transición temporal T"+(transicion+1));
+				{
+					 long Tiempo = Temporizadas.getTiempoFaltanteParaAlfa(transicion);
+					// pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
+					 if (Tiempo > 0) {
+
+							try {
+								pw.println("* A dormir T"+(transicion+1)+" t:"+Tiempo);	
+								mutex.release();
+								Thread.sleep(Tiempo);
+
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							try {
+								mutex.acquire();
+								//pw.println("*==========>>>>>>>>>> Desperte T"+(transicion+1));
+								
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							return  Disparar(transicion);
+						}
+					 return false;
+				}
+			}
 			return false;
 		}
 		else {
@@ -110,7 +145,8 @@ public class RDP {
 			 Temporizadas.ActualizarTimeStamp(transAntesdelDisparo,transDespuesdelDisparo,transicion);
 			 //System.out.println("fin de disparar en rdp");
 
-			 
+			/// Se va a poner en la cola o a dormir
+			  
 			 if (!Test_Invariante()) {
 					//consola.registrarDisparo("* NO SE CUMPLE EL INVARIANTE DE PLAZA \n", 0);
 					throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
@@ -122,7 +158,7 @@ public class RDP {
 
 	private Matriz VectorExtendidoSinVZ() {
 		// TODO Auto-generated method stub
-			Matriz VectorExtendidoAux = new Matriz(numeroTransiciones, 1);
+			
 			sensibilizarVectorE();
 			sensibilizarVectorB();
 			VectorExtendidoAux = VectorSensibilizado.getAnd(VectorInhibicion);
@@ -157,7 +193,11 @@ public class RDP {
 		//////////////////////////////////////////////////////////////
 		VectorExtendido = VectorSensibilizado.getAnd(VectorInhibicion);
 		VectorZ = Temporizadas.getVectorZ(VectorExtendidoSinVZ());
+		//pw.println("* VectorZ---->> " + VectorZ.imprimir());
 		VectorExtendido = VectorExtendido.getAnd(VectorZ.getTranspuesta());
+		//pw.println("* Marcado---->> " + Marcado());
+		//pw.println("* Sin Vz---->> " + VectorExtendidoSinVZ().imprimir());
+		//pw.println("* Con Vz---->> " + VectorExtendido.imprimir());
 	    //consola.registrarDisparo("* con Vz---->> " + sensibilidadas(), 1);
 	    //consola.registrarDisparo("* sin Vz---->> " + sensibilidadas2(), 1);
         //System.out.println("VectorZ :");
@@ -258,6 +298,9 @@ public class RDP {
 
 	// Metodos get
 
+	public Matriz getVectorExtendidosinVz() {
+		return VectorExtendidoAux ;
+	}
 	public Matriz getVectorExtendido() {
 		return VectorExtendido;
 	}

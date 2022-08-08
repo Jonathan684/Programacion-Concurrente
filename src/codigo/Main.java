@@ -13,10 +13,12 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 7;
-	private static final int tiempoCorrida = 4000;//milisegundos
+	private static final int tiempoCorrida = 5000;//milisegundos
 	private static int[] T1 = { 1 };
 	private static int[] T2 = { 2,4 };
 	private static int[] T3 = { 3,5 };
+//	private static int[] T4 = { 4 };
+//	private static int[] T5 = { 5 };
 	private static int[] T6 = { 6 };
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
 	private static Hilo[] hilos;
@@ -27,7 +29,6 @@ public class Main {
 	private static Log log;
 	private static FileWriter fichero = null;
     private static PrintWriter pw = null;
-
 	public static void main(String[] args) {
 		iniciarPrograma(); 
 	}
@@ -49,7 +50,7 @@ public class Main {
 					e1.printStackTrace();
 		  }
 	            pw = new PrintWriter(fichero);
-
+	            pw.println("* INICIO");
         Monitor monitor = new Monitor(pw);
 		hilos = new Hilo[numeroHilos];
 
@@ -78,7 +79,7 @@ public class Main {
 
 		for(Hilo H:hilos)H.set_Fin();
 		monitor.vaciarcolas();
-		//for(Thread t : threads)t.interrupt();
+		for(Thread t : threads)t.interrupt();
 		
 		
 		pw.println("* Fin *\n");

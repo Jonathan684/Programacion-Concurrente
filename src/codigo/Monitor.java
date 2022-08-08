@@ -16,16 +16,18 @@ public class Monitor {
 	private Matriz m;
 	private boolean k;
 	private	PrintWriter pw;
+	private boolean fin;
 	//private static RDP red;
 	public Monitor(PrintWriter pw) {
 
 		this.pw=pw;
 		this.mutex = new Semaphore(1);
-        red = new RDP(mutex);
+        red = new RDP(mutex,pw);
         cola = new Cola(red.get_numero_Transiciones());
 		politica = new Politica(pw,red, cola);
         red.sensibilizar();
         nTransicion = -1;
+        fin = false;
 	}
 	
 	public void dispararTransicion(int T_Disparar) {
@@ -67,37 +69,11 @@ public class Monitor {
 					//return;
 				}
 			} else { // k =false
-				pw.println("* Se va a dormir T"+(T_Disparar+1));
+				pw.println("* Se va a la cola T"+(T_Disparar+1));
+				pw.println("* Estan en la "+cola.imprimir2());
 				mutex.release();
-				/// Se va a poner en la cola o a dormir
-				 if(red.getTemporales().esTemporal(T_Disparar)) {
-				 long Tiempo = red.getTemporales().getTiempoFaltanteParaAlfa(T_Disparar);
-				 long l =  new Date().getTime();
-				 //System.out.println("No entra "+Tiempo);
-				 if(Tiempo>0) {
-					 System.out.println("A dormir :"+"T"+(T_Disparar+1)
-							 +" Tiempo:"+Tiempo+"  l"+l);
-					 try {
-						mutex.release();
-						Thread.sleep(Tiempo);
-					
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					 try {
-						mutex.acquire();
-						l =  new Date().getTime();
-						System.out.println("Desperté :"+"T"+(T_Disparar+1)+"  l"+l);
-								} 
-					 catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				 else	cola.poner_EnCola(T_Disparar);
-			 }
-				 else	cola.poner_EnCola(T_Disparar);
+				cola.poner_EnCola(T_Disparar);
+				if(fin == true)	return;
 				dispararTransicion(T_Disparar);
 				//return;
 			}
@@ -114,16 +90,17 @@ public class Monitor {
 	 * @return m : Matriz con transiciones en la cola y sensibilizadas
 	 */
 	public Matriz calcularVsAndVc() {
-		Matriz Vs = red.getVectorExtendido();
+		Matriz Vs = red.getVectorExtendidosinVz();
 		Matriz Vc = cola.quienesEstan();
 		Matriz m = Vs.getAnd(Vc);
 		return m;
 	}
 
 	public void vaciarcolas() {
-		
+		    
 			try {
 				mutex.acquire();
+				fin = true;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

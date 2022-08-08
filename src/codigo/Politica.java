@@ -200,9 +200,9 @@ public class Politica {
 		//pw.println("* inv1: " + inv1);
 		//pw.println("* inv2: " + inv2);
 		//pw.println("* inv3: " + inv3);
-		pw.println("* T_inv1: " + T_inv[0]);
-		pw.println("* T_inv2: " + T_inv[1]);
-		pw.println("* T_inv3: " + T_inv[2]);
+		//pw.println("* T_inv1: " + T_inv[0]);
+		//pw.println("* T_inv2: " + T_inv[1]);
+		//pw.println("* T_inv3: " + T_inv[2]);
 	}
 
 //------------------------------------------------------------------------------------
@@ -224,8 +224,8 @@ public class Politica {
 		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
 			// _m += " " + m.getDato(i, 0);
 			if (m.getDato(i, 0) == 1) {
-				pw.println("* [T" + (i + 1) + "] disp:" + disp.get(i).getCant_disparos() + " cant_vcs_inv:"
-						+ Transiciones[i].getcantInvariante() + " Inv-->>" + Transiciones[i].getInvariante());
+				//pw.println("* [T" + (i + 1) + "] disp:" + disp.get(i).getCant_disparos() + " cant_vcs_inv:"
+					//	+ Transiciones[i].getcantInvariante() + " Inv-->>" + Transiciones[i].getInvariante());
 				cantidad++;
 				transicion_aux = i;
 			}
