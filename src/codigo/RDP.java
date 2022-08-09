@@ -92,7 +92,8 @@ public class RDP {
 		//System.out.println("Sensillibizar apenas entra :");
 		//consola.registrarDisparo("* =====Antes======= ", 1);
 		sensibilizar(); // Se actualiza el Vz 
-		pw.println("* red : "+getVectorExtendido().imprimir()+" sensi="+estaSensibilizada(transicion));
+		pw.println("* Red : "+sensibilidadas()+" sensi="+estaSensibilizada(transicion));
+		pw.println("* Marcado : "+Marcado());
 		if (!estaSensibilizada(transicion)) { // no sensibilizada
 			// Es temporal?
 			// System.out.println("Pasó :"+"T"+(transicion+1));
@@ -104,7 +105,7 @@ public class RDP {
 					 if (Tiempo > 0) {
 
 							try {
-								pw.println("* A dormir T"+(transicion+1)+" t:"+Tiempo);	
+								pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);	
 								mutex.release();
 								Thread.sleep(Tiempo);
 
@@ -196,8 +197,8 @@ public class RDP {
 		//pw.println("* VectorZ---->> " + VectorZ.imprimir());
 		VectorExtendido = VectorExtendido.getAnd(VectorZ.getTranspuesta());
 		//pw.println("* Marcado---->> " + Marcado());
-		//pw.println("* Sin Vz---->> " + VectorExtendidoSinVZ().imprimir());
-		//pw.println("* Con Vz---->> " + VectorExtendido.imprimir());
+		pw.println("* Sin Vz---->> " + VectorExtendidoSinVZ().imprimir());
+		pw.println("* Con Vz---->> " + VectorExtendido.imprimir());
 	    //consola.registrarDisparo("* con Vz---->> " + sensibilidadas(), 1);
 	    //consola.registrarDisparo("* sin Vz---->> " + sensibilidadas2(), 1);
         //System.out.println("VectorZ :");

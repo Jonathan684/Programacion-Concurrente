@@ -90,7 +90,7 @@ public class Monitor {
 	 * @return m : Matriz con transiciones en la cola y sensibilizadas
 	 */
 	public Matriz calcularVsAndVc() {
-		Matriz Vs = red.getVectorExtendidosinVz();
+		Matriz Vs = red.getVectorExtendido();
 		Matriz Vc = cola.quienesEstan();
 		Matriz m = Vs.getAnd(Vc);
 		return m;

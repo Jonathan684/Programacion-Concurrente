@@ -113,7 +113,7 @@ public class SensibilizadaConTiempo {
 				//consola.registrarDisparo("* Inicia la cuenta a T"+(transicion+1),1);
 				
 				timeStamp[transicion] = System.currentTimeMillis()+2;
-				//pw.println("*	Inicio del contador para T"+(transicion+1)+"  ->"+timeStamp[transicion]);	
+				pw.println("*	Inicio del contador para T"+(transicion+1)+"  ->"+timeStamp[transicion]);	
 				//System.out.println("Inicio del contador para T"+(transicion+1)+"  ->"+timeStamp[transicion]);
 			}
 			
@@ -225,7 +225,7 @@ public class SensibilizadaConTiempo {
 		boolean comparacion2=timeStamp[transicion]<=(long)Intervalo.getDato(1, transicion); //Si el time esta antes del beta
 		//System.out.println("TimeStamp "+ timeStamp[transicion]);
 		if(comparacion1 && comparacion2) {
-			//System.out.println("Salida 1 T"+transicion);
+			pw.println("* Salida 1");
 			return (long)0;
 		}
 		
@@ -233,11 +233,15 @@ public class SensibilizadaConTiempo {
 			int Tiempo_esperar = (int) ((((timeStamp[transicion]) + (Intervalo.getDato(0, transicion)))
 					- System.currentTimeMillis()));
 			if(Tiempo_esperar <= 0) {
-			//	System.out.println("Salida 2 T"+transicion);
+				pw.println("* Salida 2"); 
 				return (long)0;
-			}
+			     }
+			else if(timeStamp[transicion] <= 0) {
+				pw.println("* Salida 2.5"); 
+				return (long)0;
+			     }
 			else {
-				//System.out.println("Salida 3 T"+transicion);
+				pw.println("* Salida 3 :"+Tiempo_esperar+"  timeStamp[transicion] = "+timeStamp[transicion]);
 				return ((long)Tiempo_esperar);
 			}
 		}

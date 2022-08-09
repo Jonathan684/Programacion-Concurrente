@@ -309,12 +309,12 @@ public class Politica {
 //			if (j == 1) {
 //				// System.out.println("Invariante " + j + ": " + veces + " veces [T1 T2 T4 T6] "
 //				// );
-		log.registrarDisparo("Invariante " + 1 + ": " + inv1 + " veces  [T1 T2 T4 T6] ", 1);
+		log.registrarDisparo("Invariante " + 1 + ": " + inv1 + " veces  [T1 T2 T4 T6] Tiempo:"+(inv1*(70))/1000, 1);
 //			}
 //			if (j == 2) {
 		// System.out.println("Invariante " + j + ": " + veces + " veces [T1 T3 T5 T7]"
 		// );
-		log.registrarDisparo("Invariante " + 2 + ": " + inv2 + " veces  [T1 T3 T5 T6]", 1);
+		log.registrarDisparo("Invariante " + 2 + ": " + inv2 + " veces  [T1 T3 T5 T6] Tiempo:"+(inv1*(30))/1000, 1);
 //			}
 //			if (j == 3) {
 		// System.out.println("Invariante " + j + ": " + veces + " veces [T7 T8 T9 T10]"
