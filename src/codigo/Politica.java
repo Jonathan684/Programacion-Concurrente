@@ -25,7 +25,7 @@ public class Politica {
 	private Info[] Transiciones;
 	private List<Info> disp = new ArrayList<Info>();
 	private PrintWriter pw;
-	private int var;
+	
 	private static String[][] T_invariantes = { { "T1 T2 T4 T6" }, // Invariante 1
 			{ "T1 T3 T5 T6" }, // Invariante 2
 			{ "T7 T8 T9 T10" } };// Invariane 3
@@ -36,7 +36,6 @@ public class Politica {
 	private int[] transicionesiguales;
 
 	public Politica(PrintWriter pw, RDP rdp, Cola cola) {
-		var = 0;
 		ultima = 0;
 		inv1 = 0;
 		inv2 = 0;
@@ -218,7 +217,19 @@ public class Politica {
 	 * CANTIDAD DE VECES QUE SE DISPARO EL INVARIANTE, NO LA TRANSICION.
 	 */
 	public int cual(Matriz m) {
-
+       
+		//Prioridad a las transiciones T1 y T7 ya que son inmediantas
+		
+		
+//		if(m.getDato(0,0)==1 && m.getDato(6,0)==1 ) { // Si T1 y T7 estan sensibilizadas se saca una de manera aleatoria.
+//			int t = (int) (Math.random() * 2);
+//			if(t==1)return 0;	
+//			return 6;
+//	   }
+//		if(m.getDato(0,0)==1)return 0;	// Inmediata T1
+//		if(m.getDato(6,0)==1)return 6; // Inmediata T7
+//		// Debriamos elegir por el invariante que menos se disparo y si son iguales hacer aleatorio
+		
 		int cantidad = 0;
 		int transicion_aux = -1;
 		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
@@ -233,7 +244,7 @@ public class Politica {
 		// SI HAY MAS DE UNA TRANSICION EN  "m".
 		if (cantidad > 1) {
 			//System.out.println("Implementando la politica "+ var);
-			var ++;
+			
 			int transicion_a_disparar = -1;
 			boolean inicio = true;
 			int disparos_de_invariantes = 0;

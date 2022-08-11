@@ -4,12 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
-
-import log.Log;
 
 public class RDP {
 
@@ -30,8 +27,7 @@ public class RDP {
 	private PrintWriter pw;
 	private static HashMap<String, String> p_invariantes;
 	private long timeout[] ;
-	
-	Matriz VectorExtendidoAux; 
+	private Matriz VectorExtendidoAux; 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public RDP(Semaphore mutex , PrintWriter pw) {
@@ -46,7 +42,7 @@ public class RDP {
 		Incidencia = new Matriz(numeroPlazas, numeroTransiciones);
 		Inhibicion = new Matriz(numeroPlazas, numeroTransiciones);
 		IEntrada = new Matriz(numeroPlazas, numeroTransiciones);
-		 VectorExtendidoAux = new Matriz(numeroTransiciones, 1);
+		VectorExtendidoAux = new Matriz(numeroTransiciones, 1);
 		Identidad = new Matriz(numeroTransiciones, numeroTransiciones);
 		Intervalo = new Matriz(2, numeroTransiciones);
 		//M_Inicial = new Matriz(1, numeroPlazas);
@@ -67,13 +63,15 @@ public class RDP {
 		//M_Inicial.cargarMatriz("matrices/M_Inicial.txt");
 		
 		
-		Cargar_P_Invariante();
 		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, Intervalo,pw);
 		timeStamp = new long[numeroTransiciones];
 		timeout = new long[numeroTransiciones];
 		
 		Arrays.fill(timeStamp, 0);
 		Arrays.fill(timeout, 0);
+		Cargar_P_Invariante();
+		sensibilizar();
+		Temporizadas.inicio(VectorExtendidoAux);
 	}
 	public SensibilizadaConTiempo getTemporales() {
 		return Temporizadas;
@@ -88,24 +86,51 @@ public class RDP {
 	 */
 	public boolean Disparar(int transicion) {
 		pw.println("* ----------------------");
-		pw.println("* Disparar red T"+(transicion+1));
-		//System.out.println("Sensillibizar apenas entra :");
-		//consola.registrarDisparo("* =====Antes======= ", 1);
+		pw.println("* Disparar red T"+(transicion+1)+" hilo:"+Thread.currentThread().getName());
 		sensibilizar(); // Se actualiza el Vz 
 		pw.println("* Red : "+sensibilidadas()+" sensi="+estaSensibilizada(transicion));
 		pw.println("* Marcado : "+Marcado());
 		if (!estaSensibilizada(transicion)) { // no sensibilizada
-			// Es temporal?
-			// System.out.println("Pasó :"+"T"+(transicion+1));
-			if(Temporizadas.esTemporal(transicion)) {
-				pw.println("* Transición temporal T"+(transicion+1));
-				{
-					 long Tiempo = Temporizadas.getTiempoFaltanteParaAlfa(transicion);
-					// pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
-					 if (Tiempo > 0) {
+			return false;
+		}
+		else {
+			 
+			if(Temporizadas.dentroVentana(transicion)){
+				pw.println("* Transición dentro de la ventana T"+(transicion+1));
+				if(Temporizadas.alguienEsperando(transicion))
+					{
+					//pw.println("* Transición alguienEsperando"+(transicion+1));
+                    	return false;
+					}
+				else{
+						Temporizadas.resetEsperando(transicion);
+						Matriz	transAntesdelDisparo = new Matriz(numeroTransiciones, 1); 
+						Matriz	transDespuesdelDisparo = new Matriz(numeroTransiciones, 1); 
+						transAntesdelDisparo =	VectorExtendidoSinVZ();
+						calculoDeVectorEstado(transicion);
+						sensibilizar(); // Se vuelve a sensibiizar para sacar el nuevo vectorExtendido
+						transDespuesdelDisparo = VectorExtendidoSinVZ();
+						Temporizadas.ActualizarTimeStamp(transAntesdelDisparo,transDespuesdelDisparo,transicion);
+						if (!Test_Invariante())throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
+						return true;
+					}
+			}
+			
+			else {
+				//pw.println("* Transición temporal T"+(transicion+1));
+				if(Temporizadas.antesVentana(transicion)){ // 1
+					if(Temporizadas.alguienEsperando(transicion)){ // 2
+                        return false;
+                    }
+					
+					long Tiempo = Temporizadas.getTiempoFaltanteParaAlfa(transicion);
+					pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
+					Temporizadas.setEsperando(transicion); // 3
+					if (Tiempo > 0) {
 
 							try {
-								pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);	
+								//pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);
+								
 								mutex.release();
 								Thread.sleep(Tiempo);
 
@@ -122,39 +147,12 @@ public class RDP {
 								e.printStackTrace();
 							}
 							return  Disparar(transicion);
-						}
-					 return false;
+					}
+					return false;
 				}
-			}
-			return false;
+				else return false;
+			 }
 		}
-		else {
-			 
-			 Matriz	transAntesdelDisparo = new Matriz(numeroTransiciones, 1); 
-			 Matriz	transDespuesdelDisparo = new Matriz(numeroTransiciones, 1); 
-			 
-			 transAntesdelDisparo =	VectorExtendidoSinVZ();
-//			 System.out.println("\n VectorExtendido antes del disparo");
-//			 transAntesdelDisparo.getTranspuesta().imprimirMatriz();
-//      	 System.out.println("......................");	
-//			 consola.registrarDisparo("* =====despues======= ", 1);
-			 calculoDeVectorEstado(transicion);
-			 sensibilizar(); // Se vuelve a sensibiizar para sacar el nuevo vectorExtendido
-			 transDespuesdelDisparo = VectorExtendidoSinVZ();
-//			 System.out.println("\n VectorExtendido despues del disparo");
-//			 transDespuesdelDisparo.getTranspuesta().imprimirMatriz();
-			 Temporizadas.ActualizarTimeStamp(transAntesdelDisparo,transDespuesdelDisparo,transicion);
-			 //System.out.println("fin de disparar en rdp");
-
-			/// Se va a poner en la cola o a dormir
-			  
-			 if (!Test_Invariante()) {
-					//consola.registrarDisparo("* NO SE CUMPLE EL INVARIANTE DE PLAZA \n", 0);
-					throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
-				}
-			 return true;
-		}
-
 	}
 
 	private Matriz VectorExtendidoSinVZ() {
@@ -165,24 +163,7 @@ public class RDP {
 			VectorExtendidoAux = VectorSensibilizado.getAnd(VectorInhibicion);
 			return VectorExtendidoAux;
 	}
-	public boolean Test_Invariante() {
-		int Suma_Tokens_Plaza = 0;
-		String valor = "";
-		String[] corte = null;
-
-		for (String plazas : p_invariantes.keySet()) {
-			valor = p_invariantes.get(plazas);
-			corte = plazas.split(" ");
-			for (String elemt : corte) {
-				int token = Integer.parseInt(elemt);
-				Suma_Tokens_Plaza += VectorMarcadoActual.getDato((token - 1), 0);
-			}
-			if (Suma_Tokens_Plaza != Integer.parseInt(valor))
-				return false;
-			Suma_Tokens_Plaza = 0;
-		}
-		return true;
-	}
+	
 	/*
 	 *
 	 */
@@ -199,57 +180,13 @@ public class RDP {
 		//pw.println("* Marcado---->> " + Marcado());
 		pw.println("* Sin Vz---->> " + VectorExtendidoSinVZ().imprimir());
 		pw.println("* Con Vz---->> " + VectorExtendido.imprimir());
-	    //consola.registrarDisparo("* con Vz---->> " + sensibilidadas(), 1);
-	    //consola.registrarDisparo("* sin Vz---->> " + sensibilidadas2(), 1);
-        //System.out.println("VectorZ :");
-        //VectorZ.imprimirMatriz();
-	}
-	public void sensibilizarVectorZ() {
-		for (int k = 0; k < numeroTransiciones; k++) {
-
-			if (timeStamp[k] != 0) {
-				VectorZ.setDato(0, k, 0);
-			} else {
-				VectorZ.setDato(0, k, 1);
-			}
-		}
-    }
-
-	public long gettimeout(int t) {
-		return timeout[t];
-	}
-
-	public void esperar(int transicion) {
-		int timeout = (int) ((((timeStamp[transicion]) + (Intervalo.getDato(0, transicion)))
-				- System.currentTimeMillis()) + 2);
-		try {
-			Thread.sleep(timeout);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void calculoDeVectorEstado(int transicion) {
-
 		Matriz aux = Incidencia.getMultiplicacion(Identidad.getColumna(transicion));
 		VectorMarcadoActual = VectorMarcadoActual.getSuma(aux);
 	}
 
-	public void setNuevoTimeStamp(int transicion) {
-
-		if (timeStamp[transicion] == 0) {
-			timeStamp[transicion] = System.currentTimeMillis();
-			//consola.registrarDisparo("* Nuevo Timestamp a T" + (transicion + 1) + ": " + timeStamp[transicion], 1);
-		}
-	}
-
-	public boolean esInmediata(int transicion) {
-		if (Temporizadas.esTemporal(transicion)) {
-			return false;
-		} else
-			return true;
-	}
 
 	public boolean estaSensibilizada(int transicion) {
 		if (VectorExtendido.getDato(transicion, 0) == 1)
@@ -485,6 +422,24 @@ public class RDP {
 			}
 		}
 		return VectorSensibilizado2;
+	}
+	public boolean Test_Invariante() {
+		int Suma_Tokens_Plaza = 0;
+		String valor = "";
+		String[] corte = null;
+
+		for (String plazas : p_invariantes.keySet()) {
+			valor = p_invariantes.get(plazas);
+			corte = plazas.split(" ");
+			for (String elemt : corte) {
+				int token = Integer.parseInt(elemt);
+				Suma_Tokens_Plaza += VectorMarcadoActual.getDato((token - 1), 0);
+			}
+			if (Suma_Tokens_Plaza != Integer.parseInt(valor))
+				return false;
+			Suma_Tokens_Plaza = 0;
+		}
+		return true;
 	}
 
 }

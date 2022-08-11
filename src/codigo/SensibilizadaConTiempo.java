@@ -12,20 +12,65 @@ public class SensibilizadaConTiempo {
 	private int cantidad_transiciones;
 	private Matriz VectorZ;
 	private int [] T_Inmediata;
+	private Thread [] N_hilo;
 	private	PrintWriter pw;
+	private boolean [] T_Esperando;
 	public SensibilizadaConTiempo(int cantidad_transiciones , Matriz Intervalo,PrintWriter pw) {
 		this.pw = pw;
 		timeStamp = new long[cantidad_transiciones];
 		T_Inmediata = new int[cantidad_transiciones];
+		N_hilo = new Thread[cantidad_transiciones];
+		T_Esperando = new boolean[cantidad_transiciones];
 		VectorZ = new Matriz(1, cantidad_transiciones);
 		this.Intervalo = Intervalo;
 		this.cantidad_transiciones = cantidad_transiciones;
 		for (int i = 0; i < cantidad_transiciones; i++) {
 			timeStamp[i] = -1;
 			T_Inmediata[i] = 0;
+			T_Esperando[i] = false;
+			N_hilo[i]= null;
 		}
 		Inmediatas();
 	}
+	public void setEsperando(int transicion) {
+		T_Esperando[transicion]= true;
+		N_hilo[transicion]= Thread.currentThread();
+	}
+	public boolean alguienEsperando(int transicion) {
+		if(T_Esperando[transicion]==true &&  (N_hilo[transicion]!= Thread.currentThread())) {
+			return true;
+		}
+		return false;
+	}
+	public boolean dentroVentana(int transicion) {
+		long now =  new Date().getTime();
+		long TimeStamp_ahora = now - (timeStamp[transicion]);
+		if ((TimeStamp_ahora >= (Intervalo.getDato(0, transicion)))
+				&& (TimeStamp_ahora <= (Intervalo.getDato(1, transicion))))
+				{
+				return true;
+				}
+			return false;
+	}
+	public boolean antesVentana(int transicion) {
+		long now =  new Date().getTime();
+		long TimeStamp_ahora = now - (timeStamp[transicion]);
+		
+		if ((TimeStamp_ahora < (Intervalo.getDato(0, transicion))))
+			{
+			return true;
+			}
+		return false;
+	}
+	public void resetEsperando(int transicion) {
+		T_Esperando[transicion] = false;
+	}
+	
+
+	
+	
+	
+	
 	 private void Inmediatas() {
 		// TODO Auto-generated method stub
 		 for(int i=0 ; i< cantidad_transiciones ; i++) {
@@ -77,7 +122,15 @@ public class SensibilizadaConTiempo {
 			 * De lo contrario, si la red tiene un marcado diferente al inicial (se disparo alguna transicion)
 			 * se realiza lo siguiente:
 			 */
-			
+	public void inicio(Matriz transiciones_inicio) {
+		   for (int transicion = 0; transicion < cantidad_transiciones; transicion++) {
+				if(transiciones_inicio.getDato(transicion, 0)==1) {
+					timeStamp[transicion]= System.currentTimeMillis();
+					pw.println("* Inicio el contador para : T"+(transicion+1));
+				}
+
+			}
+	}
 	public void ActualizarTimeStamp(Matriz transAntesdelDisparo, Matriz transDespuesdelDisparo, int transicion_a_disparar) {
 		
 //		System.out.println("ActualizarTimeStamp T"+(transicion_a_disparar+1));
@@ -87,6 +140,10 @@ public class SensibilizadaConTiempo {
 //		transAntesdelDisparo.getTranspuesta().imprimirMatriz();
 //		System.out.println("\n vector despues del disparo");
 //		transDespuesdelDisparo.getTranspuesta().imprimirMatriz();
+		
+		
+		
+		
 		
 		for (int transicion = 0; transicion < cantidad_transiciones; transicion++) { //Se recorren todas las transiciones
 			
@@ -139,20 +196,12 @@ public class SensibilizadaConTiempo {
 	 * @param q: Transiciones despues del disparo. 
 	 */
 	public void updateVectorZ(Matriz q) {
-		//long TimeStamp_ahora = new Date().getTime();
-		//System.out.println("Tiempo :"+TimeStamp_ahora);
 		//pw.println("* updateVectorZ");
 		for (int T= 0; T < cantidad_transiciones; T++) { 
 			if(test_ventana(T) & q.getDato(T, 0)==1) { 
 				VectorZ.setDato(0, T, 1);
-//				if(T == 5) {
-//					pw.println("* pone 1");	
-//				}
 			}
 			else {
-//				if(T == 5) {
-//					pw.println("* pone 0");	
-//				}
 				VectorZ.setDato(0, T, 0);
 			}
 		}
@@ -190,27 +239,24 @@ public class SensibilizadaConTiempo {
 //			pw.println("* TimeStamp_ahora :" + TimeStamp_ahora);
 //			pw.println("* timeStamp[transicion] : T"+(transicion+1)+" = " + timeStamp[transicion] +" l="+l);
 //		}
-		if (((TimeStamp_ahora >= (Intervalo.getDato(0, transicion)))
-			&& (TimeStamp_ahora <= (Intervalo.getDato(1, transicion))))//ESTA EN LA VENTA DE TIEMPO
-				|| (T_Inmediata[transicion] == 1) 						//ES INMEDIATA
-				|| (timeStamp[transicion] == -1)) 						//TODAVIA NO INICIO EL TIEMPO
-		{
-			//pw.println("* timeStamp[transicion]" + timeStamp[transicion]);
-			//pw.println("* Retorna true");
-			return true;//en la ventana de tiempo
-		} 
+		if(timeStamp[transicion] != 0 ) {
+			return true;
+		}
+//		if (((TimeStamp_ahora >= (Intervalo.getDato(0, transicion)))
+//			&& (TimeStamp_ahora <= (Intervalo.getDato(1, transicion))))//ESTA EN LA VENTA DE TIEMPO
+//				|| (T_Inmediata[transicion] == 1) 						//ES INMEDIATA
+//				|| (timeStamp[transicion] == -1)) 						//TODAVIA NO INICIO EL TIEMPO
+//		{
+//			//pw.println("* timeStamp[transicion]" + timeStamp[transicion]);
+//			//pw.println("* Retorna true");
+//			return true;//en la ventana de tiempo
+//		} 
 		// ANTES DEL ALFA o Despues del beta
 		else {
 			
 			//pw.println("* Retorna false");
 			return false;
 		}
-			//else(TimeStamp_ahora < Intervalo.getDato(0, transicion)) {
-		//	return false;	//antes del alfa
-		//}
-		//System.out.println("TimeStamp_ahora :"+TimeStamp_ahora);
-        //return false; // despues del beta
-		//throw new RuntimeException("\n Beta demasiado chico, elegir un beta mas grande : \n T"+ (transicion+1)+"\n Tiempo :"+System.currentTimeMillis()+ "\n TimeStamp :"+timeStamp[transicion]);
 	}
 	public int[] getInmediata() {
 		return T_Inmediata;
@@ -230,8 +276,9 @@ public class SensibilizadaConTiempo {
 		}
 		
 		else {
+			long now =  new Date().getTime();
 			int Tiempo_esperar = (int) ((((timeStamp[transicion]) + (Intervalo.getDato(0, transicion)))
-					- System.currentTimeMillis()));
+					- (now)));
 			if(Tiempo_esperar <= 0) {
 				pw.println("* Salida 2"); 
 				return (long)0;
@@ -241,7 +288,7 @@ public class SensibilizadaConTiempo {
 				return (long)0;
 			     }
 			else {
-				pw.println("* Salida 3 :"+Tiempo_esperar+"  timeStamp[transicion] = "+timeStamp[transicion]);
+				pw.println("* Salida 3 :"+Tiempo_esperar+"  timeStamp[transicion] = "+timeStamp[transicion]+ " now :"+ (now)+ " int :"+Intervalo.getDato(0, transicion));
 				return ((long)Tiempo_esperar);
 			}
 		}

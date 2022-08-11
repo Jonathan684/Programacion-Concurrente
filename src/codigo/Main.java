@@ -3,7 +3,6 @@ package codigo;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,13 +11,13 @@ import log.Log;
 
 public class Main {
 
-	private static final int numeroHilos = 7;
-	private static final int tiempoCorrida = 5000;//milisegundos
+	private static final int numeroHilos = 9;
+	private static final int tiempoCorrida = 500;//milisegundos
 	private static int[] T1 = { 1 };
 	private static int[] T2 = { 2,4 };
 	private static int[] T3 = { 3,5 };
-//	private static int[] T4 = { 4 };
-//	private static int[] T5 = { 5 };
+	private static int[] T4 = { 4 };
+	private static int[] T5 = { 5 };
 	private static int[] T6 = { 6 };
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
 	private static Hilo[] hilos;
@@ -61,8 +60,8 @@ public class Main {
 		hilos[4] = new Hilo(monitor, T7_8_9_10);
 		hilos[5] = new Hilo(monitor, T7_8_9_10);
 		hilos[6] = new Hilo(monitor, T7_8_9_10);
-//		hilos[7] = new Hilo(monitor, T4);
-//		hilos[8] = new Hilo(monitor, T5);
+		hilos[7] = new Hilo(monitor, T4);
+		hilos[8] = new Hilo(monitor, T5);
 		
 
 		

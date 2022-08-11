@@ -1,7 +1,6 @@
 package codigo;
 
 import java.io.PrintWriter;
-import java.util.Date;
 import java.util.concurrent.Semaphore;
 
 import log.Log;
@@ -25,7 +24,6 @@ public class Monitor {
         red = new RDP(mutex,pw);
         cola = new Cola(red.get_numero_Transiciones());
 		politica = new Politica(pw,red, cola);
-        red.sensibilizar();
         nTransicion = -1;
         fin = false;
 	}
@@ -44,7 +42,7 @@ public class Monitor {
 			if (k) { // k =true
 				pw.println("*************************");
 				pw.println("* Se disparo:[T"+(T_Disparar+1)+"]");
-				pw.println("* "+red.getVectorExtendido().imprimir());
+				pw.println("*    "+red.getVectorExtendido().imprimir());
 				politica.registrarDisparo(T_Disparar);
 				m = calcularVsAndVc();
 				pw.println("* m: "+m.imprimir());
@@ -90,7 +88,7 @@ public class Monitor {
 	 * @return m : Matriz con transiciones en la cola y sensibilizadas
 	 */
 	public Matriz calcularVsAndVc() {
-		Matriz Vs = red.getVectorExtendido();
+		Matriz Vs = red.getVectorExtendidosinVz(); // sin vz la politica decidira a quien sacar
 		Matriz Vc = cola.quienesEstan();
 		Matriz m = Vs.getAnd(Vc);
 		return m;
