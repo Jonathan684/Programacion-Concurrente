@@ -87,10 +87,8 @@ public class RDP {
 	public boolean Disparar(int transicion) {
 		//pw.println("* ----------------------");
 		//pw.println("* Disparar red T"+(transicion+1)+" hilo:"+Thread.currentThread().getName()+" t :"+System.currentTimeMillis());
-		sensibilizar(); // Se actualiza el Vz 
-		//pw.println("* Red : "+sensibilidadas()+" sensi="+estaSensibilizada(transicion));
-		//pw.println("* Marcado : "+Marcado());
-		if (!estaSensibilizada(transicion)) { // no sensibilizada
+		//sensibilizar(); // Se actualiza el Vz 
+	   if (!estaSensibilizada(transicion)) { // no sensibilizada
 			//pw.println("* Reset esperando");
 			Temporizadas.resetEsperando(transicion);
 			return false;
@@ -143,8 +141,6 @@ public class RDP {
 							}
 							try {
 								mutex.acquire();
-								//pw.println("*==========>>>>>>>>>> Desperte T"+(transicion+1));
-								
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -178,11 +174,8 @@ public class RDP {
 
 		sensibilizarVectorE();
 		sensibilizarVectorB();
-		//sensibilizarVectorZ();
-		//////////////////////////////////////////////////////////////
 		VectorExtendido = VectorSensibilizado.getAnd(VectorInhibicion);
 		VectorZ = Temporizadas.getVectorZ(VectorExtendidoSinVZ());
-		//pw.println("* VectorZ---->> " + VectorZ.imprimir());
 		VectorExtendido = VectorExtendido.getAnd(VectorZ.getTranspuesta());
 		//pw.println("* Marcado---->> " + Marcado());
 //		pw.println("* Sin Vz---->> " + VectorExtendidoSinVZ().imprimir());
@@ -279,18 +272,7 @@ public class RDP {
 		return Marcado_actual;
 	}
 
-	public void mostrar(Matriz vector, int Tipo) {
-		if (Tipo == 0) {
-			for (int n = 0; n < vector.getNumFilas(); n++)
-				System.out.print(Transiciones[n] + ":" + vector.getDato(n, 0) + " ");
-		} else if (Tipo > 0) {
-			for (int n = 0; n < vector.getNumFilas(); n++)
-				System.out.print(Plazas[n] + ":" + vector.getDato(n, 0) + " ");
-		}
-		System.out.println("\n");
-	}
-
-	private void sensibilizarVectorE() {
+    private void sensibilizarVectorE() {
 
 		for (int i = 0; i < IEntrada.getNumColumnas(); i++) {
 			int e = 1;
@@ -367,13 +349,6 @@ public class RDP {
 		}
 	}
 
-	public boolean noduerme(int transicion) {
-		// TODO Auto-generated method stub
-		if(timeStamp[transicion] != 0) {
-			return false;
-		}
-		return true;
-	}
 	/*
 	 * Este metodo hace un falso disparo con las transicion que estan en el vector
 	 * Esperando Si un disparo proboca que la transicion que se envia por parametro

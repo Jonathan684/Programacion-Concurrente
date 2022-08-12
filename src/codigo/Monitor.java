@@ -14,16 +14,17 @@ public class Monitor {
 	private Semaphore mutex;
 	private Matriz m;
 	private boolean k;
-	private	PrintWriter pw;
+	private	PrintWriter pw,registro_disparo;
 	private boolean fin;
 	//private static RDP red;
-	public Monitor(PrintWriter pw) {
+	public Monitor(PrintWriter pw,PrintWriter registro_disparo) {
 
 		this.pw=pw;
+		this.registro_disparo=registro_disparo;
 		this.mutex = new Semaphore(1);
         red = new RDP(mutex,pw);
         cola = new Cola(red.get_numero_Transiciones());
-		politica = new Politica(pw,red, cola);
+		politica = new Politica(pw,red,registro_disparo);
         nTransicion = -1;
         fin = false;
 	}
@@ -35,7 +36,7 @@ public class Monitor {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		k=true;
+		//k=true;
     	//while (k) {
 		
 			k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
