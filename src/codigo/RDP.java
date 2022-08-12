@@ -85,21 +85,23 @@ public class RDP {
 	 *         disparo es exitoso.
 	 */
 	public boolean Disparar(int transicion) {
-		pw.println("* ----------------------");
-		pw.println("* Disparar red T"+(transicion+1)+" hilo:"+Thread.currentThread().getName());
+		//pw.println("* ----------------------");
+		//pw.println("* Disparar red T"+(transicion+1)+" hilo:"+Thread.currentThread().getName()+" t :"+System.currentTimeMillis());
 		sensibilizar(); // Se actualiza el Vz 
-		pw.println("* Red : "+sensibilidadas()+" sensi="+estaSensibilizada(transicion));
-		pw.println("* Marcado : "+Marcado());
+		//pw.println("* Red : "+sensibilidadas()+" sensi="+estaSensibilizada(transicion));
+		//pw.println("* Marcado : "+Marcado());
 		if (!estaSensibilizada(transicion)) { // no sensibilizada
+			//pw.println("* Reset esperando");
+			Temporizadas.resetEsperando(transicion);
 			return false;
 		}
 		else {
 			 
 			if(Temporizadas.dentroVentana(transicion)){
-				pw.println("* Transición dentro de la ventana T"+(transicion+1));
+				//pw.println("* Transición dentro de la ventana T"+(transicion+1));
 				if(Temporizadas.alguienEsperando(transicion))
 					{
-					//pw.println("* Transición alguienEsperando"+(transicion+1));
+					//pw.println("* Transición alguienEsperando1"+(transicion+1));
                     	return false;
 					}
 				else{
@@ -120,11 +122,12 @@ public class RDP {
 				//pw.println("* Transición temporal T"+(transicion+1));
 				if(Temporizadas.antesVentana(transicion)){ // 1
 					if(Temporizadas.alguienEsperando(transicion)){ // 2
+						//pw.println("* Transición alguienEsperando2"+(transicion+1));
                         return false;
                     }
 					
 					long Tiempo = Temporizadas.getTiempoFaltanteParaAlfa(transicion);
-					pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
+					//pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
 					Temporizadas.setEsperando(transicion); // 3
 					if (Tiempo > 0) {
 
@@ -148,9 +151,13 @@ public class RDP {
 							}
 							return  Disparar(transicion);
 					}
+					//pw.println("* tiempo <0"+(transicion+1));
 					return false;
 				}
-				else return false;
+				else {
+					//pw.println("* despues de la ventana desensibilizada"+(transicion+1));
+					return false;
+				}
 			 }
 		}
 	}
@@ -178,8 +185,8 @@ public class RDP {
 		//pw.println("* VectorZ---->> " + VectorZ.imprimir());
 		VectorExtendido = VectorExtendido.getAnd(VectorZ.getTranspuesta());
 		//pw.println("* Marcado---->> " + Marcado());
-		pw.println("* Sin Vz---->> " + VectorExtendidoSinVZ().imprimir());
-		pw.println("* Con Vz---->> " + VectorExtendido.imprimir());
+//		pw.println("* Sin Vz---->> " + VectorExtendidoSinVZ().imprimir());
+//		pw.println("* Con Vz---->> " + VectorExtendido.imprimir());
 	}
 
 	public void calculoDeVectorEstado(int transicion) {

@@ -126,7 +126,7 @@ public class SensibilizadaConTiempo {
 		   for (int transicion = 0; transicion < cantidad_transiciones; transicion++) {
 				if(transiciones_inicio.getDato(transicion, 0)==1) {
 					timeStamp[transicion]= System.currentTimeMillis();
-					pw.println("* Inicio el contador para : T"+(transicion+1));
+					//pw.println("* Inicio el contador para : T"+(transicion+1));
 				}
 
 			}
@@ -170,7 +170,7 @@ public class SensibilizadaConTiempo {
 				//consola.registrarDisparo("* Inicia la cuenta a T"+(transicion+1),1);
 				
 				timeStamp[transicion] = System.currentTimeMillis()+2;
-				pw.println("*	Inicio del contador para T"+(transicion+1)+"  ->"+timeStamp[transicion]);	
+				//pw.println("*	Inicio del contador para T"+(transicion+1)+"  ->"+timeStamp[transicion]);	
 				//System.out.println("Inicio del contador para T"+(transicion+1)+"  ->"+timeStamp[transicion]);
 			}
 			
@@ -271,7 +271,7 @@ public class SensibilizadaConTiempo {
 		boolean comparacion2=timeStamp[transicion]<=(long)Intervalo.getDato(1, transicion); //Si el time esta antes del beta
 		//System.out.println("TimeStamp "+ timeStamp[transicion]);
 		if(comparacion1 && comparacion2) {
-			pw.println("* Salida 1");
+			//pw.println("* Salida 1");
 			return (long)0;
 		}
 		
@@ -280,7 +280,7 @@ public class SensibilizadaConTiempo {
 			int Tiempo_esperar = (int) ((((timeStamp[transicion]) + (Intervalo.getDato(0, transicion)))
 					- (now)));
 			if(Tiempo_esperar <= 0) {
-				pw.println("* Salida 2"); 
+				//pw.println("* Salida 2"); 
 				return (long)0;
 			     }
 			else if(timeStamp[transicion] <= 0) {
@@ -288,7 +288,7 @@ public class SensibilizadaConTiempo {
 				return (long)0;
 			     }
 			else {
-				pw.println("* Salida 3 :"+Tiempo_esperar+"  timeStamp[transicion] = "+timeStamp[transicion]+ " now :"+ (now)+ " int :"+Intervalo.getDato(0, transicion));
+				//pw.println("* Salida 3 :"+Tiempo_esperar+"  timeStamp[transicion] = "+timeStamp[transicion]+ " now :"+ (now)+ " int :"+Intervalo.getDato(0, transicion));
 				return ((long)Tiempo_esperar);
 			}
 		}

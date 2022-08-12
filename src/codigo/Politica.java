@@ -25,6 +25,7 @@ public class Politica {
 	private Info[] Transiciones;
 	private List<Info> disp = new ArrayList<Info>();
 	private PrintWriter pw;
+	ArrayList<Integer> aleatorio;
 	
 	private static String[][] T_invariantes = { { "T1 T2 T4 T6" }, // Invariante 1
 			{ "T1 T3 T5 T6" }, // Invariante 2
@@ -279,6 +280,7 @@ public class Politica {
 					else if ((disparos_de_invariantes == Transiciones[i].getcantInvariante()) && (Transiciones[transicion_a_disparar].getInvariante() != Transiciones[i].getInvariante())) {
 						//System.out.println("Son iguales : "+ (transicion_a_disparar+1) +" i: "+(i+1)+" cant_inv :"+ disparos_de_invariantes);
 						//pw.println("* Iguales y de distinto invariantes T"+(i+1)+" == T"+(transicion_a_disparar+1));
+						
 						int t = (int) (Math.random() * 2);
 						if(t==1) {
 							transicion_a_disparar = i;	

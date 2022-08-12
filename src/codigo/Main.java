@@ -12,17 +12,16 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 9;
-	private static final int tiempoCorrida = 500;//milisegundos
+	private static final int tiempoCorrida = 20000;//milisegundos
 	private static int[] T1 = { 1 };
-	private static int[] T2 = { 2,4 };
-	private static int[] T3 = { 3,5 };
+	private static int[] T2 = { 2 };
+	private static int[] T3 = { 3 };
 	private static int[] T4 = { 4 };
 	private static int[] T5 = { 5 };
 	private static int[] T6 = { 6 };
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
 	private static Hilo[] hilos;
 	private static Thread[] threads;
-	
 	private final static String REPORT_FILE_NAME_3 = "Consola/Reporte.txt";
 	private final static String REPORT_FILE_NAME_2 = "Consola/log.txt";
 	private static Log log;
