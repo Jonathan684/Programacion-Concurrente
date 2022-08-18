@@ -1,5 +1,6 @@
 package codigo;
 
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.concurrent.Semaphore;
 
@@ -17,12 +18,12 @@ public class Monitor {
 	private	PrintWriter pw,registro_disparo;
 	private boolean fin;
 	//private static RDP red;
-	public Monitor(PrintWriter pw,PrintWriter registro_disparo) {
+	public Monitor(PrintWriter pw,PrintWriter registro_disparo,FileWriter archivo1,FileWriter archivo2) {
 
 		this.pw=pw;
 		this.registro_disparo=registro_disparo;
 		this.mutex = new Semaphore(1);
-        red = new RDP(mutex,pw);
+        red = new RDP(mutex,pw,archivo1,archivo2);
         cola = new Cola(red.get_numero_Transiciones());
 		politica = new Politica(pw,red,registro_disparo);
         nTransicion = -1;
@@ -45,6 +46,7 @@ public class Monitor {
 //				pw.println("*************************");
 //				pw.println("* Se disparo:[T"+(T_Disparar+1)+"]");
 				//pw.println("*    "+red.getVectorExtendido().imprimir());
+				registrar_para_expresion_regular(T_Disparar);
 				politica.registrarDisparo(T_Disparar);
 				m = calcularVsAndVc();
 //				pw.println("* m: "+m.imprimir());
@@ -110,4 +112,10 @@ public class Monitor {
     public void imprimir(Log loga) {
 		politica.imprimir(loga);
 	}
+    private void registrar_para_expresion_regular(int nTransicion) {
+    	if ((nTransicion + 1) == 10)
+			registro_disparo.print("T" + 0);
+		else
+			registro_disparo.print("T" + (nTransicion + 1));
+    	}
 }

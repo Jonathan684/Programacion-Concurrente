@@ -10,7 +10,7 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 9;
-	private static final int tiempoCorrida = 2000;//milisegundos
+	private static final int tiempoCorrida = 2000;//milisegundos(200000 PARA 10000 DISPAROS)
 	private static int[] T1 = { 1 };
 	private static int[] T2 = { 2 };
 	private static int[] T3 = { 3 };
@@ -22,9 +22,9 @@ public class Main {
 	private static Thread[] threads;
 	private final static String REPORT_FILE_NAME = "Consola/Reporte.txt";
 	private static Log reporte;
-	private static FileWriter fichero = null;
+	private static FileWriter archivo1 = null;
     private static PrintWriter pw = null;
-    private static FileWriter fichero2 = null;
+    private static FileWriter archivo2 = null;
     private static PrintWriter registro_disparo = null;
     
 	public static void main(String[] args) {
@@ -40,18 +40,18 @@ public class Main {
 		
 		
 	    try {
-			fichero = new FileWriter("Consola/consola.txt");
-			fichero2 = new FileWriter("Python/log.txt");
+			archivo1 = new FileWriter("Consola/consola.txt");
+			archivo2 = new FileWriter("Python/log.txt");
 			reporte = new Log(REPORT_FILE_NAME);
 	    } catch (IOException e1) {
 			// TODO Auto-generated catch block
 					e1.printStackTrace();
 		  }
-	    pw = new PrintWriter(fichero);
+	    pw = new PrintWriter(archivo1);
 	    pw.println("* INICIO");
         
-	    registro_disparo = new PrintWriter(fichero2);
-	    Monitor monitor = new Monitor(pw,registro_disparo);
+	    registro_disparo = new PrintWriter(archivo2);
+	    Monitor monitor = new Monitor(pw,registro_disparo,archivo1,archivo2);
 		hilos = new Hilo[numeroHilos];
 
 		hilos[0] = new Hilo(monitor, T1);	//T1
@@ -85,8 +85,8 @@ public class Main {
 		
 		pw.println("* Fin *\n");
 		try {
-			fichero.close();
-			registro_disparo.close();
+			archivo1.close();
+			archivo2.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

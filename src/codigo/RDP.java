@@ -1,6 +1,7 @@
 package codigo;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -27,10 +28,13 @@ public class RDP {
 	private PrintWriter pw;
 	private static HashMap<String, String> p_invariantes;
 	private long timeout[] ;
-	private Matriz VectorExtendidoAux; 
+	private Matriz VectorExtendidoAux;
+	private FileWriter archivo1,archivo2;;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public RDP(Semaphore mutex , PrintWriter pw) {
+	public RDP(Semaphore mutex , PrintWriter pw,FileWriter archivo1,FileWriter archivo2) {
+		this.archivo1 = archivo1;
+		this.archivo2 = archivo2;
 		this.pw = pw;
 		this.mutex = mutex;
 		p_invariantes = new HashMap<String, String>();
@@ -111,7 +115,20 @@ public class RDP {
 						sensibilizar(); // Se vuelve a sensibiizar para sacar el nuevo vectorExtendido
 						transDespuesdelDisparo = VectorExtendidoSinVZ();
 						Temporizadas.ActualizarTimeStamp(transAntesdelDisparo,transDespuesdelDisparo,transicion);
-						if (!Test_Invariante())throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
+						if (!Test_Invariante()) {
+							
+							pw.println("* NO SE CUMPLE EL INVARIANTE DE PLAZA");
+							try {
+								pw.println("* Fin Con Error*\n");
+								archivo1.close();
+								archivo2.close();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
+							
+						}
 						return true;
 					}
 			}

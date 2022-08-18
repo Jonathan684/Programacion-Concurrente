@@ -63,11 +63,7 @@ public class Politica {
 
 		// registro_disparo.println("T"+(nTransicion+1));
 		// pw.println("T"+(nTransicion+1));
-		if ((nTransicion + 1) == 10)
-			registro_disparo.print("T" + 0);
-		else
-			registro_disparo.print("T" + (nTransicion + 1));
-
+		
 		if (nTransicion == 0) {// T1
 			if (inv1 == inv2)
 				Transiciones[0].setInvariante(aleatorio());
