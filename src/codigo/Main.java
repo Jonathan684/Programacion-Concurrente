@@ -3,8 +3,6 @@ package codigo;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import hilos.Hilo;
 import log.Log;
@@ -12,7 +10,7 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 9;
-	private static final int tiempoCorrida = 4000;//milisegundos
+	private static final int tiempo_ejecucion = 15000;//milisegundos(200000 PARA 10000 DISPAROS)
 	private static int[] T1 = { 1 };
 	private static int[] T2 = { 2 };
 	private static int[] T3 = { 3 };
@@ -22,35 +20,38 @@ public class Main {
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
 	private static Hilo[] hilos;
 	private static Thread[] threads;
-	private static RDP redDePetri;
-	private final static String REPORT_FILE_NAME_3 = "Consola/Reporte.txt";
-	private final static String REPORT_FILE_NAME_2 = "Consola/log.txt";
-	private static Log log;
-	private static FileWriter fichero = null;
+	private final static String REPORT_FILE_NAME = "Consola/Reporte.txt";
+	private static Log reporte;
+	private static FileWriter archivo1 = null;
     private static PrintWriter pw = null;
-
+    private static FileWriter archivo2 = null;
+    private static PrintWriter registro_disparo = null;
+    
 	public static void main(String[] args) {
 		iniciarPrograma(); 
 	}
 
 	public static void iniciarPrograma() {
-		
+
 		System.out.println("	=======================    ");
 		System.out.println("	        TP final		   ");
 		System.out.println("	=======================    ");
 		
-		log = new Log(REPORT_FILE_NAME_3);
-		Log log2 = new Log(REPORT_FILE_NAME_2);
-		redDePetri = new RDP(log2);
-		try {
-			fichero = new FileWriter("Consola/log2.txt");
-		    } catch (IOException e1) {
+		
+		
+	    try {
+			archivo1 = new FileWriter("Consola/consola.txt");
+			archivo2 = new FileWriter("Python/log.txt");
+			reporte = new Log(REPORT_FILE_NAME);
+	    } catch (IOException e1) {
 			// TODO Auto-generated catch block
 					e1.printStackTrace();
 		  }
-	            pw = new PrintWriter(fichero);
-
-        Monitor monitor = new Monitor(pw,redDePetri);
+	    pw = new PrintWriter(archivo1);
+	    pw.println("* INICIO");
+        
+	    registro_disparo = new PrintWriter(archivo2);
+	    Monitor monitor = new Monitor(pw,registro_disparo,archivo1,archivo2);
 		hilos = new Hilo[numeroHilos];
 
 		hilos[0] = new Hilo(monitor, T1);	//T1
@@ -62,8 +63,7 @@ public class Main {
 		hilos[6] = new Hilo(monitor, T7_8_9_10);
 		hilos[7] = new Hilo(monitor, T7_8_9_10);
 		hilos[8] = new Hilo(monitor, T7_8_9_10);
-//		hilos[7] = new Hilo(monitor, T4);
-//		hilos[8] = new Hilo(monitor, T5);
+		
 		
 
 		
@@ -73,29 +73,30 @@ public class Main {
 		for(Thread T : threads)T.start();
 		
 		try {
-			Thread.sleep(tiempoCorrida);
+			Thread.sleep(tiempo_ejecucion);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		for(Hilo H:hilos)H.set_Fin();
 		monitor.vaciarcolas();
-		//for(Thread t : threads)t.interrupt();
+		for(Thread t : threads)t.interrupt();
 		
 		
 		pw.println("* Fin *\n");
 		try {
-			fichero.close();
+			archivo1.close();
+			archivo2.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		System.out.println("	======== Fin ==========");
-		log2.registrarDisparo("\n************************ Fin **************************** Tiempo :" + System.currentTimeMillis(), 1);
-		log2.registrarDisparo(dtf.format(LocalDateTime.now()), 1);
-		log.registrarDisparo("Tiempo de ejecucion : " + (tiempoCorrida / 1000) + "seg.", 1);
-		monitor.imprimir(log);
+		reporte.registrarDisparo("Tiempo de ejecucion : " + (tiempo_ejecucion / 1000) + "seg.");
+		monitor.imprimir(reporte);
+		
+		System.out.println("	=======================    ");
+		System.out.println("	         Fin		   ");
+		System.out.println("	=======================    ");
 	}
 }
