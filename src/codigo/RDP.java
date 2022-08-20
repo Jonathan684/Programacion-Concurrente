@@ -24,10 +24,10 @@ public class RDP {
 	private Matriz IEntrada;
 	private SensibilizadaConTiempo Temporizadas;
 	private Semaphore mutex;
-	private long timeStamp[];
+	//private long timeStamp[];
 	private PrintWriter pw;
 	private static HashMap<String, String> p_invariantes;
-	private long timeout[] ;
+	//private long timeout[] ;
 	private Matriz VectorExtendidoAux;
 	private FileWriter archivo1,archivo2;;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,18 +68,18 @@ public class RDP {
 		
 		
 		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, Intervalo,pw);
-		timeStamp = new long[numeroTransiciones];
-		timeout = new long[numeroTransiciones];
+		//timeStamp = new long[numeroTransiciones];
+		//timeout = new long[numeroTransiciones];
 		
-		Arrays.fill(timeStamp, 0);
-		Arrays.fill(timeout, 0);
+		//Arrays.fill(timeStamp, 0);
+		//Arrays.fill(timeout, 0);
 		Cargar_P_Invariante();
 		sensibilizar();
 		Temporizadas.inicio(VectorExtendidoAux);
 	}
-	public SensibilizadaConTiempo getTemporales() {
-		return Temporizadas;
-	}
+//	public SensibilizadaConTiempo getTemporales() {
+//		return Temporizadas;
+//	}
 	/**
 	* Este metodo dispara una transicion de la rdp indicada por parametro, teniendo
 	 * en cuenta el modo indicado por parametro
@@ -187,7 +187,7 @@ public class RDP {
 	/*
 	 *
 	 */
-	public void sensibilizar() {
+	private void sensibilizar() {
 
 		sensibilizarVectorE();
 		sensibilizarVectorB();
@@ -199,7 +199,7 @@ public class RDP {
 //		pw.println("* Con Vz---->> " + VectorExtendido.imprimir());
 	}
 
-	public void calculoDeVectorEstado(int transicion) {
+	private void calculoDeVectorEstado(int transicion) {
 		Matriz aux = Incidencia.getMultiplicacion(Identidad.getColumna(transicion));
 		VectorMarcadoActual = VectorMarcadoActual.getSuma(aux);
 	}
@@ -212,7 +212,7 @@ public class RDP {
 			return false;
 	}
 
-	public void Cargar_P_Invariante() {
+	private void Cargar_P_Invariante() {
 
 		CharSequence cort;
 		try {
@@ -422,7 +422,7 @@ public class RDP {
 		}
 		return VectorSensibilizado2;
 	}
-	public boolean Test_Invariante() {
+	private boolean Test_Invariante() {
 		int Suma_Tokens_Plaza = 0;
 		String valor = "";
 		String[] corte = null;

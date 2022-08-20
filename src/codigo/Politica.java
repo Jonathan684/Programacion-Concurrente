@@ -1,10 +1,7 @@
 package codigo;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import log.Log;
@@ -59,10 +56,11 @@ public class Politica {
 		return retorna;
 	}
 
-	public void registrarDisparo(int nTransicion) { // No considera a T1 ni a T6
+	// registro_disparo.println("T"+(nTransicion+1));
+			// pw.println("T"+(nTransicion+1));
+			
+	public void registrarDisparo(int nTransicion) { 
 
-		// registro_disparo.println("T"+(nTransicion+1));
-		// pw.println("T"+(nTransicion+1));
 		
 		if (nTransicion == 0) {// T1
 			if (inv1 == inv2)

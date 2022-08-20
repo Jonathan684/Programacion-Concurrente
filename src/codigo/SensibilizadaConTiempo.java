@@ -28,7 +28,7 @@ public class SensibilizadaConTiempo {
 			T_Esperando[i] = false;
 			N_hilo[i]= null;
 		}
-		Inmediatas();
+		//Inmediatas();
 	}
 	public void setEsperando(int transicion) {
 		T_Esperando[transicion]= true;
@@ -64,23 +64,18 @@ public class SensibilizadaConTiempo {
 		T_Esperando[transicion] = false;
 	}
 	
-
-	
-	
-	
-	
-	 private void Inmediatas() {
-		// TODO Auto-generated method stub
-		 for(int i=0 ; i< cantidad_transiciones ; i++) {
-			 
-		 // 1 si es inmediata
-		 if ((Intervalo.getDato(0, i)==0) && (Intervalo.getDato(1, i)==0)) {
-			 T_Inmediata[i] = 1; // Inmedianta
-			 //System.out.println("Transiciones Inmedia T"+i);
-			}
-		 else  T_Inmediata[i] = 0;
-		 }	
-	}
+//	 private void Inmediatas() {
+//		// TODO Auto-generated method stub
+//		 for(int i=0 ; i< cantidad_transiciones ; i++) {
+//			 
+//		 // 1 si es inmediata
+//		 if ((Intervalo.getDato(0, i)==0) && (Intervalo.getDato(1, i)==0)) {
+//			 T_Inmediata[i] = 1; // Inmedianta
+//			 //System.out.println("Transiciones Inmedia T"+i);
+//			}
+//		 else  T_Inmediata[i] = 0;
+//		 }	
+//	}
 	public boolean esTemporal(int transicion) {
 		 if (Intervalo.getDato(0, transicion) - Intervalo.getDato(1, transicion) != 0) {
 				return true;
@@ -111,7 +106,6 @@ public class SensibilizadaConTiempo {
 					//pw.println("* POSIBLE ERROR ACA T"+(transicion+1)+" transicion_a_disparar:"+transicion_a_disparar);
 				}
 			}
-			
 			//Si la transicion estaba sensibilizada antes de disparar, y despues del disparo no se encuentra sensibilizada, el contador de la misma se pone a 0
 			// Tiene que esperar sensibilizarse nuevamente para iniciar la cuenta.
 			else if(transAntesdelDisparo.getDato(transicion, 0)==1 && transDespuesdelDisparo.getDato(transicion, 0)==0) {
@@ -166,8 +160,10 @@ public class SensibilizadaConTiempo {
 	}
    public long getTiempoFaltanteParaAlfa(int transicion) {
 		// TODO Auto-generated method stub
-		boolean comparacion1= timeStamp[transicion]>=(long)Intervalo.getDato(0, transicion); //Si el time estan es mayor a alfa
-		boolean comparacion2=timeStamp[transicion]<=(long)Intervalo.getDato(1, transicion); //Si el time esta antes del beta
+		boolean comparacion1; //Si el time estan es mayor a alfa
+		boolean comparacion2; //Si el time esta antes del beta
+		comparacion1 = timeStamp[transicion] >= (long)Intervalo.getDato(0, transicion);
+		comparacion2 =timeStamp[transicion] <= (long)Intervalo.getDato(1, transicion);
 		//System.out.println("TimeStamp "+ timeStamp[transicion]);
 		if(comparacion1 && comparacion2) {
 			//pw.println("* Salida 1");

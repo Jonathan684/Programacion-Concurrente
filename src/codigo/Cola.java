@@ -79,13 +79,13 @@ public class Cola {
 		}
 		System.out.println("]");
 	}
-	public String imprimir2(){
-		String cadena="";
-		cadena = cadena+"Cola [";
-		for(int i=0;i<cantTransiciones;i++){
-			if(Transiciones_en_espera[i])cadena = cadena + ("T"+(i+1)+" ");
-		}
-		cadena = cadena + "]";
-		return cadena;
-	}
+//	public String imprimir2(){
+//		String cadena="";
+//		cadena = cadena+"Cola [";
+//		for(int i=0;i<cantTransiciones;i++){
+//			if(Transiciones_en_espera[i])cadena = cadena + ("T"+(i+1)+" ");
+//		}
+//		cadena = cadena + "]";
+//		return cadena;
+//	}
 }

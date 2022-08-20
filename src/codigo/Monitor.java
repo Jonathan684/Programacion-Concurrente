@@ -53,11 +53,11 @@ public class Monitor {
 //				pw.println("* "+cola.imprimir2());
 				
 				if (m.esNula()) {
-					k = false;// No hay hilos con transiciones esperando para disparar y que esten
+					//k = false;// No hay hilos con transiciones esperando para disparar y que esten
 //					pw.println("*************************");
 //					pw.println("\n");
 					mutex.release();
-					//return;
+				    return;
 				
 				} else {
 					
@@ -68,9 +68,11 @@ public class Monitor {
 //					pw.println("*************************");
 //					pw.println("\n");
 					mutex.release();
-					//return;
+					return;
 				}
-			} else { // k =false
+			} 
+			
+			// k =false
 //				pw.println("* Se va a la cola T"+(T_Disparar+1)+ " [hilo :"+Thread.currentThread().getName()+"]");
 //				pw.println("* Estan en la "+cola.imprimir2());
 				mutex.release();
@@ -78,11 +80,7 @@ public class Monitor {
 				if(fin == true)	return;
 				dispararTransicion(T_Disparar);
 				//return;
-			}
-		//}
-
-		//mutex.release();
-		//return;
+			
 	}
 
 	/**

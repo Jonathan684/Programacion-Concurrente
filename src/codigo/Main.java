@@ -10,7 +10,7 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 9;
-	private static final int tiempoCorrida = 2000;//milisegundos(200000 PARA 10000 DISPAROS)
+	private static final int tiempo_ejecucion = 15000;//milisegundos(200000 PARA 10000 DISPAROS)
 	private static int[] T1 = { 1 };
 	private static int[] T2 = { 2 };
 	private static int[] T3 = { 3 };
@@ -73,7 +73,7 @@ public class Main {
 		for(Thread T : threads)T.start();
 		
 		try {
-			Thread.sleep(tiempoCorrida);
+			Thread.sleep(tiempo_ejecucion);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -92,8 +92,9 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		reporte.registrarDisparo("Tiempo de ejecucion : " + (tiempoCorrida / 1000) + "seg.");
+		reporte.registrarDisparo("Tiempo de ejecucion : " + (tiempo_ejecucion / 1000) + "seg.");
 		monitor.imprimir(reporte);
+		
 		System.out.println("	=======================    ");
 		System.out.println("	         Fin		   ");
 		System.out.println("	=======================    ");
