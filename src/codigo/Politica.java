@@ -17,14 +17,15 @@ public class Politica {
 	private Info[] Transiciones;
 	private PrintWriter pw, registro_disparo;
 	private static int[][] invariantes = { { 1, 2, 4, 6 }, // Invariante 1
-			{ 1, 3, 5, 6 }, // Invariante 2
-			{ 7, 8, 9, 10 } };// Invariane 3
-
+										   { 1, 3, 5, 6 }, // Invariante 2
+										   { 7, 8, 9, 10 }};// Invariane 3
+	private boolean aleatorio;
 	public Politica(PrintWriter pw, RDP rdp, PrintWriter registro_disparo) {
 		ultimaTrancisionDisparada = 0;
 		inv1 = 0;
 		inv2 = 0;
 		inv3 = 0;
+		aleatorio = false;
 		disparos = new ArrayList<Integer>(Collections.nCopies(10, 0));
 		this.rdp = rdp;
 		Transiciones = new Info[rdp.get_numero_Transiciones()];
@@ -109,7 +110,7 @@ public class Politica {
 			}
 		}
 		// SI HAY MAS DE UNA TRANSICION EN "m".
-		if (cantidad > 1) {
+		if (cantidad > 1 && aleatorio == false ) {
 			
 			boolean inicio = true;
 			int disparos_de_invariantes = 0;
@@ -148,6 +149,25 @@ public class Politica {
                   }
 			}
 			return transicion_a_disparar;
+		}
+		else if (aleatorio == true ){
+			
+			boolean inicio = true;
+			transicion_a_disparar = -1;
+			for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
+
+				if (m.getDato(i, 0) == 1) { // BUSCO LA TRANSICION EN m.
+					// PRIMERA VEZ QUE ENCUENTRE UNA TRANSICION
+					if (inicio) {
+						inicio = false;
+						transicion_a_disparar = i;
+					}
+					
+					else {
+						   if (aleatorio() == 1)transicion_a_disparar = i;
+						}
+                  }
+			}
 		}
 		// SI HAY UNA SOLA TRANSICION EN "m"
 		return transicion_a_disparar;
