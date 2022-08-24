@@ -109,8 +109,12 @@ public class Monitor {
 		    for (int i = 0; i < red.get_numero_Transiciones(); i++)cola.sacar_de_Cola(i);
 			mutex.release();
 	}
-    public void imprimir(Log loga) {
-		politica.imprimir(loga);
+	/**
+	 * Imprime en un log la cantidad de disparo realizados por las transiciones.
+	 * @param informe
+	 */
+    public void imprimir(Log informe) {
+		politica.imprimir(informe);
 	}
     /**
      * Registro para luego aplicar la expresion regular correspondiente.
