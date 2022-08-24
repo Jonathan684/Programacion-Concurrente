@@ -19,6 +19,7 @@ public class Hilo implements Runnable {
 		while(continuar){
 				for(Integer i:secuencia) {monitor.dispararTransicion(i - 1);}
 			}
+		//System.out.println("Termino T"+ Thread.currentThread().getName());
 	}
 	// Fin del hilo 
 	public void set_Fin() {

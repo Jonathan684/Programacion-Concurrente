@@ -33,6 +33,7 @@ public class Monitor {
 	public void dispararTransicion(int T_Disparar) {
 
 		try {
+			if(fin == true)	return;
 			mutex.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -47,7 +48,7 @@ public class Monitor {
 //				pw.println("*************************");
 //				pw.println("* Se disparo:[T"+(T_Disparar+1)+"]");
 				//pw.println("*    "+red.getVectorExtendido().imprimir());
-				registrar_para_expresion_regular(T_Disparar);
+				registrar_log(T_Disparar);
 				politica.registrarDisparo(T_Disparar);
 				m = calcularVsAndVc();
 //				pw.println("* m: "+m.imprimir());
@@ -78,7 +79,7 @@ public class Monitor {
 //				pw.println("* Estan en la "+cola.imprimir2());
 				mutex.release();
 				cola.poner_EnCola(T_Disparar);
-				if(fin == true)	return;
+				//if(fin == true)	return;
 				dispararTransicion(T_Disparar);
 				//return;
 			
@@ -111,7 +112,11 @@ public class Monitor {
     public void imprimir(Log loga) {
 		politica.imprimir(loga);
 	}
-    private void registrar_para_expresion_regular(int nTransicion) {
+    /**
+     * Registro para luego aplicar la expresion regular correspondiente.
+     * @param nTransicion
+     */
+    private void registrar_log(int nTransicion) {
     	if ((nTransicion + 1) == 10)
 			registro_disparo.print("T" + 0);
 		else
