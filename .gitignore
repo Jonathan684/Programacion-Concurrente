@@ -1,8 +1,1 @@
-# ignorar los archivos terminados en .txt dentro de la carpeta doc (pero no sus subdirectorios)
-Consola/consola.txt
-Python/log.txt
 .idea
-.metadata
-.settings
-.classpath
-.project
