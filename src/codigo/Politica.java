@@ -9,8 +9,8 @@ import log.Log;
 public class Politica {
 	// Campos
 	private List<Integer> disparos;
-	private RDP rdp;
-	private int ultimaTrancisionDisparada;
+	//private RDP rdp;
+	private int ultimaTrancisionDisparada,N_transiciones;
 	private int inv1;
 	private int inv2;
 	private int inv3;
@@ -27,10 +27,11 @@ public class Politica {
 		inv3 = 0;
 		aleatorio = false;
 		disparos = new ArrayList<Integer>(Collections.nCopies(10, 0));
-		this.rdp = rdp;
+		//this.rdp = rdp;
 		Transiciones = new Info[rdp.get_numero_Transiciones()];
 		this.pw = pw;
 		this.registro_disparo = registro_disparo;
+		N_transiciones = rdp.get_numero_Transiciones();
 		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
 			Transiciones[i] = new Info(i, 0, pertence(i));
 		}
@@ -56,10 +57,10 @@ public class Politica {
 		}
 		return retorna;
 	}
-
-	// registro_disparo.println("T"+(nTransicion+1));
-			// pw.println("T"+(nTransicion+1));
-			
+	/**
+	 * Este metodo registra los disparos de las transiciones
+	 * @param nTransicion
+	 */
 	public void registrarDisparo(int nTransicion) { 
 
 		
@@ -103,7 +104,7 @@ public class Politica {
 	public int cual(Matriz m) {
 		int cantidad = 0;
 		int transicion_a_disparar = -1;
-		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
+		for (int i = 0; i < N_transiciones; i++) {
 			if (m.getDato(i, 0) == 1) {
 				cantidad++;
 				transicion_a_disparar = i;
@@ -115,7 +116,7 @@ public class Politica {
 			boolean inicio = true;
 			int disparos_de_invariantes = 0;
 			transicion_a_disparar = -1;
-			for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
+			for (int i = 0; i < N_transiciones; i++) {
 
 				if (m.getDato(i, 0) == 1) { // BUSCO LA TRANSICION EN m.
 					// PRIMERA VEZ QUE ENCUENTRE UNA TRANSICION
@@ -154,7 +155,7 @@ public class Politica {
 			
 			boolean inicio = true;
 			transicion_a_disparar = -1;
-			for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
+			for (int i = 0; i < N_transiciones; i++) {
 
 				if (m.getDato(i, 0) == 1) { // BUSCO LA TRANSICION EN m.
 					// PRIMERA VEZ QUE ENCUENTRE UNA TRANSICION

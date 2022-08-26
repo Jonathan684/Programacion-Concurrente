@@ -38,8 +38,8 @@ public class RDP {
 		this.pw = pw;
 		this.mutex = mutex;
 		p_invariantes = new HashMap<String, String>();
-		numeroTransiciones = cargarTransiciones("matrices/M.I.txt"); // Extraccion de la cantidad de transiciones.
-		numeroPlazas = cargarPlazas("matrices/M.I.txt"); // Extraccion de la cantidad de plazas.
+		numeroTransiciones = cargarTransiciones("Matrices/M.I.txt"); // Extraccion de la cantidad de transiciones.
+		numeroPlazas = cargarPlazas("Matrices/M.I.txt"); // Extraccion de la cantidad de plazas.
 		
 		// Matrices
 		// invariantes = cargarInvariantes("matrices/InvTrans.txt");
@@ -58,28 +58,20 @@ public class RDP {
 		VectorExtendido = new Matriz(numeroTransiciones, 1);
 		VectorZ = new Matriz(1, numeroTransiciones);
 		// Carga de datos
-		Incidencia.cargarMatriz("matrices/M.I.txt");
-		Inhibicion.cargarMatriz("matrices/M.H.txt");
-		Intervalo.cargarMatriz("matrices/IZ.txt");
-		VectorMarcadoActual.cargarMatriz("matrices/VMI.txt");
+		Incidencia.cargarMatriz("Matrices/M.I.txt");
+		Inhibicion.cargarMatriz("Matrices/M.H.txt");
+		Intervalo.cargarMatriz("Matrices/IZ.txt");
+		VectorMarcadoActual.cargarMatriz("Matrices/VMI.txt");
 		Identidad.cargarIdentidad();
-		IEntrada.cargarMatriz("matrices/M.Pre.txt");
+		IEntrada.cargarMatriz("Matrices/M.Pre.txt");
 		//M_Inicial.cargarMatriz("matrices/M_Inicial.txt");
 		
-		
 		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, Intervalo,pw);
-		//timeStamp = new long[numeroTransiciones];
-		//timeout = new long[numeroTransiciones];
-		
-		//Arrays.fill(timeStamp, 0);
-		//Arrays.fill(timeout, 0);
 		Cargar_P_Invariante();
 		sensibilizar();
 		Temporizadas.inicio(VectorExtendidoAux);
 	}
-//	public SensibilizadaConTiempo getTemporales() {
-//		return Temporizadas;
-//	}
+
 	/**
 	* Este metodo dispara una transicion de la rdp indicada por parametro, teniendo
 	 * en cuenta el modo indicado por parametro
@@ -91,8 +83,7 @@ public class RDP {
 	public boolean Disparar(int transicion) {
 		//pw.println("* ----------------------");
 		//pw.println("* Disparar red T"+(transicion+1)+" hilo:"+Thread.currentThread().getName()+" t :"+System.currentTimeMillis());
-		//sensibilizar(); // Se actualiza el Vz 
-	   if (!estaSensibilizada(transicion)) { // no sensibilizada
+		if (!estaSensibilizada(transicion)) { // no sensibilizada
 			//pw.println("* Reset esperando");
 			Temporizadas.resetEsperando(transicion);
 			return false;
@@ -177,7 +168,6 @@ public class RDP {
 
 	private Matriz VectorExtendidoSinVZ() {
 		// TODO Auto-generated method stub
-			
 			sensibilizarVectorE();
 			sensibilizarVectorB();
 			VectorExtendidoAux = VectorSensibilizado.getAnd(VectorInhibicion);
@@ -189,14 +179,9 @@ public class RDP {
 	 */
 	private void sensibilizar() {
 
-		sensibilizarVectorE();
-		sensibilizarVectorB();
-		VectorExtendido = VectorSensibilizado.getAnd(VectorInhibicion);
-		VectorZ = Temporizadas.getVectorZ(VectorExtendidoSinVZ());
+		VectorExtendido = VectorExtendidoSinVZ(); // VectorSensibilizado.getAnd(VectorInhibicion);
+		VectorZ = Temporizadas.getVectorZ(VectorExtendido);
 		VectorExtendido = VectorExtendido.getAnd(VectorZ.getTranspuesta());
-		//pw.println("* Marcado---->> " + Marcado());
-//		pw.println("* Sin Vz---->> " + VectorExtendidoSinVZ().imprimir());
-//		pw.println("* Con Vz---->> " + VectorExtendido.imprimir());
 	}
 
 	private void calculoDeVectorEstado(int transicion) {
@@ -216,7 +201,7 @@ public class RDP {
 
 		CharSequence cort;
 		try {
-			input = new Scanner(new File("matrices/P_Invariantes.txt"));
+			input = new Scanner(new File("Matrices/P_Invariantes.txt"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -314,8 +299,7 @@ public class RDP {
 		}
 		VectorInhibicion = Inhibicion.getTranspuesta().getMultiplicacion(Q);
 		for (int i = 0; i < VectorInhibicion.getNumFilas(); i++) {
-			if (VectorInhibicion.getDato(i, 0) > 1)
-				VectorInhibicion.setDato(i, 0, 1);
+			if (VectorInhibicion.getDato(i, 0) > 1)VectorInhibicion.setDato(i, 0, 1);
 		}
 		VectorInhibicion = VectorInhibicion.getComplemento();
 	}
