@@ -28,7 +28,7 @@
             <name>
                 <value>P10</value>
                 <graphics>
-                    <offset x="0.0" y="0.0"/>
+                    <offset x="27.0" y="53.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -148,7 +148,7 @@
             <name>
                 <value>P4</value>
                 <graphics>
-                    <offset x="0.0" y="0.0"/>
+                    <offset x="-5.0" y="25.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -168,7 +168,7 @@
             <name>
                 <value>P5</value>
                 <graphics>
-                    <offset x="0.0" y="0.0"/>
+                    <offset x="56.0" y="27.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -188,7 +188,7 @@
             <name>
                 <value>P6</value>
                 <graphics>
-                    <offset x="0.0" y="0.0"/>
+                    <offset x="58.0" y="34.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -208,7 +208,7 @@
             <name>
                 <value>P7</value>
                 <graphics>
-                    <offset x="0.0" y="0.0"/>
+                    <offset x="58.0" y="30.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -228,7 +228,7 @@
             <name>
                 <value>P8</value>
                 <graphics>
-                    <offset x="0.0" y="0.0"/>
+                    <offset x="24.0" y="48.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -248,7 +248,7 @@
             <name>
                 <value>P9</value>
                 <graphics>
-                    <offset x="0.0" y="0.0"/>
+                    <offset x="23.0" y="-10.0"/>
                 </graphics>
             </name>
             <initialMarking>
@@ -294,7 +294,7 @@
             <name>
                 <value>T10</value>
                 <graphics>
-                    <offset x="-6.0" y="34.0"/>
+                    <offset x="53.0" y="33.0"/>
                 </graphics>
             </name>
             <orientation>
@@ -476,7 +476,7 @@
             <name>
                 <value>T8</value>
                 <graphics>
-                    <offset x="-14.0" y="27.0"/>
+                    <offset x="60.0" y="28.0"/>
                 </graphics>
             </name>
             <orientation>
@@ -502,7 +502,7 @@
             <name>
                 <value>T9</value>
                 <graphics>
-                    <offset x="-5.0" y="35.0"/>
+                    <offset x="59.0" y="34.0"/>
                 </graphics>
             </name>
             <orientation>
@@ -583,8 +583,8 @@
                 <value>false</value>
             </tagged>
             <arcpath id="000" x="102" y="267" curvePoint="false"/>
-            <arcpath id="001" x="111" y="67" curvePoint="false"/>
-            <arcpath id="002" x="171" y="67" curvePoint="false"/>
+            <arcpath id="001" x="112" y="68" curvePoint="false"/>
+            <arcpath id="002" x="172" y="68" curvePoint="false"/>
             <arcpath id="003" x="356" y="57" curvePoint="false"/>
             <type value="normal"/>
         </arc>
@@ -598,7 +598,7 @@
                 <value>false</value>
             </tagged>
             <arcpath id="000" x="882" y="311" curvePoint="false"/>
-            <arcpath id="001" x="891" y="577" curvePoint="false"/>
+            <arcpath id="001" x="892" y="578" curvePoint="false"/>
             <arcpath id="002" x="761" y="567" curvePoint="false"/>
             <type value="normal"/>
         </arc>
@@ -611,7 +611,7 @@
             <tagged>
                 <value>false</value>
             </tagged>
-            <arcpath id="000" x="363" y="174" curvePoint="false"/>
+            <arcpath id="000" x="364" y="175" curvePoint="false"/>
             <arcpath id="001" x="336" y="216" curvePoint="false"/>
             <type value="normal"/>
         </arc>
@@ -624,7 +624,7 @@
             <tagged>
                 <value>false</value>
             </tagged>
-            <arcpath id="000" x="383" y="171" curvePoint="false"/>
+            <arcpath id="000" x="384" y="170" curvePoint="false"/>
             <arcpath id="001" x="441" y="216" curvePoint="false"/>
             <type value="normal"/>
         </arc>
@@ -637,7 +637,7 @@
             <tagged>
                 <value>false</value>
             </tagged>
-            <arcpath id="000" x="336" y="310" curvePoint="false"/>
+            <arcpath id="000" x="335" y="310" curvePoint="false"/>
             <arcpath id="001" x="302" y="397" curvePoint="false"/>
             <type value="normal"/>
         </arc>
@@ -663,7 +663,7 @@
             <tagged>
                 <value>false</value>
             </tagged>
-            <arcpath id="000" x="445" y="311" curvePoint="false"/>
+            <arcpath id="000" x="446" y="311" curvePoint="false"/>
             <arcpath id="001" x="441" y="381" curvePoint="false"/>
             <type value="normal"/>
         </arc>
@@ -820,7 +820,7 @@
                 <value>false</value>
             </tagged>
             <arcpath id="000" x="761" y="57" curvePoint="false"/>
-            <arcpath id="001" x="891" y="67" curvePoint="false"/>
+            <arcpath id="001" x="892" y="68" curvePoint="false"/>
             <arcpath id="002" x="882" y="282" curvePoint="false"/>
             <type value="normal"/>
         </arc>
@@ -977,7 +977,7 @@
                 <value>false</value>
             </tagged>
             <arcpath id="000" x="356" y="567" curvePoint="false"/>
-            <arcpath id="001" x="111" y="577" curvePoint="false"/>
+            <arcpath id="001" x="112" y="578" curvePoint="false"/>
             <arcpath id="002" x="102" y="296" curvePoint="false"/>
             <type value="normal"/>
         </arc>

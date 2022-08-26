@@ -37,9 +37,7 @@ public class Main {
 		System.out.println("	        TP final		   ");
 		System.out.println("	=======================    ");
 		
-		
-		
-	    try {
+		try {
 			archivo1 = new FileWriter("Consola/consola.txt");
 			archivo2 = new FileWriter("Python/log.txt");
 			reporte = new Log(REPORT_FILE_NAME);
@@ -64,12 +62,8 @@ public class Main {
 		hilos[7] = new Hilo(monitor, T7_8_9_10);
 		hilos[8] = new Hilo(monitor, T7_8_9_10);
 		
-		
-
-		
-		threads = new Thread[numeroHilos];
+        threads = new Thread[numeroHilos];
 		for(int i=0; i<numeroHilos;i++)threads[i] = new Thread(hilos[i], "" +i);
-		
 		for(Thread T : threads)T.start();
 		
 		try {

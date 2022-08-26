@@ -298,6 +298,7 @@ public class RDP {
 
 		}
 		VectorInhibicion = Inhibicion.getTranspuesta().getMultiplicacion(Q);
+		
 		for (int i = 0; i < VectorInhibicion.getNumFilas(); i++) {
 			if (VectorInhibicion.getDato(i, 0) > 1)VectorInhibicion.setDato(i, 0, 1);
 		}
@@ -350,62 +351,6 @@ public class RDP {
 		}
 	}
 
-	/*
-	 * Este metodo hace un falso disparo con las transicion que estan en el vector
-	 * Esperando Si un disparo proboca que la transicion que se envia por parametro
-	 * cambie a estar desensibilizada significa que ya hay una transicion que espera
-	 * por lo mismo que la transicion enviada por parametro. Return: false: Si
-	 * alguien espera por ese token true: Si no alguien esperando
-	 */
-	public Matriz Falso_Disparo(int transicion) {
-		// Falso disparo de las trasiciones dormidas
-		Matriz VectorExtendido_auxiliar = new Matriz(numeroTransiciones, 1);
-		Matriz VectorMarcadoActual2;
-		//consola.registrarDisparo("* 0 m: " + VectorMarcadoActual.getDato(0, 0), 1);
-		Matriz aux = Incidencia.getMultiplicacion(Identidad.getColumna(transicion));
-		VectorMarcadoActual2 = VectorMarcadoActual.getSuma(aux);
-		VectorExtendido_auxiliar = sensibilizarVectorE2(VectorMarcadoActual2)
-				.getAnd(sensibilizarVectorB2(VectorMarcadoActual2));// .getAnd(VectorZ.getTranspuesta());
-		return VectorExtendido_auxiliar;
-	}
-	private Matriz sensibilizarVectorB2(Matriz VectorMarcadoActual2) {
-		Matriz VectorInhibicion2;
-		Matriz Q2 = new Matriz(numeroPlazas, 1);
-		for (int i = 0; i < Q2.getNumFilas(); i++) {
-
-			if (VectorMarcadoActual2.getDato(i, 0) != 0)
-				Q2.setDato(i, 0, 1);
-			else
-				Q2.setDato(i, 0, 0);
-
-		}
-		VectorInhibicion2 = Inhibicion.getTranspuesta().getMultiplicacion(Q2);
-		for (int i = 0; i < VectorInhibicion.getNumFilas(); i++) {
-			if (VectorInhibicion2.getDato(i, 0) > 1)
-				VectorInhibicion2.setDato(i, 0, 1);
-		}
-		VectorInhibicion2 = VectorInhibicion2.getComplemento();
-		return VectorInhibicion2;
-	}
-
-	/**
-	 * Metodo que calcula el vector sensibilizado
-	 */
-	private Matriz sensibilizarVectorE2(Matriz VectorMarcadoActual2) {
-		Matriz VectorSensibilizado2;
-		VectorSensibilizado2 = new Matriz(numeroTransiciones, 1);
-		for (int i = 0; i < IEntrada.getNumColumnas(); i++) {
-			int e = 1;
-			for (int j = 0; j < Incidencia.getNumFilas(); j++) {
-				if (VectorMarcadoActual2.getDato(j, 0) < IEntrada.getDato(j, i)) {
-					e = 0;
-				}
-				// VectorMarcadoActual2
-				VectorSensibilizado2.setDato(i, 0, e);
-			}
-		}
-		return VectorSensibilizado2;
-	}
 	private boolean Test_Invariante() {
 		int Suma_Tokens_Plaza = 0;
 		String valor = "";
