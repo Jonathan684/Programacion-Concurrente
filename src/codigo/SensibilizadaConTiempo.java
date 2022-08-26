@@ -43,10 +43,12 @@ public class SensibilizadaConTiempo {
 		return false;
 	}
 	public boolean dentroVentana(int transicion) {
-		long now =  new Date().getTime();
-		long TimeStamp_ahora = now - (timeStamp[transicion]);
-		if ((TimeStamp_ahora >= (Intervalo.getDato(0, transicion)))
-				&& (TimeStamp_ahora <= (Intervalo.getDato(1, transicion))))
+		long ahora =  new Date().getTime();
+		long TimeStamp_ahora = ahora - (timeStamp[transicion]);
+		long alfa = Intervalo.getDato(0, transicion);
+		long beta = Intervalo.getDato(1, transicion);
+		if ((TimeStamp_ahora >= alfa)
+				&& (TimeStamp_ahora <= beta))
 				{
 				return true;
 				}
