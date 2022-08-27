@@ -63,13 +63,14 @@ public class Cola {
 	public void sacar_de_Cola(int nTransicion) {
 
 		Transiciones_en_espera[nTransicion] = false;
-		if(nTransicion == 6) {
-			while(semaforos[nTransicion] != null) {
-				semaforos[nTransicion].release();
-				if(semaforos[nTransicion] != null)break;
-			}
-		}
+//		if(nTransicion == 6) {
+//			while(semaforos[nTransicion] != null) {
+//				semaforos[nTransicion].release();
+//				if(semaforos[nTransicion] != null)break;
+//			}
+//		}
 		if (semaforos[nTransicion] != null)semaforos[nTransicion].release();
+		//semaforos[nTransicion] != null)semaforos[nTransicion].release()
 	}
 	
 	public void imprimir(){

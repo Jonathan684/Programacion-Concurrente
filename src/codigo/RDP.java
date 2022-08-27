@@ -82,9 +82,10 @@ public class RDP {
 	 */
 	public boolean Disparar(int transicion) {
 		//pw.println("* ----------------------");
-		//pw.println("* Disparar red T"+(transicion+1)+" hilo:"+Thread.currentThread().getName()+" t :"+System.currentTimeMillis());
+		//pw.println("* Disparar red T"+(transicion+1));//+" hilo:"+Thread.currentThread().getName()+" t :"+System.currentTimeMillis());
 		if (!estaSensibilizada(transicion)) { // no sensibilizada
-			//pw.println("* Reset esperando");
+			//pw.println(getVectorExtendido().imprimir());
+			//pw.println("* Disparo no exitoso T"+(transicion+1));
 			Temporizadas.resetEsperando(transicion);
 			return false;
 		}
@@ -125,20 +126,20 @@ public class RDP {
 			}
 			
 			else {
-				//pw.println("* Transición temporal T"+(transicion+1));
+				pw.println("* Transición temporal T"+(transicion+1));
 				if(Temporizadas.antesVentana(transicion)){ // 1
 					if(Temporizadas.alguienEsperando(transicion)){ // 2
-						//pw.println("* Transición alguienEsperando2"+(transicion+1));
+						pw.println("* Transición alguienEsperando2 : T"+(transicion+1));
                         return false;
                     }
 					
 					long Tiempo = Temporizadas.getTiempoFaltanteParaAlfa(transicion);
-					//pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
+					pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
 					Temporizadas.setEsperando(transicion); // 3
 					if (Tiempo > 0) {
 
 							try {
-								//pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);
+								pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);
 								
 								mutex.release();
 								Thread.sleep(Tiempo);

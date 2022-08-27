@@ -28,39 +28,46 @@ public class Monitor {
 		politica = new Politica(pw,red,registro_disparo);
         nTransicion = -1;
         fin = false;
+        k=true;
 	}
 
 	public void dispararTransicion(int T_Disparar) {
-
-		try {
-			if(fin == true)	return;
-			mutex.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-            k = red.Disparar(T_Disparar);// Hilo "+ Thread.currentThread().getName()
+			try {
+				mutex.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    k=true;
+			while(k) {
+				k = red.Disparar(T_Disparar);
+				pw.println("* k= "+k);
 			if (k) { // k =true
-                //pw.println("*    "+red.getVectorExtendido().imprimir());
-				registrar_log(T_Disparar);
+                registrar_log(T_Disparar);
 				politica.registrarDisparo(T_Disparar);
+				pw.println("*                   True : T"+ (T_Disparar+1));
 				m = calcularVsAndVc();
-                //pw.println("* m: "+m.imprimir());
-              
-				if (m.esNula()) {
-					mutex.release();
-				    return;
-				
-				} else {
-					
-					nTransicion = politica.cual(m);
+                if (m.esNula()) {
+					k = false;
+                	}
+                else {
+                	//pw.println("* Despertar "+ T_Disparar);
+                	nTransicion = politica.cual(m);
 					cola.sacar_de_Cola(nTransicion);
-					mutex.release();
-					return;
+					pw.println("* Despertar a: T"+ (nTransicion+1)+" k :"+k);
+					//mutex.release();
+					return ;
+					}
 				}
-			} 
-			mutex.release();
-			cola.poner_EnCola(T_Disparar);
-			dispararTransicion(T_Disparar);
+            else {//k = false
+            	pw.println("* A dormir : T"+ (T_Disparar+1));
+            	mutex.release();
+    			cola.poner_EnCola(T_Disparar);
+    			pw.println("* Desperté : T"+ (T_Disparar+1)+" k:"+k);
+            }
+            
+			}
+           mutex.release();
 	}
 
 	/**
