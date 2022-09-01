@@ -9,13 +9,13 @@ import log.Log;
 
 public class Main {
 
-	private static final int numeroHilos = 9;
-	private static final int tiempo_ejecucion = 200000;//milisegundos(200000 PARA 10000 DISPAROS)
+	private static final int numeroHilos = 7;
+	private static final int tiempo_ejecucion = 170000;//milisegundos(200000 PARA 10000 DISPAROS)
 	private static int[] T1 = { 1 };
-	private static int[] T2 = { 2 };
-	private static int[] T3 = { 3 };
-	private static int[] T4 = { 4 };
-	private static int[] T5 = { 5 };
+	private static int[] T2 = { 2,4 };
+	private static int[] T3 = { 3,5 };
+//	private static int[] T4 = { 4 };
+//	private static int[] T5 = { 5 };
 	private static int[] T6 = { 6 };
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
 	private static Hilo[] hilos;
@@ -56,11 +56,11 @@ public class Main {
 		hilos[1] = new Hilo(monitor, T2);	//T2
 		hilos[2] = new Hilo(monitor, T3);
 		hilos[3] = new Hilo(monitor, T6);
-		hilos[4] = new Hilo(monitor, T4);
-		hilos[5] = new Hilo(monitor, T5);
+//		hilos[4] = new Hilo(monitor, T4);
+//		hilos[5] = new Hilo(monitor, T5);
+		hilos[4] = new Hilo(monitor, T7_8_9_10);
+		hilos[5] = new Hilo(monitor, T7_8_9_10);
 		hilos[6] = new Hilo(monitor, T7_8_9_10);
-		hilos[7] = new Hilo(monitor, T7_8_9_10);
-		hilos[8] = new Hilo(monitor, T7_8_9_10);
 		
         threads = new Thread[numeroHilos];
 		for(int i=0; i<numeroHilos;i++)threads[i] = new Thread(hilos[i], "" +i);

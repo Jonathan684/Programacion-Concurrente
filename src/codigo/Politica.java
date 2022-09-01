@@ -3,39 +3,41 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import log.Log;
 
 public class Politica {
 	// Campos
 	private List<Integer> disparos;
-	//private RDP rdp;
+	private Matriz Intervalo;
 	private int ultimaTrancisionDisparada,N_transiciones;
 	private int inv1;
 	private int inv2;
 	private int inv3;
 	private Info[] Transiciones;
 	private PrintWriter pw, registro_disparo;
+	private Random random;
 	private static int[][] invariantes = { { 1, 2, 4, 6 }, // Invariante 1
 										   { 1, 3, 5, 6 }, // Invariante 2
 										   { 7, 8, 9, 10 }};// Invariane 3
 	private boolean aleatorio;
-	public Politica(PrintWriter pw, RDP rdp, PrintWriter registro_disparo) {
+	public Politica(PrintWriter pw, Matriz Intervalo,int numero_Transiciones , PrintWriter registro_disparo) {
 		ultimaTrancisionDisparada = 0;
 		inv1 = 0;
 		inv2 = 0;
 		inv3 = 0;
-		aleatorio = false;
+		aleatorio = true;
 		disparos = new ArrayList<Integer>(Collections.nCopies(10, 0));
-		//this.rdp = rdp;
-		Transiciones = new Info[rdp.get_numero_Transiciones()];
+		this.Intervalo = Intervalo;
+		Transiciones = new Info[numero_Transiciones];
 		this.pw = pw;
 		this.registro_disparo = registro_disparo;
-		N_transiciones = rdp.get_numero_Transiciones();
-		for (int i = 0; i < rdp.get_numero_Transiciones(); i++) {
+		N_transiciones = numero_Transiciones;
+		for (int i = 0; i < numero_Transiciones; i++) {
 			Transiciones[i] = new Info(i, 0, pertence(i));
 		}
-
+		random = new Random();
 	}
 
 	/**
@@ -111,47 +113,11 @@ public class Politica {
 			}
 		}
 		// SI HAY MAS DE UNA TRANSICION EN "m".
-		if (cantidad > 1 && aleatorio == false ) {
+		if (cantidad > 1 && aleatorio == true ) {
 			
-			boolean inicio = true;
-			int disparos_de_invariantes = 0;
-			transicion_a_disparar = -1;
-			for (int i = 0; i < N_transiciones; i++) {
-
-				if (m.getDato(i, 0) == 1) { // BUSCO LA TRANSICION EN m.
-					// PRIMERA VEZ QUE ENCUENTRE UNA TRANSICION
-					if (inicio) {
-						inicio = false;
-						disparos_de_invariantes = Transiciones[i].getcantInvariante();
-						transicion_a_disparar = i;
-					}
-					// CANTIDAD DE VECES QUE SE DISPARO EL INVARIANTE ES MAYOR QUE EL ACTUAL
-					else if ((Transiciones[i].getcantInvariante() < disparos_de_invariantes)
-							&& (Transiciones[transicion_a_disparar].getInvariante() != Transiciones[i]
-									.getInvariante())) {
-						disparos_de_invariantes = Transiciones[i].getcantInvariante();
-						transicion_a_disparar = i;
-					}
-					// SI SON IGUALES ALMACENO LA TRANSICION DE MAYOR TAMAÑO POR LA PRIORIDAD A LA
-					// SALIDA
-					else if ((disparos_de_invariantes == Transiciones[i].getcantInvariante())
-							&& (Transiciones[transicion_a_disparar].getInvariante() == Transiciones[i]
-									.getInvariante())) {
-						// pw.println("* Prioridad a la salida"+"* Transicion_a_disparar = "+(i+1));
-						disparos_de_invariantes = Transiciones[i].getcantInvariante();
-						transicion_a_disparar = i;
-					}
-					// SI SON IGUALES PERO DE DISTINTOS INVARIANTES LOS ALMACENO Y ELIJO UNO
-					// ALEATORIAMENTE
-					else if ((disparos_de_invariantes == Transiciones[i].getcantInvariante())
-							&& (Transiciones[transicion_a_disparar].getInvariante() != Transiciones[i].getInvariante())) {
-						if (aleatorio() == 1)transicion_a_disparar = i;
-						}
-                  }
-			}
-			return transicion_a_disparar;
-		}
-		else if (aleatorio == true ){
+		int min = 0;
+			int max = 2;
+			
 			
 			boolean inicio = true;
 			transicion_a_disparar = -1;
@@ -165,11 +131,13 @@ public class Politica {
 					}
 					
 					else {
-						   if (aleatorio() == 1)transicion_a_disparar = i;
+						int value = random.nextInt(max + min) + min;
+						   if (value == 1)transicion_a_disparar = i;
 						}
                   }
 			}
 		}
+		//https://www.delftstack.com/es/howto/java/java-random-number-between-1-and-10/#:~:text=Random%20es%20un%20paquete%20que,un%20int%20o%20un%20float%20.
 		// SI HAY UNA SOLA TRANSICION EN "m"
 		return transicion_a_disparar;
 	}
@@ -197,14 +165,17 @@ public class Politica {
 	}
 
 	public void imprimir(Log log) {
-
+		int tiempo_inv1 = Intervalo.getDato(0, 0) + Intervalo.getDato(0, 1) + Intervalo.getDato(0, 3) + Intervalo.getDato(0, 5);
+		int tiempo_inv2 = Intervalo.getDato(0, 0) + Intervalo.getDato(0, 2) + Intervalo.getDato(0, 4) + Intervalo.getDato(0, 5);
+		int tiempo_inv3 = Intervalo.getDato(0, 6) + Intervalo.getDato(0, 7) + Intervalo.getDato(0, 8) + Intervalo.getDato(0, 9);
+		System.out.println("Intervalo 3 "+ tiempo_inv3 );
 		log.registrarDisparo("=====================================");
 		log.registrarDisparo(
-				"Invariante " + 1 + ": " + inv1 + " veces  [T1 T2 T4 T6] Tiempo:" + ((inv1 * (145)) / 1000));
+				"Invariante " + 1 + ": " + inv1 + " veces  [T1 T2 T4 T6] Tiempo:["+tiempo_inv1 +"]" +  (inv1 * tiempo_inv1)/1000);
 		log.registrarDisparo(
-				"Invariante " + 2 + ": " + inv2 + " veces  [T1 T3 T5 T6] Tiempo:" + ((inv1 * (55)) / 1000));
+				"Invariante " + 2 + ": " + inv2 + " veces  [T1 T3 T5 T6] Tiempo:["+tiempo_inv2 +"]" +(inv2 * tiempo_inv2)/1000);
 		log.registrarDisparo(
-				"Invariante " + 3 + ": " + inv3 + " veces  [T7 T8 T9 T10] Tiempo:" + ((inv1 * (50)) / 1000));
+				"Invariante " + 3 + ": " + inv3 + " veces  [T7 T8 T9 T10] Tiempo:["+tiempo_inv3 +"]" +(inv3 * tiempo_inv3)/1000);
 		log.registrarDisparo("=====================================");
 		for (int i = 0; i < disparos.size(); i++) {
 			if (i == 6)
@@ -212,6 +183,13 @@ public class Politica {
 			else
 				log.registrarDisparo("Transicion: " + (i + 1) + " disparos: " + disparos.get(i));
 		}
+		//suma_tiempo_invariante();
+	}
+	private void suma_tiempo_invariante()
+	{
+//		System.out.println("Intervalo 1:["+ Intervalo.getDato(0, 0)+"]"+"["+ Intervalo.getDato(0, 1)+"]"+"["+ Intervalo.getDato(0, 3)+"]"+"["+ Intervalo.getDato(0, 5)+"]");
+//		System.out.println("Intervalo 2:["+ Intervalo.getDato(0, 0)+"]"+"["+ Intervalo.getDato(0, 2)+"]"+"["+ Intervalo.getDato(0, 4)+"]"+"["+ Intervalo.getDato(0, 5)+"]");
+//		System.out.println("Intervalo 3:["+ Intervalo.getDato(0, 6)+"]"+"["+ Intervalo.getDato(0, 7)+"]"+"["+ Intervalo.getDato(0, 8)+"]"+"["+ Intervalo.getDato(0, 9)+"]");
 	}
 
 }

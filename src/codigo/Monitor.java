@@ -25,7 +25,7 @@ public class Monitor {
 		this.mutex = new Semaphore(1);
         red = new RDP(mutex,pw,archivo1,archivo2);
         cola = new Cola(red.get_numero_Transiciones());
-		politica = new Politica(pw,red,registro_disparo);
+		politica = new Politica(pw,RDP.get_Intervalo(),red.get_numero_Transiciones(),registro_disparo);
         nTransicion = -1;
         fin = false;
         k=true;
@@ -33,6 +33,7 @@ public class Monitor {
 
 	public void dispararTransicion(int T_Disparar) {
 			try {
+				if(fin == true)return;
 				mutex.acquire();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -41,11 +42,11 @@ public class Monitor {
 		    k=true;
 			while(k) {
 				k = red.Disparar(T_Disparar);
-				pw.println("* k= "+k);
+				//pw.println("* k= "+k);
 			if (k) { // k =true
                 registrar_log(T_Disparar);
 				politica.registrarDisparo(T_Disparar);
-				pw.println("*                   True : T"+ (T_Disparar+1));
+				//pw.println("*                   True : T"+ (T_Disparar+1));
 				m = calcularVsAndVc();
                 if (m.esNula()) {
 					k = false;
@@ -54,7 +55,7 @@ public class Monitor {
                 	//pw.println("* Despertar "+ T_Disparar);
                 	nTransicion = politica.cual(m);
 					cola.sacar_de_Cola(nTransicion);
-					pw.println("* Despertar a: T"+ (nTransicion+1)+" k :"+k);
+					//pw.println("* Despertar a: T"+ (nTransicion+1)+" k :"+k);
 					//mutex.release();
 					return ;
 					}
@@ -63,7 +64,7 @@ public class Monitor {
             	pw.println("* A dormir : T"+ (T_Disparar+1));
             	mutex.release();
     			cola.poner_EnCola(T_Disparar);
-    			pw.println("* Desperté : T"+ (T_Disparar+1)+" k:"+k);
+    			//pw.println("* Desperté : T"+ (T_Disparar+1)+" k:"+k);
             }
             
 			}

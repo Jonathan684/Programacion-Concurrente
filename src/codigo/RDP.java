@@ -15,7 +15,7 @@ public class RDP {
 	private String[] Plazas;
 	private Matriz VectorMarcadoActual, VectorExtendido, VectorSensibilizado, VectorInhibicion;
 	private Matriz Incidencia, Identidad, Inhibicion;
-	private Matriz Intervalo;
+	private static Matriz Intervalo;
 	private Matriz VectorZ;
 	private final int numeroPlazas;
 	private final int numeroTransiciones;
@@ -129,12 +129,12 @@ public class RDP {
 				pw.println("* Transición temporal T"+(transicion+1));
 				if(Temporizadas.antesVentana(transicion)){ // 1
 					if(Temporizadas.alguienEsperando(transicion)){ // 2
-						pw.println("* Transición alguienEsperando2 : T"+(transicion+1));
+						//pw.println("* Transición alguienEsperando2 : T"+(transicion+1));
                         return false;
                     }
 					
 					long Tiempo = Temporizadas.getTiempoFaltanteParaAlfa(transicion);
-					pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
+					//pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
 					Temporizadas.setEsperando(transicion); // 3
 					if (Tiempo > 0) {
 
@@ -369,6 +369,9 @@ public class RDP {
 			Suma_Tokens_Plaza = 0;
 		}
 		return true;
+	}
+	public static Matriz get_Intervalo() {
+	return Intervalo;
 	}
 
 }
