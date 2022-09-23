@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
@@ -126,7 +125,7 @@ public class RDP {
 			}
 			
 			else {
-				pw.println("* Transición temporal T"+(transicion+1));
+				//pw.println("* Transición temporal T"+(transicion+1));
 				if(Temporizadas.antesVentana(transicion)){ // 1
 					if(Temporizadas.alguienEsperando(transicion)){ // 2
 						//pw.println("* Transición alguienEsperando2 : T"+(transicion+1));
@@ -139,8 +138,7 @@ public class RDP {
 					if (Tiempo > 0) {
 
 							try {
-								pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);
-								
+								//pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);
 								mutex.release();
 								Thread.sleep(Tiempo);
 

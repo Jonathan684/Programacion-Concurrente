@@ -33,8 +33,8 @@ public class Monitor {
 
 	public void dispararTransicion(int T_Disparar) {
 			try {
-				if(fin == true)return;
 				mutex.acquire();
+				if(fin == true)return;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -42,6 +42,7 @@ public class Monitor {
 		    k=true;
 			while(k) {
 				k = red.Disparar(T_Disparar);
+				//pw.println(cola.imprimir());
 				//pw.println("* k= "+k);
 			if (k) { // k =true
                 registrar_log(T_Disparar);
@@ -61,7 +62,7 @@ public class Monitor {
 					}
 				}
             else {//k = false
-            	pw.println("* A dormir : T"+ (T_Disparar+1));
+            	//pw.println("* A dormir : T"+ (T_Disparar+1));
             	mutex.release();
     			cola.poner_EnCola(T_Disparar);
     			//pw.println("* Desperté : T"+ (T_Disparar+1)+" k:"+k);

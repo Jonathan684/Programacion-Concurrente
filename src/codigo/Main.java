@@ -10,13 +10,11 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 7;
-	private static final int tiempo_ejecucion = 170000;//milisegundos(200000 PARA 10000 DISPAROS)
+	private static final int tiempo_ejecucion = 225000;//milisegundos(200000 PARA 10000 DISPAROS)
 	private static int[] T1 = { 1 };
 	private static int[] T2 = { 2,4 };
 	private static int[] T3 = { 3,5 };
-//	private static int[] T4 = { 4 };
-//	private static int[] T5 = { 5 };
-	private static int[] T6 = { 6 };
+    private static int[] T6 = { 6 };
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
 	private static Hilo[] hilos;
 	private static Thread[] threads;
@@ -75,8 +73,6 @@ public class Main {
 		for(Hilo H:hilos)H.set_Fin();
 		monitor.vaciarcolas();
 		for(Thread t : threads)t.interrupt();
-		
-		
 		pw.println("* Fin *\n");
 		try {
 			archivo1.close();

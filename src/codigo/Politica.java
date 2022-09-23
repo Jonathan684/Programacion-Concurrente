@@ -17,17 +17,19 @@ public class Politica {
 	private int inv3;
 	private Info[] Transiciones;
 	private PrintWriter pw, registro_disparo;
+	private ArrayList<Integer> Valores_Aleatorio;
 	private Random random;
 	private static int[][] invariantes = { { 1, 2, 4, 6 }, // Invariante 1
 										   { 1, 3, 5, 6 }, // Invariante 2
 										   { 7, 8, 9, 10 }};// Invariane 3
-	private boolean aleatorio;
+	//private boolean aleatorio;
 	public Politica(PrintWriter pw, Matriz Intervalo,int numero_Transiciones , PrintWriter registro_disparo) {
+		Valores_Aleatorio = new ArrayList<>();
 		ultimaTrancisionDisparada = 0;
 		inv1 = 0;
 		inv2 = 0;
 		inv3 = 0;
-		aleatorio = true;
+		//aleatorio = true;
 		disparos = new ArrayList<Integer>(Collections.nCopies(10, 0));
 		this.Intervalo = Intervalo;
 		Transiciones = new Info[numero_Transiciones];
@@ -97,13 +99,13 @@ public class Politica {
 		disparos.set(nTransicion, (disparos.get(nTransicion) + 1));
 	}
 	/**
-	 * 
+	 * Este metodo retorna la transicion a disparar de manera balanceada.
 	 * @param m = transiciones sesnsibilizadas y que estan en la cola.
-	 * @return
+	 * @return 
+	 * 			-1 -> si la ocurrio un error
+	 * 			transicion_a_disparar -> Si se selecciono una transicion para disparar.
 	 */
-
-	
-	public int cual(Matriz m) {
+    public int cual(Matriz m) {
 		int cantidad = 0;
 		int transicion_a_disparar = -1;
 		for (int i = 0; i < N_transiciones; i++) {
@@ -113,32 +115,16 @@ public class Politica {
 			}
 		}
 		// SI HAY MAS DE UNA TRANSICION EN "m".
-		if (cantidad > 1 && aleatorio == true ) {
-			
-		int min = 0;
-			int max = 2;
-			
-			
-			boolean inicio = true;
-			transicion_a_disparar = -1;
+		if (cantidad > 1) {
 			for (int i = 0; i < N_transiciones; i++) {
 
-				if (m.getDato(i, 0) == 1) { // BUSCO LA TRANSICION EN m.
-					// PRIMERA VEZ QUE ENCUENTRE UNA TRANSICION
-					if (inicio) {
-						inicio = false;
-						transicion_a_disparar = i;
+				if (m.getDato(i, 0) == 1) {
+					Valores_Aleatorio.add(i); // Se agregan al array.
 					}
-					
-					else {
-						int value = random.nextInt(max + min) + min;
-						   if (value == 1)transicion_a_disparar = i;
-						}
-                  }
 			}
+			transicion_a_disparar = Valores_Aleatorio.get(random.nextInt(Valores_Aleatorio.size()));
 		}
-		//https://www.delftstack.com/es/howto/java/java-random-number-between-1-and-10/#:~:text=Random%20es%20un%20paquete%20que,un%20int%20o%20un%20float%20.
-		// SI HAY UNA SOLA TRANSICION EN "m"
+		
 		return transicion_a_disparar;
 	}
 
@@ -168,7 +154,7 @@ public class Politica {
 		int tiempo_inv1 = Intervalo.getDato(0, 0) + Intervalo.getDato(0, 1) + Intervalo.getDato(0, 3) + Intervalo.getDato(0, 5);
 		int tiempo_inv2 = Intervalo.getDato(0, 0) + Intervalo.getDato(0, 2) + Intervalo.getDato(0, 4) + Intervalo.getDato(0, 5);
 		int tiempo_inv3 = Intervalo.getDato(0, 6) + Intervalo.getDato(0, 7) + Intervalo.getDato(0, 8) + Intervalo.getDato(0, 9);
-		System.out.println("Intervalo 3 "+ tiempo_inv3 );
+		//System.out.println("Intervalo 3 "+ tiempo_inv3 );
 		log.registrarDisparo("=====================================");
 		log.registrarDisparo(
 				"Invariante " + 1 + ": " + inv1 + " veces  [T1 T2 T4 T6] Tiempo:["+tiempo_inv1 +"]" +  (inv1 * tiempo_inv1)/1000);
@@ -183,13 +169,5 @@ public class Politica {
 			else
 				log.registrarDisparo("Transicion: " + (i + 1) + " disparos: " + disparos.get(i));
 		}
-		//suma_tiempo_invariante();
 	}
-	private void suma_tiempo_invariante()
-	{
-//		System.out.println("Intervalo 1:["+ Intervalo.getDato(0, 0)+"]"+"["+ Intervalo.getDato(0, 1)+"]"+"["+ Intervalo.getDato(0, 3)+"]"+"["+ Intervalo.getDato(0, 5)+"]");
-//		System.out.println("Intervalo 2:["+ Intervalo.getDato(0, 0)+"]"+"["+ Intervalo.getDato(0, 2)+"]"+"["+ Intervalo.getDato(0, 4)+"]"+"["+ Intervalo.getDato(0, 5)+"]");
-//		System.out.println("Intervalo 3:["+ Intervalo.getDato(0, 6)+"]"+"["+ Intervalo.getDato(0, 7)+"]"+"["+ Intervalo.getDato(0, 8)+"]"+"["+ Intervalo.getDato(0, 9)+"]");
-	}
-
 }
