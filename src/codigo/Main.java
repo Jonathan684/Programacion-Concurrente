@@ -10,10 +10,10 @@ import log.Log;
 public class Main {
 
 	private static final int numeroHilos = 7;
-	private static final int tiempo_ejecucion = 225000;//milisegundos(200000 PARA 10000 DISPAROS)
+	private static final int tiempo_ejecucion = 5000;//milisegundos(200000 PARA 10000 DISPAROS)
 	private static int[] T1 = { 1 };
-	private static int[] T2 = { 2,4 };
-	private static int[] T3 = { 3,5 };
+	private static int[] T2_T4 = { 2,4 };
+	private static int[] T3_T5 = { 3,5 };
     private static int[] T6 = { 6 };
 	private static int[] T7_8_9_10 = { 7,8,9,10 };
 	private static Hilo[] hilos;
@@ -50,15 +50,13 @@ public class Main {
 	    Monitor monitor = new Monitor(pw,registro_disparo,archivo1,archivo2);
 		hilos = new Hilo[numeroHilos];
 
-		hilos[0] = new Hilo(monitor, T1);	//T1
-		hilos[1] = new Hilo(monitor, T2);	//T2
-		hilos[2] = new Hilo(monitor, T3);
-		hilos[3] = new Hilo(monitor, T6);
-//		hilos[4] = new Hilo(monitor, T4);
-//		hilos[5] = new Hilo(monitor, T5);
-		hilos[4] = new Hilo(monitor, T7_8_9_10);
-		hilos[5] = new Hilo(monitor, T7_8_9_10);
-		hilos[6] = new Hilo(monitor, T7_8_9_10);
+		hilos[0] = new Hilo(monitor, T1);	    //T1
+		hilos[1] = new Hilo(monitor, T2_T4);	//T2 Y T4
+		hilos[2] = new Hilo(monitor, T3_T5);    //T3 Y T5
+		hilos[3] = new Hilo(monitor, T6);		//T6
+		hilos[4] = new Hilo(monitor, T7_8_9_10);//T7 T8 T9 T10
+		hilos[5] = new Hilo(monitor, T7_8_9_10);//T7 T8 T9 T10
+		hilos[6] = new Hilo(monitor, T7_8_9_10);//T7 T8 T9 T10
 		
         threads = new Thread[numeroHilos];
 		for(int i=0; i<numeroHilos;i++)threads[i] = new Thread(hilos[i], "" +i);

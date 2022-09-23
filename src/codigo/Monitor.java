@@ -17,7 +17,7 @@ public class Monitor {
 	private boolean k;
 	private	PrintWriter pw,registro_disparo;
 	private boolean fin;
-	//private static RDP red;
+	
 	public Monitor(PrintWriter pw,PrintWriter registro_disparo,FileWriter archivo1,FileWriter archivo2) {
 
 		this.pw=pw;
@@ -57,7 +57,6 @@ public class Monitor {
                 	nTransicion = politica.cual(m);
 					cola.sacar_de_Cola(nTransicion);
 					//pw.println("* Despertar a: T"+ (nTransicion+1)+" k :"+k);
-					//mutex.release();
 					return ;
 					}
 				}
