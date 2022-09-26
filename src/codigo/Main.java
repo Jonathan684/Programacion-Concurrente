@@ -69,8 +69,21 @@ public class Main {
 		}
 
 		for(Hilo H:hilos)H.set_Fin();
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		monitor.vaciarcolas();
 		for(Thread t : threads)t.interrupt();
+		for(Thread t : threads)
+			try {
+				t.join();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		pw.println("* Fin *\n");
 		try {
 			archivo1.close();

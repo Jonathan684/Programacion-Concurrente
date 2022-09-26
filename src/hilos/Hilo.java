@@ -18,7 +18,15 @@ public class Hilo implements Runnable {
 	public void run() {
 		while(continuar){
 				for(Integer i:secuencia) {
-					monitor.dispararTransicion(i - 1);
+					try {
+						monitor.dispararTransicion(i - 1);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						//Thread.currentThread().interrupt();
+						continuar = false;
+						break;
+					}
 				}
 			}
 		//System.out.println("Termino T"+ Thread.currentThread().getName());

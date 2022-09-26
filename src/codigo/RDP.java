@@ -23,15 +23,15 @@ public class RDP {
 	private Matriz IEntrada;
 	private SensibilizadaConTiempo Temporizadas;
 	private Semaphore mutex;
-	//private long timeStamp[];
+	// private long timeStamp[];
 	private PrintWriter pw;
 	private static HashMap<String, String> p_invariantes;
-	//private long timeout[] ;
+	// private long timeout[] ;
 	private Matriz VectorExtendidoAux;
-	private FileWriter archivo1,archivo2;;
+	private FileWriter archivo1, archivo2;;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public RDP(Semaphore mutex , PrintWriter pw,FileWriter archivo1,FileWriter archivo2) {
+	public RDP(Semaphore mutex, PrintWriter pw, FileWriter archivo1, FileWriter archivo2) {
 		this.archivo1 = archivo1;
 		this.archivo2 = archivo2;
 		this.pw = pw;
@@ -39,7 +39,7 @@ public class RDP {
 		p_invariantes = new HashMap<String, String>();
 		numeroTransiciones = cargarTransiciones("Matrices/M.I.txt"); // Extraccion de la cantidad de transiciones.
 		numeroPlazas = cargarPlazas("Matrices/M.I.txt"); // Extraccion de la cantidad de plazas.
-		
+
 		// Matrices
 		// invariantes = cargarInvariantes("matrices/InvTrans.txt");
 		Incidencia = new Matriz(numeroPlazas, numeroTransiciones);
@@ -48,7 +48,7 @@ public class RDP {
 		VectorExtendidoAux = new Matriz(numeroTransiciones, 1);
 		Identidad = new Matriz(numeroTransiciones, numeroTransiciones);
 		Intervalo = new Matriz(2, numeroTransiciones);
-		//M_Inicial = new Matriz(1, numeroPlazas);
+		// M_Inicial = new Matriz(1, numeroPlazas);
 		// ISalida = new Matriz(numeroPlazas,numeroTransiciones);
 		// Vectores
 		VectorMarcadoActual = new Matriz(numeroPlazas, 1);
@@ -63,16 +63,16 @@ public class RDP {
 		VectorMarcadoActual.cargarMatriz("Matrices/VMI.txt");
 		Identidad.cargarIdentidad();
 		IEntrada.cargarMatriz("Matrices/M.Pre.txt");
-		//M_Inicial.cargarMatriz("matrices/M_Inicial.txt");
-		
-		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, Intervalo,pw);
+		// M_Inicial.cargarMatriz("matrices/M_Inicial.txt");
+
+		Temporizadas = new SensibilizadaConTiempo(numeroTransiciones, Intervalo, pw);
 		Cargar_P_Invariante();
 		sensibilizar();
 		Temporizadas.inicio(VectorExtendidoAux);
 	}
 
 	/**
-	* Este metodo dispara una transicion de la rdp indicada por parametro, teniendo
+	 * Este metodo dispara una transicion de la rdp indicada por parametro, teniendo
 	 * en cuenta el modo indicado por parametro
 	 * 
 	 * @param transicion : numero de transicion.
@@ -80,99 +80,98 @@ public class RDP {
 	 *         disparo es exitoso.
 	 */
 	public boolean Disparar(int transicion) {
-		//pw.println("* ----------------------");
-		//pw.println("* Disparar red T"+(transicion+1));//+" hilo:"+Thread.currentThread().getName()+" t :"+System.currentTimeMillis());
+		// pw.println("* ----------------------");
+		// pw.println("* Disparar red T"+(transicion+1));//+"
+		// hilo:"+Thread.currentThread().getName()+" t :"+System.currentTimeMillis());
 		if (!estaSensibilizada(transicion)) { // no sensibilizada
-			//pw.println(getVectorExtendido().imprimir());
-			//pw.println("* Disparo no exitoso T"+(transicion+1));
+			// pw.println(getVectorExtendido().imprimir());
+			// pw.println("* Disparo no exitoso T"+(transicion+1));
 			Temporizadas.resetEsperando(transicion);
 			return false;
-		}
-		else {
-			 
-			if(Temporizadas.dentroVentana(transicion)){
-				//pw.println("* Transición dentro de la ventana T"+(transicion+1));
-				if(Temporizadas.alguienEsperando(transicion))
-					{
-					//pw.println("* Transición alguienEsperando1"+(transicion+1));
-                    	return false;
-					}
-				else{
-						Temporizadas.resetEsperando(transicion);
-						Matriz	transAntesdelDisparo = new Matriz(numeroTransiciones, 1); 
-						Matriz	transDespuesdelDisparo = new Matriz(numeroTransiciones, 1); 
-						transAntesdelDisparo =	VectorExtendidoSinVZ();
-						calculoDeVectorEstado(transicion);
-						sensibilizar(); // Se vuelve a sensibiizar para sacar el nuevo vectorExtendido
-						transDespuesdelDisparo = VectorExtendidoSinVZ();
-						Temporizadas.ActualizarTimeStamp(transAntesdelDisparo,transDespuesdelDisparo,transicion);
-						if (!Test_Invariante()) {
-							
-							pw.println("* NO SE CUMPLE EL INVARIANTE DE PLAZA");
-							try {
-								pw.println("* Fin Con Error*\n");
-								archivo1.close();
-								archivo2.close();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
-							
+		} else {
+
+			if (Temporizadas.dentroVentana(transicion)) {
+				// pw.println("* Transición dentro de la ventana T"+(transicion+1));
+				if (Temporizadas.alguienEsperando(transicion)) {
+					// pw.println("* Transición alguienEsperando1"+(transicion+1));
+					return false;
+				} else {
+					Temporizadas.resetEsperando(transicion);
+					Matriz transAntesdelDisparo = new Matriz(numeroTransiciones, 1);
+					Matriz transDespuesdelDisparo = new Matriz(numeroTransiciones, 1);
+					transAntesdelDisparo = VectorExtendidoSinVZ();
+					calculoDeVectorEstado(transicion);
+					sensibilizar(); // Se vuelve a sensibiizar para sacar el nuevo vectorExtendido
+					transDespuesdelDisparo = VectorExtendidoSinVZ();
+					Temporizadas.ActualizarTimeStamp(transAntesdelDisparo, transDespuesdelDisparo, transicion);
+					if (!Test_Invariante()) {
+
+						pw.println("* NO SE CUMPLE EL INVARIANTE DE PLAZA");
+						try {
+							pw.println("* Fin Con Error*\n");
+							archivo1.close();
+							archivo2.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						return true;
+						throw new RuntimeException("NO SE CUMPLE EL INVARIANTE DE PLAZA");
+
 					}
+					return true;
+				}
 			}
-			
+
 			else {
-				//pw.println("* Transición temporal T"+(transicion+1));
-				if(Temporizadas.antesVentana(transicion)){ // 1
-					if(Temporizadas.alguienEsperando(transicion)){ // 2
-						//pw.println("* Transición alguienEsperando2 : T"+(transicion+1));
-                        return false;
-                    }
-					
+				// pw.println("* Transición temporal T"+(transicion+1));
+				if (Temporizadas.antesVentana(transicion)) { // 1
+					if (Temporizadas.alguienEsperando(transicion)) { // 2
+						// pw.println("* Transición alguienEsperando2 : T"+(transicion+1));
+						return false;
+					}
+
 					long Tiempo = Temporizadas.getTiempoFaltanteParaAlfa(transicion);
-					//pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);	
+					// pw.println("* Disparar red T"+(transicion+1)+" Tiempo:"+ Tiempo);
 					Temporizadas.setEsperando(transicion); // 3
 					if (Tiempo > 0) {
 
-							try {
-								//pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);
-								mutex.release();
-								Thread.sleep(Tiempo);
+						try {
+							// pw.println("* A dormir T"+(transicion+1)+" T:"+Tiempo);
+							mutex.release();
+							Thread.sleep(Tiempo);
 
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							try {
-								mutex.acquire();
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							return  Disparar(transicion);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							//e.printStackTrace();
+							return false;
+						}
+						try {
+							mutex.acquire();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							//e.printStackTrace();
+							return false;
+						}
+						return Disparar(transicion);
 					}
-					//pw.println("* tiempo <0"+(transicion+1));
+					// pw.println("* tiempo <0"+(transicion+1));
+					return false;
+				} else {
+					// pw.println("* despues de la ventana desensibilizada"+(transicion+1));
 					return false;
 				}
-				else {
-					//pw.println("* despues de la ventana desensibilizada"+(transicion+1));
-					return false;
-				}
-			 }
+			}
 		}
 	}
 
 	private Matriz VectorExtendidoSinVZ() {
 		// TODO Auto-generated method stub
-			sensibilizarVectorE();
-			sensibilizarVectorB();
-			VectorExtendidoAux = VectorSensibilizado.getAnd(VectorInhibicion);
-			return VectorExtendidoAux;
+		sensibilizarVectorE();
+		sensibilizarVectorB();
+		VectorExtendidoAux = VectorSensibilizado.getAnd(VectorInhibicion);
+		return VectorExtendidoAux;
 	}
-	
+
 	/*
 	 *
 	 */
@@ -187,7 +186,6 @@ public class RDP {
 		Matriz aux = Incidencia.getMultiplicacion(Identidad.getColumna(transicion));
 		VectorMarcadoActual = VectorMarcadoActual.getSuma(aux);
 	}
-
 
 	public boolean estaSensibilizada(int transicion) {
 		if (VectorExtendido.getDato(transicion, 0) == 1)
@@ -238,8 +236,9 @@ public class RDP {
 	// Metodos get
 
 	public Matriz getVectorExtendidosinVz() {
-		return VectorExtendidoAux ;
+		return VectorExtendidoAux;
 	}
+
 	public Matriz getVectorExtendido() {
 		return VectorExtendido;
 	}
@@ -250,12 +249,13 @@ public class RDP {
 
 	public String sensibilidadas() {
 		String Transiciones_sensibilizadas = "";
-		
+
 		for (int n = 0; n < VectorExtendido.getNumFilas(); n++) {
 			Transiciones_sensibilizadas += Transiciones[n] + ":" + VectorExtendido.getDato(n, 0) + " ";
 		}
 		return Transiciones_sensibilizadas;
 	}
+
 	public String sensibilidadas2() {
 		String Transiciones_sensibilizadas = "";
 		Matriz VectorExtendidoAux = new Matriz(numeroTransiciones, 1);
@@ -265,6 +265,7 @@ public class RDP {
 		}
 		return Transiciones_sensibilizadas;
 	}
+
 	public String Marcado() {
 		String Marcado_actual = "";
 		for (int n = 0; n < VectorMarcadoActual.getNumFilas(); n++) {
@@ -273,7 +274,7 @@ public class RDP {
 		return Marcado_actual;
 	}
 
-    private void sensibilizarVectorE() {
+	private void sensibilizarVectorE() {
 
 		for (int i = 0; i < IEntrada.getNumColumnas(); i++) {
 			int e = 1;
@@ -297,9 +298,10 @@ public class RDP {
 
 		}
 		VectorInhibicion = Inhibicion.getTranspuesta().getMultiplicacion(Q);
-		
+
 		for (int i = 0; i < VectorInhibicion.getNumFilas(); i++) {
-			if (VectorInhibicion.getDato(i, 0) > 1)VectorInhibicion.setDato(i, 0, 1);
+			if (VectorInhibicion.getDato(i, 0) > 1)
+				VectorInhibicion.setDato(i, 0, 1);
 		}
 		VectorInhibicion = VectorInhibicion.getComplemento();
 	}
@@ -368,8 +370,9 @@ public class RDP {
 		}
 		return true;
 	}
+
 	public static Matriz get_Intervalo() {
-	return Intervalo;
+		return Intervalo;
 	}
 
 }
