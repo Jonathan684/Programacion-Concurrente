@@ -142,15 +142,17 @@ public class RDP {
 
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
-							//e.printStackTrace();
-							return false;
+							// e.printStackTrace();
+							Thread.currentThread().interrupt();
+							// return false;
 						}
 						try {
 							mutex.acquire();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
-							//e.printStackTrace();
-							return false;
+							// e.printStackTrace();
+							Thread.currentThread().interrupt();
+							// return false;
 						}
 						return Disparar(transicion);
 					}

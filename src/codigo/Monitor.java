@@ -32,10 +32,9 @@ public class Monitor {
 	}
 
 	public void dispararTransicion(int T_Disparar) throws InterruptedException {
-		
-			mutex.acquire();
 
-		
+		mutex.acquire();
+
 		k = true;
 		while (k) {
 			k = red.Disparar(T_Disparar);
@@ -56,40 +55,12 @@ public class Monitor {
 					return;
 				}
 			} else {// k = false
-					// pw.println("* A dormir : T"+ (T_Disparar+1));
-//				if (fin == true)
-//					return;
+
 				mutex.release();
 				cola.poner_EnCola(T_Disparar);
 				// pw.println("* Desperté : T"+ (T_Disparar+1)+" k:"+k);
-				if (fin == true) {
-					//System.out.println("Saliendo :"+ Thread.currentThread().getName());
-					mutex.release();
-					return; 
-				}
-					
 			}
 		}
-		mutex.release();
-	}
-
-	/**
-	 * Calcula la operacion AND entre los que estan en la cola y las transiciones
-	 * que estan en sensibilidas
-	 * 
-	 * @return m : Matriz con transiciones en la cola y sensibilizadas
-	 */
-
-	public void vaciarcolas() {
-
-		try {
-			mutex.acquire();
-			fin = true;
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		for (int i = 0; i < red.get_numero_Transiciones(); i++)
-			cola.sacar_de_Cola(i);
 		mutex.release();
 	}
 
